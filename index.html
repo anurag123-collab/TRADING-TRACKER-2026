@@ -30,19 +30,19 @@
         // Automatic Cache Purge & Immediate Theme Initialization
         if ('serviceWorker' in navigator) {
             try {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) { registration.unregister(); }
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    for (let registration of registrations) { registration.unregister(); }
                 });
-            } catch(e) {}
+            } catch (e) { }
         }
         if ('caches' in window) {
             try {
-                caches.keys().then(function(names) {
+                caches.keys().then(function (names) {
                     for (let name of names) caches.delete(name);
                 });
-            } catch(e) {}
+            } catch (e) { }
         }
-        (function() {
+        (function () {
             try {
                 var savedTheme = localStorage.getItem('app_theme') || 'dark';
                 var effectiveTheme = savedTheme;
@@ -50,11 +50,12 @@
                     effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 document.documentElement.setAttribute('data-theme', effectiveTheme);
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
     <style>
-        :root, [data-theme="dark"] {
+        :root,
+        [data-theme="dark"] {
             --bg-dark: radial-gradient(ellipse at 20% 15%, #0f172a 0%, #090d16 60%, #05080e 100%);
             --sidebar-bg: #0a0e17;
             --card-bg: #111827;
@@ -376,6 +377,7 @@
                 transform: translateY(100px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
@@ -1022,8 +1024,13 @@
 
         /* SPIN ANIMATION FOR REFRESH */
         @keyframes spinIcon {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .spin-icon {
@@ -1292,22 +1299,29 @@
     <!-- 1. LOGIN & SIGN UP SCREEN WITH OTP VERIFICATION -->
     <div id="loginScreen">
         <div style="position: absolute; top: 20px; right: 20px;">
-            <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="loginThemeBtn" title="Toggle Theme" style="display: flex; align-items: center; gap: 6px; border-radius: 20px;">
+            <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="loginThemeBtn" title="Toggle Theme"
+                style="display: flex; align-items: center; gap: 6px; border-radius: 20px;">
                 <span id="loginThemeIcon">🌙</span> <span id="loginThemeText">Dark Mode</span>
             </button>
         </div>
         <div class="login-card">
             <div class="login-avatar-container">
                 <img src="profile.jpg" alt="ANURAG PATEL" class="login-avatar-img">
-                <div style="position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #10b981; border: 2px solid var(--card-bg); border-radius: 50%; box-shadow: 0 0 8px #10b981;" title="Trading System Active"></div>
+                <div style="position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #10b981; border: 2px solid var(--card-bg); border-radius: 50%; box-shadow: 0 0 8px #10b981;"
+                    title="Trading System Active"></div>
             </div>
             <h2 id="loginTitleHeader">ANURAG PATEL</h2>
-            <p style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">PRO TRADER PORTAL 2026</p>
+            <p
+                style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">
+                PRO TRADER PORTAL 2026</p>
 
             <!-- LOGIN / SIGNUP TABS -->
-            <div id="authTabsHeader" style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border);">
-                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">🔑 Sign In (Login)</button>
-                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">📝 Sign Up (New User)</button>
+            <div id="authTabsHeader"
+                style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border);">
+                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">🔑 Sign In
+                    (Login)</button>
+                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">📝 Sign Up (New
+                    User)</button>
             </div>
 
             <div id="loginSecurityNotice"
@@ -1326,12 +1340,15 @@
                     <div style="position: relative;">
                         <input type="password" id="loginPass" placeholder="Enter Password (default: 12345)"
                             onkeydown="if(event.key==='Enter') handleSendOTP()" style="padding-right: 40px;">
-                        <span onclick="togglePasswordVisibility('loginPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                        <span onclick="togglePasswordVisibility('loginPass', this)"
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
                     </div>
                 </div>
 
                 <button class="btn-login-submit" onclick="handleSendOTP()">📩 Request OTP Code & Login</button>
-                <button class="btn btn-secondary btn-block" style="margin-top: 8px; width: 100%; justify-content: center; font-size: 12px; border-radius: 8px;" onclick="handleDirectPasswordLogin()">
+                <button class="btn btn-secondary btn-block"
+                    style="margin-top: 8px; width: 100%; justify-content: center; font-size: 12px; border-radius: 8px;"
+                    onclick="handleDirectPasswordLogin()">
                     🔑 Direct Password Login
                 </button>
                 <a class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
@@ -1341,30 +1358,42 @@
             <div id="otpFormContainer" style="display: none;">
                 <div style="text-align: center; margin-bottom: 12px;">
                     <div style="font-size: 26px; margin-bottom: 4px;">📩</div>
-                    <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Verification Code Sent</div>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">OTP code sent to <b id="otpTargetText" style="color:var(--text-main);">+91 ******3210</b></p>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Verification Code Sent
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">OTP code sent to <b
+                            id="otpTargetText" style="color:var(--text-main);">+91 ******3210</b></p>
                 </div>
 
-                <div id="otpSimulatedNotice" style="background: rgba(16, 185, 129, 0.12); border: 1px dashed rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 14px; color: var(--success);">
-                    🔑 YOUR SECURITY OTP IS: <b id="otpCodeDisplay" style="font-size: 16px; font-weight: 800; letter-spacing: 2px; color: var(--success);">4289</b>
+                <div id="otpSimulatedNotice"
+                    style="background: rgba(16, 185, 129, 0.12); border: 1px dashed rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 14px; color: var(--success);">
+                    🔑 YOUR SECURITY OTP IS: <b id="otpCodeDisplay"
+                        style="font-size: 16px; font-weight: 800; letter-spacing: 2px; color: var(--success);">4289</b>
                 </div>
 
                 <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
-                    <input type="text" id="otpBox1" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(1, event)" inputmode="numeric">
-                    <input type="text" id="otpBox2" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(2, event)" inputmode="numeric">
-                    <input type="text" id="otpBox3" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(3, event)" inputmode="numeric">
-                    <input type="text" id="otpBox4" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(4, event)" inputmode="numeric">
+                    <input type="text" id="otpBox1" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(1, event)"
+                        inputmode="numeric">
+                    <input type="text" id="otpBox2" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(2, event)"
+                        inputmode="numeric">
+                    <input type="text" id="otpBox3" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(3, event)"
+                        inputmode="numeric">
+                    <input type="text" id="otpBox4" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(4, event)"
+                        inputmode="numeric">
                 </div>
 
-                <button class="btn-login-submit" style="background: var(--success);" onclick="verifyOTPAndLogin()">Verify OTP & Unlock Dashboard 🚀</button>
+                <button class="btn-login-submit" style="background: var(--success);"
+                    onclick="verifyOTPAndLogin()">Verify OTP & Unlock Dashboard 🚀</button>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px;">
                     <span style="color: var(--text-muted);">Resend in <b id="otpTimerText">45</b>s</span>
-                    <a class="forgot-link" style="margin: 0; color: var(--primary);" onclick="resendOTPCode()">Resend OTP 🔄</a>
+                    <a class="forgot-link" style="margin: 0; color: var(--primary);" onclick="resendOTPCode()">Resend
+                        OTP 🔄</a>
                 </div>
 
                 <div style="text-align: center; margin-top: 10px;">
-                    <a class="forgot-link" style="font-size: 11px;" onclick="cancelOtpView()">← Back to Login Options</a>
+                    <a class="forgot-link" style="font-size: 11px;" onclick="cancelOtpView()">← Back to Login
+                        Options</a>
                 </div>
             </div>
 
@@ -1388,8 +1417,10 @@
                 <div class="login-form-group">
                     <label>🔑 Create Password</label>
                     <div style="position: relative;">
-                        <input type="password" id="signupPass" placeholder="Create your login password" style="padding-right: 40px;">
-                        <span onclick="togglePasswordVisibility('signupPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                        <input type="password" id="signupPass" placeholder="Create your login password"
+                            style="padding-right: 40px;">
+                        <span onclick="togglePasswordVisibility('signupPass', this)"
+                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
                     </div>
                 </div>
 
@@ -1398,10 +1429,12 @@
                     <input type="number" id="signupCapital" placeholder="e.g. 50000" value="50000">
                 </div>
 
-                <button class="btn-login-submit" style="background: var(--primary);" onclick="handleSignupSendOTP()">Generate OTP & Create Account 📩</button>
+                <button class="btn-login-submit" style="background: var(--primary);"
+                    onclick="handleSignupSendOTP()">Generate OTP & Create Account 📩</button>
             </div>
 
-            <div style="margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 10px; color: var(--text-muted); text-align: center;">
+            <div
+                style="margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 10px; color: var(--text-muted); text-align: center;">
                 🛡️ 256-Bit Encrypted Session | Official Trading Tracker 2026
             </div>
         </div>
@@ -1419,7 +1452,8 @@
                     <h3>Trading Tracker</h3>
                     <span id="sidebarUserName">ANURAG PATEL</span>
                 </div>
-                <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar (Ctrl + B)">☰</button>
+                <button class="sidebar-toggle-btn" onclick="toggleSidebar()"
+                    title="Toggle Sidebar (Ctrl + B)">☰</button>
             </div>
 
             <ul class="nav-menu">
@@ -1458,11 +1492,14 @@
 
             <div class="nav-logout">
                 <div class="sidebar-quick-actions">
-                    <button class="btn btn-secondary btn-sm sidebar-action-btn" onclick="refreshApp()" title="Refresh Data (Alt + R)">
+                    <button class="btn btn-secondary btn-sm sidebar-action-btn" onclick="refreshApp()"
+                        title="Refresh Data (Alt + R)">
                         <span class="refresh-icon">🔄</span> <span class="sidebar-btn-text">Refresh</span>
                     </button>
-                    <button class="btn btn-secondary btn-sm sidebar-action-btn" id="sidebarThemeBtn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
-                        <span id="sidebarThemeIcon">🌙</span> <span id="sidebarThemeText" class="sidebar-btn-text">Theme</span>
+                    <button class="btn btn-secondary btn-sm sidebar-action-btn" id="sidebarThemeBtn"
+                        onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+                        <span id="sidebarThemeIcon">🌙</span> <span id="sidebarThemeText"
+                            class="sidebar-btn-text">Theme</span>
                     </button>
                 </div>
                 <button class="btn-logout" title="Logout" onclick="handleLogout()">
@@ -1853,15 +1890,22 @@
                 <div class="card" id="secVisualCharts" style="margin-top: 16px;">
                     <div class="card-header">
                         <div class="card-title"><span>🍩</span> Win/Loss & Setup Visual Insights</div>
-                        <button class="card-action-btn" title="Hide Charts" onclick="toggleWidget('secVisualCharts', false)">👁️ Hide</button>
+                        <button class="card-action-btn" title="Hide Charts"
+                            onclick="toggleWidget('secVisualCharts', false)">👁️ Hide</button>
                     </div>
                     <div class="grid-2" style="gap: 12px; flex: 1;">
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 210px; position: relative;">
-                            <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Win / Loss Ratio</div>
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 210px; position: relative;">
+                            <div
+                                style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                                Win / Loss Ratio</div>
                             <canvas id="winLossChart"></canvas>
                         </div>
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 210px; position: relative;">
-                            <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">Setup P&L Breakdown</div>
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 210px; position: relative;">
+                            <div
+                                style="font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">
+                                Setup P&L Breakdown</div>
                             <canvas id="setupChart"></canvas>
                         </div>
                     </div>
@@ -1952,9 +1996,12 @@
                     </div>
 
                     <!-- TRADE LOG FILTERS -->
-                    <div style="display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; background: var(--th-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+                    <div
+                        style="display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; background: var(--th-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
                         <div style="flex: 1; min-width: 140px;">
-                            <label style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">📅 DATE RANGE</label>
+                            <label
+                                style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">📅
+                                DATE RANGE</label>
                             <select id="filterDateRange" class="form-control" onchange="filterTradeTable()">
                                 <option value="all">All Time</option>
                                 <option value="today">Today</option>
@@ -1964,7 +2011,9 @@
                             </select>
                         </div>
                         <div style="flex: 1; min-width: 140px;">
-                            <label style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">🎯 OUTCOME</label>
+                            <label
+                                style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">🎯
+                                OUTCOME</label>
                             <select id="filterOutcome" class="form-control" onchange="filterTradeTable()">
                                 <option value="all">All Trades (Wins & Losses)</option>
                                 <option value="win">Profitable Trades (Wins)</option>
@@ -1972,7 +2021,9 @@
                             </select>
                         </div>
                         <div style="flex: 1; min-width: 140px;">
-                            <label style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">📈 ASSET / INDEX</label>
+                            <label
+                                style="font-size: 10px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">📈
+                                ASSET / INDEX</label>
                             <select id="filterIndex" class="form-control" onchange="filterTradeTable()">
                                 <option value="all">All Assets</option>
                                 <option value="Nifty">Nifty</option>
@@ -1982,7 +2033,8 @@
                             </select>
                         </div>
                         <div style="display: flex; align-items: flex-end;">
-                            <button class="btn btn-secondary btn-sm" onclick="resetTradeFilters()" title="Reset Filters">🔄 Reset Filters</button>
+                            <button class="btn btn-secondary btn-sm" onclick="resetTradeFilters()"
+                                title="Reset Filters">🔄 Reset Filters</button>
                         </div>
                     </div>
 
@@ -2130,7 +2182,8 @@
                         <div class="card-header">
                             <div>
                                 <div class="card-title"><span>🎨</span> Theme & Visual Style Presets</div>
-                                <div class="card-subtitle">Select your preferred background aesthetic & color theme</div>
+                                <div class="card-subtitle">Select your preferred background aesthetic & color theme
+                                </div>
                             </div>
                         </div>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
@@ -2210,7 +2263,8 @@
                         <div class="grid-2">
                             <div>
                                 <div class="form-group">
-                                    <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+                                    <label
+                                        style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
                                         Select Application Theme
                                     </label>
                                     <select id="themeSelect" class="form-control" onchange="setTheme(this.value)">
@@ -2254,7 +2308,9 @@
 
                     <!-- CALENDAR MONTHLY SUMMARY STATS -->
                     <div style="margin-bottom: 12px;">
-                        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">📅 Monthly Market & Trading Stats</div>
+                        <div
+                            style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                            📅 Monthly Market & Trading Stats</div>
                         <div class="grid-6" style="grid-template-columns: repeat(5, 1fr); gap: 10px;">
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Month Traded Days</h4>
@@ -2270,7 +2326,8 @@
                             </div>
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Month Holidays & Off</h4>
-                                <div class="value" id="calMonthHolidays" style="color: #f59e0b; font-size: 12px;">0 Days</div>
+                                <div class="value" id="calMonthHolidays" style="color: #f59e0b; font-size: 12px;">0 Days
+                                </div>
                             </div>
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Month Net P&L</h4>
@@ -2281,7 +2338,9 @@
 
                     <!-- CALENDAR YEARLY SUMMARY STATS -->
                     <div style="margin-bottom: 16px;">
-                        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">📊 Yearly Market & Trading Stats (<span id="calYearTitle">2026</span>)</div>
+                        <div
+                            style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                            📊 Yearly Market & Trading Stats (<span id="calYearTitle">2026</span>)</div>
                         <div class="grid-6" style="grid-template-columns: repeat(5, 1fr); gap: 10px;">
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Year Traded Days</h4>
@@ -2293,7 +2352,8 @@
                             </div>
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Year Total Holidays & Off</h4>
-                                <div class="value" id="calYearHolidays" style="color: #f59e0b; font-size: 12px;">0 Days</div>
+                                <div class="value" id="calYearHolidays" style="color: #f59e0b; font-size: 12px;">0 Days
+                                </div>
                             </div>
                             <div class="summary-card" style="padding: 10px;">
                                 <h4>Year Win Rate (Days)</h4>
@@ -2439,7 +2499,7 @@
             if (themeSelect) themeSelect.value = savedTheme;
         }
 
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
             if (localStorage.getItem('app_theme') === 'system') {
                 applyTheme('system');
             }
@@ -2725,7 +2785,7 @@
                             body: `Your 4-Digit Login OTP Code is: ${otpCode}`,
                             icon: "profile.jpg"
                         });
-                    } catch(e) {}
+                    } catch (e) { }
                 } else if (Notification.permission !== "denied") {
                     try {
                         Notification.requestPermission().then(permission => {
@@ -2736,7 +2796,7 @@
                                 });
                             }
                         });
-                    } catch(e) {}
+                    } catch (e) { }
                 }
             }
 
@@ -2755,7 +2815,7 @@
                     }, emailjsKey).then(() => {
                         showToast(`✉️ Real Email OTP sent to ${targetEmail}!`, "✅");
                     }).catch(err => console.log("EmailJS:", err));
-                } catch(e) {}
+                } catch (e) { }
             }
 
             // 3. Real SMS Sending via Fast2SMS
@@ -2767,7 +2827,7 @@
                     fetch(smsUrl, { mode: 'no-cors' }).then(() => {
                         showToast(`📱 Real SMS OTP sent to +91 ${targetMobile}!`, "✅");
                     }).catch(e => console.log("SMS error:", e));
-                } catch(e) {}
+                } catch (e) { }
             }
         }
 
@@ -2786,8 +2846,8 @@
             }
 
             const isUserValid = (userInput.toLowerCase() === savedUser.toLowerCase() ||
-                                userInput.toLowerCase() === savedEmail.toLowerCase() ||
-                                userInput === savedMobile);
+                userInput.toLowerCase() === savedEmail.toLowerCase() ||
+                userInput === savedMobile);
 
             if (isUserValid && passInput === savedPass) {
                 localStorage.setItem('logged_user', savedUser);
@@ -3026,8 +3086,8 @@
         });
 
         window.onload = function () {
-            try { initTheme(); } catch (e) {}
-            try { initSidebarState(); } catch (e) {}
+            try { initTheme(); } catch (e) { }
+            try { initSidebarState(); } catch (e) { }
 
             const tradeDateElem = document.getElementById('tradeDate');
             if (tradeDateElem) tradeDateElem.valueAsDate = new Date();
@@ -4088,7 +4148,7 @@
 
             const now = new Date();
             const todayStr = now.toISOString().slice(0, 10);
-            
+
             // Get Monday of current week
             const startOfWeek = new Date(now);
             const dayOfWeek = startOfWeek.getDay(); // 0 Sun, 1 Mon...
@@ -4902,12 +4962,16 @@
             <span style="font-size: 26px;">🚀</span>
             <div>
                 <div style="font-size: 13px; font-weight: 700;">New Trading Tracker Update Available!</div>
-                <div style="font-size: 11px; opacity: 0.9;">Version <b id="updateVerText">v2.5.0</b> is ready with new features.</div>
+                <div style="font-size: 11px; opacity: 0.9;">Version <b id="updateVerText">v2.5.0</b> is ready with new
+                    features.</div>
             </div>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
-            <button class="btn btn-primary btn-sm" style="background: var(--success); color: white; border: none; font-weight: 700;" onclick="applyAppUpdate()">⚡ Update Now</button>
-            <button class="btn btn-secondary btn-sm" style="padding: 4px 8px;" onclick="dismissUpdateBanner()">✕</button>
+            <button class="btn btn-primary btn-sm"
+                style="background: var(--success); color: white; border: none; font-weight: 700;"
+                onclick="applyAppUpdate()">⚡ Update Now</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 4px 8px;"
+                onclick="dismissUpdateBanner()">✕</button>
         </div>
     </div>
 </body>
