@@ -1296,7 +1296,7 @@
 
 <body>
 
-    <!-- 1. LOGIN & SIGN UP SCREEN WITH OTP VERIFICATION -->
+    <!-- 1. LOGIN & SIGN UP SCREEN (DIRECT PASSWORD AUTHENTICATION) -->
     <div id="loginScreen">
         <div style="position: absolute; top: 20px; right: 20px;">
             <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="loginThemeBtn" title="Toggle Theme"
@@ -1318,17 +1318,15 @@
             <!-- LOGIN / SIGNUP TABS -->
             <div id="authTabsHeader"
                 style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border);">
-                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">🔑 Sign In
-                    (Login)</button>
-                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">📝 Sign Up (New
-                    User)</button>
+                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">🔑 Sign In (Login)</button>
+                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">📝 Sign Up (New User)</button>
             </div>
 
             <div id="loginSecurityNotice"
                 style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 10px 14px; border-radius: 10px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
             </div>
 
-            <!-- LOGIN FORM (EMAIL / MOBILE / USER ID) -->
+            <!-- LOGIN FORM (EMAIL / MOBILE / USER ID + PASSWORD) -->
             <div id="loginFormContainer">
                 <div class="login-form-group">
                     <label>📱 Email ID / Mobile Number / User ID</label>
@@ -1339,62 +1337,14 @@
                     <label>🔑 Password</label>
                     <div style="position: relative;">
                         <input type="password" id="loginPass" placeholder="Enter Password (default: 12345)"
-                            onkeydown="if(event.key==='Enter') handleSendOTP()" style="padding-right: 40px;">
+                            onkeydown="if(event.key==='Enter') handleDirectPasswordLogin()" style="padding-right: 40px;">
                         <span onclick="togglePasswordVisibility('loginPass', this)"
                             style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
                     </div>
                 </div>
 
-                <button class="btn-login-submit" onclick="handleSendOTP()">📩 Request OTP Code & Login</button>
-                <button class="btn btn-secondary btn-block"
-                    style="margin-top: 8px; width: 100%; justify-content: center; font-size: 12px; border-radius: 8px;"
-                    onclick="handleDirectPasswordLogin()">
-                    🔑 Direct Password Login
-                </button>
+                <button class="btn-login-submit" onclick="handleDirectPasswordLogin()">🚀 Login to Dashboard</button>
                 <a class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
-            </div>
-
-            <!-- OTP VERIFICATION SCREEN -->
-            <div id="otpFormContainer" style="display: none;">
-                <div style="text-align: center; margin-bottom: 12px;">
-                    <div style="font-size: 26px; margin-bottom: 4px;">📩</div>
-                    <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Verification Code Sent
-                    </div>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">OTP code sent to <b
-                            id="otpTargetText" style="color:var(--text-main);">+91 ******3210</b></p>
-                </div>
-
-                <div id="otpSimulatedNotice"
-                    style="background: rgba(16, 185, 129, 0.12); border: 1px dashed rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 14px; color: var(--success);">
-                    🔑 YOUR SECURITY OTP IS: <b id="otpCodeDisplay"
-                        style="font-size: 16px; font-weight: 800; letter-spacing: 2px; color: var(--success);">4289</b>
-                </div>
-
-                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
-                    <input type="text" id="otpBox1" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(1, event)"
-                        inputmode="numeric">
-                    <input type="text" id="otpBox2" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(2, event)"
-                        inputmode="numeric">
-                    <input type="text" id="otpBox3" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(3, event)"
-                        inputmode="numeric">
-                    <input type="text" id="otpBox4" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(4, event)"
-                        inputmode="numeric">
-                </div>
-
-                <button class="btn-login-submit" style="background: var(--success);"
-                    onclick="verifyOTPAndLogin()">Verify OTP & Unlock Dashboard 🚀</button>
-
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px;">
-                    <span style="color: var(--text-muted);">Resend in <b id="otpTimerText">45</b>s</span>
-                    <a class="forgot-link" style="margin: 0; color: var(--primary);" onclick="resendOTPCode()">Resend
-                        OTP 🔄</a>
-                </div>
-
-                <div style="text-align: center; margin-top: 10px;">
-                    <a class="forgot-link" style="font-size: 11px;" onclick="cancelOtpView()">← Back to Login
-                        Options</a>
-                </div>
             </div>
 
             <!-- SIGN UP FORM FOR NEW DEVICE / NEW USER -->
@@ -1429,8 +1379,8 @@
                     <input type="number" id="signupCapital" placeholder="e.g. 50000" value="50000">
                 </div>
 
-                <button class="btn-login-submit" style="background: var(--primary);"
-                    onclick="handleSignupSendOTP()">Generate OTP & Create Account 📩</button>
+                <button class="btn-login-submit" style="background: var(--success);"
+                    onclick="handleSignupDirect()">🎉 Create Account & Login</button>
             </div>
 
             <div
@@ -2829,6 +2779,41 @@
                     }).catch(e => console.log("SMS error:", e));
                 } catch (e) { }
             }
+        }
+
+        function handleSignupDirect() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const mobile = document.getElementById('signupMobile').value.trim();
+            const pass = document.getElementById('signupPass').value.trim();
+            const capital = parseFloat(document.getElementById('signupCapital').value) || 50000;
+
+            if (!name || !email || !mobile || !pass) {
+                alert("⚠️ Please fill in all fields (Full Name, Email Address, Mobile Number, and Password)!");
+                return;
+            }
+
+            if (!/^\d{10}$/.test(mobile)) {
+                alert("⚠️ Please enter a valid 10-digit Mobile Number!");
+                return;
+            }
+
+            const userId = name.split(' ')[0] || 'Anurag';
+            localStorage.setItem('trader_full_name', name);
+            localStorage.setItem('app_user_id', userId);
+            localStorage.setItem('app_user_email', email);
+            localStorage.setItem('app_user_mobile', mobile);
+            localStorage.setItem('app_user_pass', pass);
+            localStorage.setItem('initial_capital', capital.toString());
+            localStorage.setItem('logged_user', userId);
+            localStorage.setItem('last_login_time', Date.now().toString());
+            localStorage.setItem('user_registered', 'true');
+            sessionStorage.setItem('session_authenticated', 'true');
+
+            showToast("🎉 Account Created Successfully! Logging in...", "✅");
+            setTimeout(() => {
+                openDashboardScreen();
+            }, 400);
         }
 
         function handleDirectPasswordLogin() {
