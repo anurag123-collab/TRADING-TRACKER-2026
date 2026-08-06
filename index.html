@@ -27,7 +27,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script>
-        // Immediate Theme initialization to prevent FOUC (flash of unstyled content)
+        // Automatic Cache Purge & Immediate Theme Initialization
+        if ('serviceWorker' in navigator) {
+            try {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) { registration.unregister(); }
+                });
+            } catch(e) {}
+        }
+        if ('caches' in window) {
+            try {
+                caches.keys().then(function(names) {
+                    for (let name of names) caches.delete(name);
+                });
+            } catch(e) {}
+        }
         (function() {
             try {
                 var savedTheme = localStorage.getItem('app_theme') || 'dark';
@@ -2334,8 +2348,8 @@
         if (!localStorage.getItem('initial_capital')) localStorage.setItem('initial_capital', "50000");
         if (!localStorage.getItem('total_added_capital')) localStorage.setItem('total_added_capital', "0");
         if (!localStorage.getItem('total_withdrawn')) localStorage.setItem('total_withdrawn', "0");
-        if (!localStorage.getItem('deposit_history')) localStorage.setItem('deposit_history', JSON.stringify([]));
-        if (!localStorage.getItem('withdrawal_history')) localStorage.setItem('withdrawal_history', JSON.stringify([]));
+        if (!localStorage.getItem('deposit_history')) localStorage.getItem('deposit_history', JSON.stringify([]));
+        if (!localStorage.getItem('withdrawal_history')) localStorage.getItem('withdrawal_history', JSON.stringify([]));
         if (!localStorage.getItem('recycle_bin_trades')) localStorage.setItem('recycle_bin_trades', JSON.stringify([]));
         if (!localStorage.getItem('app_theme')) localStorage.setItem('app_theme', 'dark');
 
