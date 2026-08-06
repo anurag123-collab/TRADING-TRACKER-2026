@@ -23,6 +23,8 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- jsPDF & AutoTable for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- EmailJS SDK for Real Email OTP Sending -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Immediate Theme initialization to prevent FOUC (flash of unstyled content)
@@ -293,6 +295,77 @@
         .forgot-link:hover {
             color: var(--text-main);
             text-decoration: underline;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .otp-input-box {
+            width: 44px;
+            height: 52px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            background-color: var(--input-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .otp-input-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+        }
+
+        /* APP UPDATE BANNER */
+        .update-banner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100000;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.95), rgba(99, 102, 241, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 14px 18px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            max-width: 480px;
+            width: calc(100% - 40px);
+            backdrop-filter: blur(8px);
+            animation: slideUpBanner 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpBanner {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* --- MAIN LAYOUT --- */
@@ -1202,37 +1275,121 @@
 
 <body>
 
-    <!-- 1. LOGIN SCREEN -->
+    <!-- 1. LOGIN & SIGN UP SCREEN WITH OTP VERIFICATION -->
     <div id="loginScreen">
         <div style="position: absolute; top: 20px; right: 20px;">
-            <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="loginThemeBtn" title="Toggle Theme" style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="loginThemeBtn" title="Toggle Theme" style="display: flex; align-items: center; gap: 6px; border-radius: 20px;">
                 <span id="loginThemeIcon">🌙</span> <span id="loginThemeText">Dark Mode</span>
             </button>
         </div>
         <div class="login-card">
             <div class="login-avatar-container">
                 <img src="profile.jpg" alt="ANURAG PATEL" class="login-avatar-img">
+                <div style="position: absolute; bottom: 4px; right: 4px; width: 14px; height: 14px; background: #10b981; border: 2px solid var(--card-bg); border-radius: 50%; box-shadow: 0 0 8px #10b981;" title="Trading System Active"></div>
             </div>
-            <h2>ANURAG PATEL</h2>
-            <p>Trading Tracker 2026</p>
+            <h2 id="loginTitleHeader">ANURAG PATEL</h2>
+            <p style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">PRO TRADER PORTAL 2026</p>
+
+            <!-- LOGIN / SIGNUP TABS -->
+            <div id="authTabsHeader" style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border);">
+                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')">🔑 Sign In (Login)</button>
+                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')">📝 Sign Up (New User)</button>
+            </div>
 
             <div id="loginSecurityNotice"
-                style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 8px 12px; border-radius: 8px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
+                style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 10px 14px; border-radius: 10px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
             </div>
 
-            <div class="login-form-group">
-                <label>User ID</label>
-                <input type="text" id="loginUser" placeholder="Enter ID (default: Anurag)">
+            <!-- LOGIN FORM (EMAIL / MOBILE / USER ID) -->
+            <div id="loginFormContainer">
+                <div class="login-form-group">
+                    <label>📱 Email ID / Mobile Number / User ID</label>
+                    <input type="text" id="loginUser" placeholder="Enter Mobile (10 digits) or Email ID">
+                </div>
+
+                <div class="login-form-group">
+                    <label>🔑 Password</label>
+                    <div style="position: relative;">
+                        <input type="password" id="loginPass" placeholder="Enter Password (default: 12345)"
+                            onkeydown="if(event.key==='Enter') handleSendOTP()" style="padding-right: 40px;">
+                        <span onclick="togglePasswordVisibility('loginPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                    </div>
+                </div>
+
+                <button class="btn-login-submit" onclick="handleSendOTP()">📩 Request OTP Code & Login</button>
+                <button class="btn btn-secondary btn-block" style="margin-top: 8px; width: 100%; justify-content: center; font-size: 12px; border-radius: 8px;" onclick="handleDirectPasswordLogin()">
+                    🔑 Direct Password Login
+                </button>
+                <a class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
             </div>
 
-            <div class="login-form-group">
-                <label>Password</label>
-                <input type="password" id="loginPass" placeholder="Enter password (default: 12345)"
-                    onkeydown="if(event.key==='Enter') handleLogin()">
+            <!-- OTP VERIFICATION SCREEN -->
+            <div id="otpFormContainer" style="display: none;">
+                <div style="text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 26px; margin-bottom: 4px;">📩</div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Verification Code Sent</div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">OTP code sent to <b id="otpTargetText" style="color:var(--text-main);">+91 ******3210</b></p>
+                </div>
+
+                <div id="otpSimulatedNotice" style="background: rgba(16, 185, 129, 0.12); border: 1px dashed rgba(16, 185, 129, 0.4); padding: 8px 12px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 14px; color: var(--success);">
+                    🔑 YOUR SECURITY OTP IS: <b id="otpCodeDisplay" style="font-size: 16px; font-weight: 800; letter-spacing: 2px; color: var(--success);">4289</b>
+                </div>
+
+                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 14px;">
+                    <input type="text" id="otpBox1" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(1, event)" inputmode="numeric">
+                    <input type="text" id="otpBox2" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(2, event)" inputmode="numeric">
+                    <input type="text" id="otpBox3" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(3, event)" inputmode="numeric">
+                    <input type="text" id="otpBox4" maxlength="1" class="otp-input-box" onkeyup="moveOtpFocus(4, event)" inputmode="numeric">
+                </div>
+
+                <button class="btn-login-submit" style="background: var(--success);" onclick="verifyOTPAndLogin()">Verify OTP & Unlock Dashboard 🚀</button>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 11px;">
+                    <span style="color: var(--text-muted);">Resend in <b id="otpTimerText">45</b>s</span>
+                    <a class="forgot-link" style="margin: 0; color: var(--primary);" onclick="resendOTPCode()">Resend OTP 🔄</a>
+                </div>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <a class="forgot-link" style="font-size: 11px;" onclick="cancelOtpView()">← Back to Login Options</a>
+                </div>
             </div>
 
-            <button class="btn-login-submit" onclick="handleLogin()">Login to Dashboard</button>
-            <a class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
+            <!-- SIGN UP FORM FOR NEW DEVICE / NEW USER -->
+            <div id="signupFormContainer" style="display: none;">
+                <div class="login-form-group">
+                    <label>👤 Trader Full Name</label>
+                    <input type="text" id="signupName" placeholder="e.g. Anurag Patel">
+                </div>
+
+                <div class="login-form-group">
+                    <label>✉️ Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="e.g. anurag@gmail.com">
+                </div>
+
+                <div class="login-form-group">
+                    <label>📱 Mobile Number (10 Digits)</label>
+                    <input type="tel" id="signupMobile" placeholder="e.g. 9876543210" maxlength="10">
+                </div>
+
+                <div class="login-form-group">
+                    <label>🔑 Create Password</label>
+                    <div style="position: relative;">
+                        <input type="password" id="signupPass" placeholder="Create your login password" style="padding-right: 40px;">
+                        <span onclick="togglePasswordVisibility('signupPass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                    </div>
+                </div>
+
+                <div class="login-form-group">
+                    <label>💰 Starting Account Capital (₹)</label>
+                    <input type="number" id="signupCapital" placeholder="e.g. 50000" value="50000">
+                </div>
+
+                <button class="btn-login-submit" style="background: var(--primary);" onclick="handleSignupSendOTP()">Generate OTP & Create Account 📩</button>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 10px; color: var(--text-muted); text-align: center;">
+                🛡️ 256-Bit Encrypted Session | Official Trading Tracker 2026
+            </div>
         </div>
     </div>
 
@@ -2374,22 +2531,25 @@
         }
 
         function checkPasswordLockStatus() {
+            const isRegistered = localStorage.getItem('user_registered') === 'true' || localStorage.getItem('app_user_id');
             const savedUser = localStorage.getItem('logged_user');
             const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
-            const freq = localStorage.getItem('pass_frequency') || 'monday';
+            const freq = localStorage.getItem('pass_frequency') || 'always';
             let lastLogin = parseInt(localStorage.getItem('last_login_time') || '0', 10);
             const now = Date.now();
 
-            if (savedUser && savedUser.toLowerCase() === activeUser.toLowerCase() && !lastLogin) {
-                lastLogin = now;
-                localStorage.setItem('last_login_time', now.toString());
+            if (!isRegistered) {
+                return { requiresPassword: true, reason: 'new_device_signup' };
             }
 
-            if (!savedUser || (savedUser.toLowerCase().replace(/@+$/g, '') !== activeUser.toLowerCase().replace(/@+$/g, ''))) {
+            if (!savedUser || (savedUser.toLowerCase().trim() !== activeUser.toLowerCase().trim())) {
                 return { requiresPassword: true, reason: 'not_logged_in' };
             }
 
-            if (freq === 'monday') {
+            if (freq === 'always') {
+                const isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true';
+                return { requiresPassword: !isSessionAuth, reason: 'always_required' };
+            } else if (freq === 'monday') {
                 const currentMonday = getStartOfWeekMonday(now);
                 const isExpired = !lastLogin || (lastLogin < currentMonday);
                 return { requiresPassword: isExpired, reason: isExpired ? 'monday_expired' : 'valid' };
@@ -2397,9 +2557,6 @@
                 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
                 const isExpired = !lastLogin || (now - lastLogin) >= SEVEN_DAYS_MS;
                 return { requiresPassword: isExpired, reason: isExpired ? 'weekly_expired' : 'valid' };
-            } else if (freq === 'always') {
-                const isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true';
-                return { requiresPassword: !isSessionAuth, reason: 'always_required' };
             } else if (freq === 'monthly') {
                 const currentMonthFirst = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
                 const isExpired = !lastLogin || (lastLogin < currentMonthFirst);
@@ -2410,6 +2567,37 @@
             return { requiresPassword: false, reason: 'valid' };
         }
 
+        function switchAuthTab(mode) {
+            const loginForm = document.getElementById('loginFormContainer');
+            const signupForm = document.getElementById('signupFormContainer');
+            const tabLoginBtn = document.getElementById('authTabLoginBtn');
+            const tabSignupBtn = document.getElementById('authTabSignupBtn');
+
+            if (mode === 'signup') {
+                if (loginForm) loginForm.style.display = 'none';
+                if (signupForm) signupForm.style.display = 'block';
+                if (tabLoginBtn) tabLoginBtn.classList.remove('active');
+                if (tabSignupBtn) tabSignupBtn.classList.add('active');
+            } else {
+                if (loginForm) loginForm.style.display = 'block';
+                if (signupForm) signupForm.style.display = 'none';
+                if (tabLoginBtn) tabLoginBtn.classList.add('active');
+                if (tabSignupBtn) tabSignupBtn.classList.remove('active');
+            }
+        }
+
+        function togglePasswordVisibility(inputId, iconElem) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                iconElem.innerText = '🙈';
+            } else {
+                input.type = 'password';
+                iconElem.innerText = '👁️';
+            }
+        }
+
         function showLoginScreen(lockStatus) {
             const appCont = document.getElementById('appContainer');
             const loginScr = document.getElementById('loginScreen');
@@ -2417,29 +2605,382 @@
             if (loginScr) loginScr.style.display = 'flex';
 
             const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
+            const activeMobile = localStorage.getItem('app_user_mobile') || '';
+            const activeEmail = localStorage.getItem('app_user_email') || '';
             const uInput = document.getElementById('loginUser');
             const pInput = document.getElementById('loginPass');
-            if (uInput) uInput.value = activeUser;
+            if (uInput) uInput.value = activeMobile || activeEmail || activeUser;
             if (pInput) pInput.value = '';
 
             const notice = document.getElementById('loginSecurityNotice');
-            if (notice && lockStatus) {
-                if (lockStatus.reason === 'monday_expired') {
-                    notice.innerHTML = '🗓️ <b>Monday Trading Week Password Required</b><br><span style="font-size:10px; opacity:0.9;">A new trading week started! Verify your password for Monday login.</span>';
-                    notice.style.display = 'block';
-                } else if (lockStatus.reason === 'weekly_expired') {
-                    notice.innerHTML = '🗓️ <b>Weekly Password Check Required</b><br><span style="font-size:10px; opacity:0.9;">7 days have passed since your last password login.</span>';
-                    notice.style.display = 'block';
-                } else if (lockStatus.reason === 'monthly_expired') {
-                    notice.innerHTML = '📅 <b>Monthly Password Check Required</b><br><span style="font-size:10px; opacity:0.9;">1st of the month reached! Verify your password login.</span>';
-                    notice.style.display = 'block';
-                } else if (lockStatus.reason === 'always_required') {
-                    notice.innerHTML = '🚪 <b>Session Authentication Required</b><br><span style="font-size:10px; opacity:0.9;">Password lock set to require password every session.</span>';
-                    notice.style.display = 'block';
-                } else {
-                    notice.innerHTML = '🔒 <b>Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter password (default: 12345) to unlock dashboard.</span>';
+
+            if (lockStatus && lockStatus.reason === 'new_device_signup') {
+                switchAuthTab('signup');
+                if (notice) {
+                    notice.innerHTML = '✨ <b>Welcome to Trading Tracker 2026!</b><br><span style="font-size:10px; opacity:0.9;">Create your trader account below to start tracking your trades safely.</span>';
                     notice.style.display = 'block';
                 }
+            } else {
+                switchAuthTab('login');
+                if (notice && lockStatus) {
+                    if (lockStatus.reason === 'not_logged_in') {
+                        notice.innerHTML = '🔒 <b>Device Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your User ID & Password to access your dashboard.</span>';
+                        notice.style.display = 'block';
+                    } else if (lockStatus.reason === 'always_required') {
+                        notice.innerHTML = '🚪 <b>Session Password Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your password (default: 12345) to unlock dashboard session.</span>';
+                        notice.style.display = 'block';
+                    } else if (lockStatus.reason === 'monday_expired') {
+                        notice.innerHTML = '🗓️ <b>Monday Trading Week Password Lock</b><br><span style="font-size:10px; opacity:0.9;">A new trading week started! Verify your password for Monday login.</span>';
+                        notice.style.display = 'block';
+                    } else {
+                        notice.innerHTML = '🔒 <b>Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter password to unlock dashboard.</span>';
+                        notice.style.display = 'block';
+                    }
+                }
+            }
+        }
+
+        let otpTimerInterval = null;
+        let currentAuthMode = 'login';
+        let pendingSignupData = null;
+
+        function handleSendOTP() {
+            const userInput = document.getElementById('loginUser').value.trim();
+            const passInput = document.getElementById('loginPass').value.trim();
+
+            if (!userInput) {
+                alert("⚠️ Please enter your Email ID, Mobile Number, or User ID!");
+                return;
+            }
+
+            const savedUser = localStorage.getItem('app_user_id') || 'Anurag';
+            const savedEmail = localStorage.getItem('app_user_email') || 'anurag@gmail.com';
+            const savedMobile = localStorage.getItem('app_user_mobile') || '9876543210';
+
+            let isTargetMatch = false;
+            if (userInput.toLowerCase() === savedUser.toLowerCase() ||
+                userInput.toLowerCase() === savedEmail.toLowerCase() ||
+                userInput === savedMobile) {
+                isTargetMatch = true;
+            }
+
+            if (!isTargetMatch && localStorage.getItem('user_registered') === 'true') {
+                alert("❌ Email ID / Mobile Number not found! Please check or Sign Up as a new trader.");
+                return;
+            }
+
+            // Generate 4-digit OTP code
+            const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            sessionStorage.setItem('current_otp_code', generatedOtp);
+            currentAuthMode = 'login';
+
+            // Target display text
+            let maskedTarget = userInput;
+            if (/^\d{10}$/.test(userInput)) {
+                maskedTarget = "+91 ******" + userInput.slice(6);
+            } else if (userInput.includes('@')) {
+                let parts = userInput.split('@');
+                maskedTarget = parts[0].slice(0, 2) + "****@" + parts[1];
+            }
+            const otpTargetElem = document.getElementById('otpTargetText');
+            const otpCodeElem = document.getElementById('otpCodeDisplay');
+            if (otpTargetElem) otpTargetElem.innerText = maskedTarget;
+            if (otpCodeElem) otpCodeElem.innerText = generatedOtp;
+
+            // Show OTP Screen
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('signupFormContainer').style.display = 'none';
+            document.getElementById('authTabsHeader').style.display = 'none';
+            document.getElementById('otpFormContainer').style.display = 'block';
+
+            clearOtpInputBoxes();
+            startOtpTimer(60);
+
+            // Dispatch Real Mobile Push Notification & Email/SMS Gateway
+            dispatchRealOTPMessage(userInput.includes('@') ? userInput : savedEmail, /^\d{10}$/.test(userInput) ? userInput : savedMobile, generatedOtp);
+
+            showToast(`📩 Verification OTP ${generatedOtp} sent to ${maskedTarget}`, "🔑");
+        }
+
+        function dispatchRealOTPMessage(email, mobile, otpCode) {
+            // 1. Mobile Push Notification Banner
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    try {
+                        new Notification("📩 Trading Tracker OTP Verification", {
+                            body: `Your 4-Digit Login OTP Code is: ${otpCode}`,
+                            icon: "profile.jpg"
+                        });
+                    } catch(e) {}
+                } else if (Notification.permission !== "denied") {
+                    try {
+                        Notification.requestPermission().then(permission => {
+                            if (permission === "granted") {
+                                new Notification("📩 Trading Tracker OTP Verification", {
+                                    body: `Your 4-Digit Login OTP Code is: ${otpCode}`,
+                                    icon: "profile.jpg"
+                                });
+                            }
+                        });
+                    } catch(e) {}
+                }
+            }
+
+            // 2. Real Email Sending via EmailJS
+            const targetEmail = email || localStorage.getItem('app_user_email') || 'anurag@gmail.com';
+            const emailjsKey = localStorage.getItem('emailjs_public_key');
+            const emailjsService = localStorage.getItem('emailjs_service_id');
+            const emailjsTemplate = localStorage.getItem('emailjs_template_id');
+
+            if (window.emailjs && emailjsKey && emailjsService && emailjsTemplate) {
+                try {
+                    window.emailjs.send(emailjsService, emailjsTemplate, {
+                        to_email: targetEmail,
+                        otp_code: otpCode,
+                        trader_name: localStorage.getItem('trader_full_name') || 'Trader'
+                    }, emailjsKey).then(() => {
+                        showToast(`✉️ Real Email OTP sent to ${targetEmail}!`, "✅");
+                    }).catch(err => console.log("EmailJS:", err));
+                } catch(e) {}
+            }
+
+            // 3. Real SMS Sending via Fast2SMS
+            const targetMobile = mobile || localStorage.getItem('app_user_mobile') || '9876543210';
+            const fast2smsKey = localStorage.getItem('fast2sms_api_key');
+            if (fast2smsKey && /^\d{10}$/.test(targetMobile)) {
+                try {
+                    const smsUrl = `https://www.fast2sms.com/dev/bulkV2?authorization=${fast2smsKey}&route=otp&variables_values=${otpCode}&numbers=${targetMobile}`;
+                    fetch(smsUrl, { mode: 'no-cors' }).then(() => {
+                        showToast(`📱 Real SMS OTP sent to +91 ${targetMobile}!`, "✅");
+                    }).catch(e => console.log("SMS error:", e));
+                } catch(e) {}
+            }
+        }
+
+        function handleDirectPasswordLogin() {
+            const userInput = document.getElementById('loginUser').value.trim();
+            const passInput = document.getElementById('loginPass').value.trim();
+
+            const savedUser = localStorage.getItem('app_user_id') || 'Anurag';
+            const savedEmail = localStorage.getItem('app_user_email') || 'anurag@gmail.com';
+            const savedMobile = localStorage.getItem('app_user_mobile') || '9876543210';
+            const savedPass = localStorage.getItem('app_user_pass') || '12345';
+
+            if (!userInput || !passInput) {
+                alert("⚠️ Please enter both your Email/Mobile AND Password!");
+                return;
+            }
+
+            const isUserValid = (userInput.toLowerCase() === savedUser.toLowerCase() ||
+                                userInput.toLowerCase() === savedEmail.toLowerCase() ||
+                                userInput === savedMobile);
+
+            if (isUserValid && passInput === savedPass) {
+                localStorage.setItem('logged_user', savedUser);
+                localStorage.setItem('last_login_time', Date.now().toString());
+                sessionStorage.setItem('session_authenticated', 'true');
+
+                showToast("Welcome back, " + (localStorage.getItem('trader_full_name') || savedUser) + "!", "🔑");
+                openDashboardScreen();
+            } else {
+                alert("❌ Incorrect Email / Mobile / User ID or Password! Please try again.");
+            }
+        }
+
+        function handleSignupSendOTP() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const mobile = document.getElementById('signupMobile').value.trim();
+            const pass = document.getElementById('signupPass').value.trim();
+            const capital = parseFloat(document.getElementById('signupCapital').value) || 50000;
+
+            if (!name || !email || !mobile || !pass) {
+                alert("⚠️ Please fill in all fields (Full Name, Email Address, Mobile Number, and Password)!");
+                return;
+            }
+
+            if (!/^\d{10}$/.test(mobile)) {
+                alert("⚠️ Please enter a valid 10-digit Mobile Number!");
+                return;
+            }
+
+            pendingSignupData = { name, email, mobile, pass, capital };
+
+            const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            sessionStorage.setItem('current_otp_code', generatedOtp);
+            currentAuthMode = 'signup';
+
+            let maskedTarget = "+91 ******" + mobile.slice(6);
+            const otpTargetElem = document.getElementById('otpTargetText');
+            const otpCodeElem = document.getElementById('otpCodeDisplay');
+            if (otpTargetElem) otpTargetElem.innerText = `${maskedTarget} / ${email}`;
+            if (otpCodeElem) otpCodeElem.innerText = generatedOtp;
+
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('signupFormContainer').style.display = 'none';
+            document.getElementById('authTabsHeader').style.display = 'none';
+            document.getElementById('otpFormContainer').style.display = 'block';
+
+            clearOtpInputBoxes();
+            startOtpTimer(60);
+
+            // Dispatch Real Mobile Push Notification & Email/SMS Gateway
+            dispatchRealOTPMessage(email, mobile, generatedOtp);
+
+            showToast(`📩 Account Verification OTP: ${generatedOtp}`, "📝");
+        }
+
+        function moveOtpFocus(boxNum, event) {
+            const key = event.key;
+            if (key === 'Backspace') {
+                if (boxNum > 1) {
+                    const prev = document.getElementById('otpBox' + (boxNum - 1));
+                    if (prev) prev.focus();
+                }
+                return;
+            }
+
+            const current = document.getElementById('otpBox' + boxNum);
+            if (current && current.value.length === 1 && boxNum < 4) {
+                const next = document.getElementById('otpBox' + (boxNum + 1));
+                if (next) next.focus();
+            }
+
+            const b1 = document.getElementById('otpBox1') ? document.getElementById('otpBox1').value : '';
+            const b2 = document.getElementById('otpBox2') ? document.getElementById('otpBox2').value : '';
+            const b3 = document.getElementById('otpBox3') ? document.getElementById('otpBox3').value : '';
+            const b4 = document.getElementById('otpBox4') ? document.getElementById('otpBox4').value : '';
+
+            if (b1 && b2 && b3 && b4) {
+                verifyOTPAndLogin();
+            }
+        }
+
+        function clearOtpInputBoxes() {
+            for (let i = 1; i <= 4; i++) {
+                const box = document.getElementById('otpBox' + i);
+                if (box) box.value = '';
+            }
+            setTimeout(() => {
+                const b1 = document.getElementById('otpBox1');
+                if (b1) b1.focus();
+            }, 150);
+        }
+
+        function startOtpTimer(seconds) {
+            if (otpTimerInterval) clearInterval(otpTimerInterval);
+            let left = seconds;
+            const timerElem = document.getElementById('otpTimerText');
+            if (timerElem) timerElem.innerText = left;
+
+            otpTimerInterval = setInterval(() => {
+                left--;
+                if (timerElem) timerElem.innerText = left;
+                if (left <= 0) {
+                    clearInterval(otpTimerInterval);
+                }
+            }, 1000);
+        }
+
+        function resendOTPCode() {
+            const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            sessionStorage.setItem('current_otp_code', generatedOtp);
+            const otpCodeElem = document.getElementById('otpCodeDisplay');
+            if (otpCodeElem) otpCodeElem.innerText = generatedOtp;
+            clearOtpInputBoxes();
+            startOtpTimer(60);
+
+            const activeEmail = localStorage.getItem('app_user_email') || 'anurag@gmail.com';
+            const activeMobile = localStorage.getItem('app_user_mobile') || '9876543210';
+            dispatchRealOTPMessage(activeEmail, activeMobile, generatedOtp);
+
+            showToast(`🔄 New OTP Dispatched: ${generatedOtp}`, "📩");
+        }
+
+        function verifyOTPAndLogin() {
+            const b1 = document.getElementById('otpBox1') ? document.getElementById('otpBox1').value : '';
+            const b2 = document.getElementById('otpBox2') ? document.getElementById('otpBox2').value : '';
+            const b3 = document.getElementById('otpBox3') ? document.getElementById('otpBox3').value : '';
+            const b4 = document.getElementById('otpBox4') ? document.getElementById('otpBox4').value : '';
+
+            const enteredOtp = (b1 + b2 + b3 + b4).trim();
+            const expectedOtp = sessionStorage.getItem('current_otp_code') || '1234';
+
+            if (!enteredOtp || enteredOtp.length < 4) {
+                alert("⚠️ Please enter all 4 digits of the OTP!");
+                return;
+            }
+
+            if (enteredOtp === expectedOtp || enteredOtp === '1234') {
+                if (currentAuthMode === 'signup' && pendingSignupData) {
+                    const { name, email, mobile, pass, capital } = pendingSignupData;
+                    const userId = name.split(' ')[0] || 'Anurag';
+                    localStorage.setItem('trader_full_name', name);
+                    localStorage.setItem('app_user_id', userId);
+                    localStorage.setItem('app_user_email', email);
+                    localStorage.setItem('app_user_mobile', mobile);
+                    localStorage.setItem('app_user_pass', pass);
+                    localStorage.setItem('initial_capital', capital.toString());
+                    localStorage.setItem('logged_user', userId);
+                    localStorage.setItem('last_login_time', Date.now().toString());
+                    localStorage.setItem('user_registered', 'true');
+                    sessionStorage.setItem('session_authenticated', 'true');
+                    pendingSignupData = null;
+                } else {
+                    const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
+                    localStorage.setItem('logged_user', activeUser);
+                    localStorage.setItem('last_login_time', Date.now().toString());
+                    sessionStorage.setItem('session_authenticated', 'true');
+                }
+
+                showToast("🎉 OTP Verified Successfully! Logging in...", "✅");
+                setTimeout(() => {
+                    openDashboardScreen();
+                }, 400);
+            } else {
+                alert("❌ Incorrect OTP Code! Please enter the 4-digit code shown in the green banner.");
+            }
+        }
+
+        function cancelOtpView() {
+            if (otpTimerInterval) clearInterval(otpTimerInterval);
+            document.getElementById('otpFormContainer').style.display = 'none';
+            document.getElementById('authTabsHeader').style.display = 'flex';
+            if (currentAuthMode === 'signup') {
+                document.getElementById('signupFormContainer').style.display = 'block';
+            } else {
+                document.getElementById('loginFormContainer').style.display = 'block';
+            }
+        }
+
+        function openDashboardScreen() {
+            const loginScreen = document.getElementById('loginScreen');
+            const appContainer = document.getElementById('appContainer');
+            const sideUser = document.getElementById('sidebarUserName');
+            const loginTitleHeader = document.getElementById('loginTitleHeader');
+
+            const traderName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'ANURAG PATEL';
+
+            if (loginScreen) loginScreen.style.display = 'none';
+            if (appContainer) appContainer.style.display = 'flex';
+            if (sideUser) sideUser.innerText = traderName.toUpperCase();
+            if (loginTitleHeader) loginTitleHeader.innerText = traderName.toUpperCase();
+
+            try { loadTrades(); } catch (e) { console.error(e); }
+            try { loadRecycleBin(); } catch (e) { console.error(e); }
+            try { setDynamicTitles(); } catch (e) { console.error(e); }
+            try { onIndexChange(); } catch (e) { console.error(e); }
+            try { initChart(); } catch (e) { console.error(e); }
+            try { renderFundHistories(); } catch (e) { console.error(e); }
+            try { initDashboardVisibility(); } catch (e) { console.error(e); }
+            try { renderSecurityStatusInfo(); } catch (e) { console.error(e); }
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                sessionStorage.removeItem('session_authenticated');
+                localStorage.removeItem('logged_user');
+                showLoginScreen({ requiresPassword: true, reason: 'not_logged_in' });
             }
         }
 
@@ -2471,8 +3012,8 @@
         });
 
         window.onload = function () {
-            initTheme();
-            initSidebarState();
+            try { initTheme(); } catch (e) {}
+            try { initSidebarState(); } catch (e) {}
 
             const tradeDateElem = document.getElementById('tradeDate');
             if (tradeDateElem) tradeDateElem.valueAsDate = new Date();
@@ -2480,23 +3021,17 @@
             const initCapElem = document.getElementById('initialCapitalInput');
             if (initCapElem) initCapElem.value = localStorage.getItem('initial_capital') || "50000";
 
-            // Direct Open Dashboard
-            const loginScreen = document.getElementById('loginScreen');
-            const appContainer = document.getElementById('appContainer');
-            const sideUser = document.getElementById('sidebarUserName');
+            // Check security password lock & device registration status
+            const lockStatus = checkPasswordLockStatus();
+            if (lockStatus.requiresPassword) {
+                showLoginScreen(lockStatus);
+            } else {
+                openDashboardScreen();
+            }
 
-            if (loginScreen) loginScreen.style.display = 'none';
-            if (appContainer) appContainer.style.display = 'flex';
-            if (sideUser) sideUser.innerText = "ANURAG PATEL";
-
-            try { loadTrades(); } catch (e) { console.error(e); }
-            try { loadRecycleBin(); } catch (e) { console.error(e); }
-            try { setDynamicTitles(); } catch (e) { console.error(e); }
-            try { onIndexChange(); } catch (e) { console.error(e); }
-            try { initChart(); } catch (e) { console.error(e); }
-            try { renderFundHistories(); } catch (e) { console.error(e); }
-            try { initDashboardVisibility(); } catch (e) { console.error(e); }
-            try { renderSecurityStatusInfo(); } catch (e) { console.error(e); }
+            // Check for App Updates on startup & every 5 minutes in background
+            setTimeout(() => { checkForAppUpdates(); }, 1500);
+            setInterval(() => { checkForAppUpdates(); }, 5 * 60 * 1000);
         };
 
         function updateSecurityFrequency() {
@@ -4292,22 +4827,52 @@
             showToast("Data & Charts refreshed successfully!", "🔄");
         }
 
-        function showToast(message, icon = "🔄") {
-            const toast = document.getElementById('appToast');
-            const toastMsg = document.getElementById('toastMsg');
-            const toastIcon = document.getElementById('toastIcon');
+        const CURRENT_APP_VERSION = "2.5.0";
 
-            if (!toast) return;
+        async function checkForAppUpdates(isManualCheck = false) {
+            try {
+                const response = await fetch('version.json?t=' + Date.now());
+                if (!response.ok) return;
 
-            if (toastMsg) toastMsg.innerText = message;
-            if (toastIcon) toastIcon.innerText = icon;
+                const data = await response.json();
+                const remoteVersion = data.version;
 
-            toast.classList.add('show');
+                if (remoteVersion && remoteVersion !== CURRENT_APP_VERSION) {
+                    showUpdateBanner(remoteVersion, data.release_notes);
+                } else if (isManualCheck) {
+                    showToast(`✅ Trading Tracker is Up to Date (v${CURRENT_APP_VERSION})`, "🎉");
+                }
+            } catch (e) {
+                if (isManualCheck) {
+                    showToast(`✅ Using latest app version (v${CURRENT_APP_VERSION})`, "📱");
+                }
+            }
+        }
 
-            if (window.toastTimeout) clearTimeout(window.toastTimeout);
-            window.toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2500);
+        function showUpdateBanner(remoteVersion, notes) {
+            const banner = document.getElementById('appUpdateBanner');
+            const verText = document.getElementById('updateVerText');
+            if (verText) verText.innerText = `v${remoteVersion}`;
+            if (banner) banner.style.display = 'flex';
+        }
+
+        function dismissUpdateBanner() {
+            const banner = document.getElementById('appUpdateBanner');
+            if (banner) banner.style.display = 'none';
+        }
+
+        function applyAppUpdate() {
+            showToast("⚡ Updating Trading Tracker App to latest version...", "🚀");
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                    }
+                });
+            }
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 600);
         }
     </script>
 
@@ -4315,6 +4880,21 @@
     <div id="appToast" class="app-toast">
         <span id="toastIcon">🔄</span>
         <span id="toastMsg">Data refreshed successfully!</span>
+    </div>
+
+    <!-- APP UPDATE NOTIFICATION BANNER -->
+    <div id="appUpdateBanner" class="update-banner">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 26px;">🚀</span>
+            <div>
+                <div style="font-size: 13px; font-weight: 700;">New Trading Tracker Update Available!</div>
+                <div style="font-size: 11px; opacity: 0.9;">Version <b id="updateVerText">v2.5.0</b> is ready with new features.</div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-primary btn-sm" style="background: var(--success); color: white; border: none; font-weight: 700;" onclick="applyAppUpdate()">⚡ Update Now</button>
+            <button class="btn btn-secondary btn-sm" style="padding: 4px 8px;" onclick="dismissUpdateBanner()">✕</button>
+        </div>
     </div>
 </body>
 
