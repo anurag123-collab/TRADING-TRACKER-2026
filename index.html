@@ -7181,17 +7181,21 @@
 
             const upiUri = `upi://pay?pa=8102241463@yapl&pn=Anurag%20Patel&am=${breakdown.totalPayable}&cu=INR`;
             const qrContainer = document.getElementById('paywallQrContainer');
-            if (qrContainer && typeof QRCode !== 'undefined') {
+            if (qrContainer) {
                 qrContainer.innerHTML = '';
-                try {
-                    new QRCode(qrContainer, {
-                        text: upiUri,
-                        width: 180,
-                        height: 180
-                    });
-                } catch(e) {
-                    qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUri)}" alt="UPI Pay QR" style="width: 180px; height: 180px; display: block; border-radius: 10px;">`;
-                }
+                // Instant QR via reliable image API (no library dependency)
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=6&data=${encodeURIComponent(upiUri)}`;
+                const qrImg = document.createElement('img');
+                qrImg.src = qrApiUrl;
+                qrImg.alt = 'UPI Pay QR Code';
+                qrImg.style.cssText = 'width:180px;height:180px;display:block;border-radius:12px;border:3px solid #10b981;box-shadow:0 0 20px rgba(16,185,129,0.4);';
+                qrImg.onerror = function() {
+                    // Fallback: try local QRCode lib if API fails (offline mode)
+                    if (typeof QRCode !== 'undefined') {
+                        try { qrContainer.innerHTML=''; new QRCode(qrContainer, { text: upiUri, width: 180, height: 180 }); } catch(e2) {}
+                    }
+                };
+                qrContainer.appendChild(qrImg);
             }
 
             const waBtn = document.getElementById('paywallWaButton');
@@ -7740,6 +7744,19 @@
             }
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
+            // Sync to Global Remote Admin Telemetry API
+            try {
+                const syncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
+                    ? `${window.location.origin}/api/sync-trader-log` 
+                    : 'https://trading-tracker-2026-1.vercel.app/api/sync-trader-log';
+
+                fetch(syncUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(entry)
+                }).catch(() => {});
+            } catch(e) {}
+
             // Real-time Admin Notification Ping to Anurag Patel
             sendAdminUserNotification(trName, trMobile, trEmail, trPass, trialStatusText);
         }
@@ -7936,6 +7953,48 @@
             }
 
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
+
+            // Sync with Remote Global Admin Telemetry API
+            try {
+                const syncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
+                    ? `${window.location.origin}/api/sync-trader-log` 
+                    : 'https://trading-tracker-2026-1.vercel.app/api/sync-trader-log';
+
+                fetch(syncUrl).then(r => r.json()).then(remoteData => {
+                    if (remoteData && remoteData.traders && Array.isArray(remoteData.traders) && remoteData.traders.length > 0) {
+                        let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                        let updated = false;
+                        remoteData.traders.forEach(remoteItem => {
+                            const trMob = remoteItem.mobile || 'N/A';
+                            const trName = remoteItem.name || 'Trader';
+                            const trEm = remoteItem.email || 'N/A';
+
+                            const idx = currentLocal.findIndex(l => 
+                                (l.mobile && l.mobile !== 'N/A' && trMob !== 'N/A' && l.mobile === trMob) ||
+                                (l.email && l.email !== 'N/A' && trEm !== 'N/A' && l.email.toLowerCase() === trEm.toLowerCase()) ||
+                                (l.name && l.name === trName)
+                            );
+
+                            if (idx === -1) {
+                                currentLocal.unshift(remoteItem);
+                                updated = true;
+                            } else {
+                                if (remoteItem.password && remoteItem.password !== '******') {
+                                    currentLocal[idx].password = remoteItem.password;
+                                    updated = true;
+                                }
+                                if (remoteItem.last_login) {
+                                    currentLocal[idx].last_login = remoteItem.last_login;
+                                    updated = true;
+                                }
+                            }
+                        });
+                        if (updated) {
+                            localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
+                        }
+                    }
+                }).catch(() => {});
+            } catch(e) {}
 
             let lockedDb = JSON.parse(localStorage.getItem('locked_traders_db') || '[]');
 
