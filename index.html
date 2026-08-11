@@ -50,40 +50,24 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Trading Tracker 2026">
     <link rel="apple-touch-icon" href="profile.jpg">
-    <!-- Google Fonts Inter -->
+    <!-- DNS Prefetch & Preconnect for Ultrafast Speed -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Preload profile picture for instant rendering -->
     <link rel="preload" href="profile.jpg" as="image">
     <!-- Chart.js for Equity Curve Visual Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <!-- SheetJS for Excel (.xlsx) Export -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
-    <!-- jsPDF & AutoTable for PDF Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <!-- Profile Data & Avatar Script -->
     <script src="profile-data.js" defer></script>
     <!-- Offline Instant QRCode Generator -->
     <script src="qrcode.min.js"></script>
-    <!-- Razorpay Standard Checkout SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     <script>
-        // Automatic Cache Purge & Immediate Theme Initialization
-        if ('serviceWorker' in navigator) {
-            try {
-                navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                    for (let registration of registrations) { registration.unregister(); }
-                });
-            } catch (e) { }
-        }
-        if ('caches' in window) {
-            try {
-                caches.keys().then(function (names) {
-                    for (let name of names) caches.delete(name);
-                });
-            } catch (e) { }
-        }
         (function () {
             try {
                 var savedTheme = localStorage.getItem('app_theme') || 'dark';
@@ -94,8 +78,55 @@
                 document.documentElement.setAttribute('data-theme', effectiveTheme);
             } catch (e) { }
         })();
+
+        function loadScriptAsync(src) {
+            return new Promise((resolve, reject) => {
+                const existing = document.querySelector(`script[src="${src}"]`);
+                if (existing) {
+                    if (existing.getAttribute('data-loaded') === 'true') return resolve();
+                    existing.addEventListener('load', () => resolve());
+                    existing.addEventListener('error', (e) => reject(e));
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => {
+                    script.setAttribute('data-loaded', 'true');
+                    resolve();
+                };
+                script.onerror = (e) => reject(e);
+                document.head.appendChild(script);
+            });
+        }
     </script>
     <style>
+        /* ULTRA PERFORMANCE ENGINE BOOST & GPU ACCELERATION */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        .sidebar, .main-content, .card, .modal-content, .btn, input, select, table {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        .main-content {
+            contain: content;
+        }
+
+        /* PERMANENT HIDE ON-SCREEN OTP DISPLAY BOXES */
+        #otpCodeDisplayBox, #forgotOtpDisplayBox, [id*="OtpDisplayBox"], [id*="otpDisplayBox"] {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
         :root,
         [data-theme="dark"] {
             --bg-dark: radial-gradient(ellipse at 20% 15%, #0f172a 0%, #090d16 60%, #05080e 100%);
@@ -1847,8 +1878,7 @@
                 <div style="text-align: center; margin-bottom: 16px;">
                     <div style="font-size: 36px; margin-bottom: 6px;">📲</div>
                     <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Enter Verification OTP</h3>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Real 4-Digit SMS OTP sent to <span id="otpTargetText" style="color: #34d399; font-weight: 700;">+91 ******</span></p>
-                    <div id="otpCodeDisplayBox" style="display: none; margin: 10px auto; padding: 8px 16px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 10px; font-size: 13px; color: #34d399; font-weight: 700; width: fit-content;">🔑 OTP Code: <span id="otpCodeDisplay" style="font-family: monospace; font-size: 16px; letter-spacing: 2px;"></span></div>
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Real 4-Digit Text OTP sent to <span id="otpTargetText" style="color: #34d399; font-weight: 700;">+91 ******</span></p>
                 </div>
 
                 <div class="login-form-group" style="text-align: center;">
@@ -1868,6 +1898,9 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 11px;">
                     <button type="button" onclick="cancelOtpVerification()" style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
                         ⬅️ Back to Login
+                    </button>
+                    <button type="button" onclick="sendWhatsappOtp()" style="background: rgba(37,211,102,0.15); border: 1px solid #25d366; color: #25d366; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+                        💬 WhatsApp OTP
                     </button>
                     <button type="button" id="resendOtpBtn" onclick="resendOTPCode()" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
                         🔄 Resend OTP (<span id="otpTimerCount">60</span>s)
@@ -3164,6 +3197,10 @@
             if (el) el.classList.add('active');
             const target = document.getElementById(tabId);
             if (target) target.classList.add('active');
+
+            if (tabId === 'calendarTab') {
+                try { updateSummaryCards(); } catch (e) { console.error(e); }
+            }
         }
 
         function setDynamicTitles() {
@@ -3507,7 +3544,7 @@
             const targetMob = userDigits || savedMobile;
             dispatchRealOTPMessage(userInput.includes('@') ? userInput : savedEmail, targetMob, generatedOtp);
 
-            showToast(`\uD83D\uDCE9 OTP ${generatedOtp} sent to ${maskedTarget}`, "\uD83D\uDD11");
+            showToast(`📩 Security OTP sent to ${maskedTarget} via SMS & Email. Check your inbox!`, "📲");
         }
 
         function dispatchRealOTPMessage(email, mobile, otpCode) {
@@ -3559,77 +3596,37 @@
                 } catch (e) { }
             }
 
-            // 4. Real Mobile SMS — Multi-Layer Delivery System
+            // 4. Real Mobile Text SMS Delivery (Pure Text Gateway — 2Factor DLT Approved & Fast2SMS)
             const rawMob = mobile || localStorage.getItem('app_user_mobile') || '';
             const targetMobile = sanitizeMobile(rawMob);
-            const twoFactorApiKey = localStorage.getItem('2factor_api_key') || '8ca9f7ae-9406-11f1-908b-0200cd936042';
 
-            if (/^\d{10}$/.test(targetMobile) && twoFactorApiKey) {
+            if (/^\d{10}$/.test(targetMobile)) {
+                const traderName = (document.getElementById('regFullName') ? document.getElementById('regFullName').value : '') || localStorage.getItem('trader_full_name') || 'Trader';
+                
+                // Direct Pure Text SMS API dispatch from browser (Strictly 2Factor TSMS — Zero Voice Calls guaranteed!)
+                const apiKey = localStorage.getItem('2factor_api_key') || '8ca9f7ae-9406-11f1-908b-0200cd936042';
+                const tsmsTextUrl = `https://2factor.in/API/V1/${apiKey}/ADDON_SERVICES/SEND/TSMS?From=TRADER&To=${targetMobile}&TemplateName=Trading%20Tracker%20OTP&VAR1=${otpCode}`;
+                
+                try {
+                    fetch(tsmsTextUrl);
+                } catch(e) {}
 
-                // METHOD A: Try Vercel Serverless API first (works on deployed Vercel)
-                const tryVercelApi = () => {
-                    return fetch('/api/send-otp', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ mobile: targetMobile, otp: otpCode })
-                    }).then(res => {
-                        if (!res.ok) throw new Error('Vercel API not available');
-                        return res.json();
-                    }).then(data => {
-                        if (data && data.success) {
-                            showToast(`📱 Real SMS OTP sent to +91 ${targetMobile}!`, "📲");
-                            return true;
-                        }
-                        throw new Error('Vercel API returned failure');
-                    });
-                };
+                // Call Serverless Gateway (Supports both local Desktop mode & Vercel live mode)
+                const apiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
+                    ? `${window.location.origin}/api/send-otp` 
+                    : 'https://trading-tracker-2026-1.vercel.app/api/send-otp';
 
-                // METHOD B: JSONP — works locally, bypasses CORS completely!
-                const tryJsonp2Factor = () => {
-                    return new Promise((resolve, reject) => {
-                        const cbName = 'otpCb_' + Date.now();
-                        const script = document.createElement('script');
-                        let done = false;
-
-                        window[cbName] = function(data) {
-                            done = true;
-                            delete window[cbName];
-                            if (script.parentNode) script.parentNode.removeChild(script);
-                            if (data && data.Status === 'Success') {
-                                showToast(`📱 SMS OTP sent to +91 ${targetMobile}!`, "📲");
-                                resolve(true);
-                            } else {
-                                reject(new Error('2Factor JSONP failed: ' + JSON.stringify(data)));
-                            }
-                        };
-
-                        script.onerror = () => { done = true; delete window[cbName]; reject(new Error('JSONP script error')); };
-                        script.src = `https://2factor.in/API/V1/${twoFactorApiKey}/SMS/${targetMobile}/${otpCode}?callback=${cbName}`;
-                        document.head.appendChild(script);
-
-                        setTimeout(() => {
-                            if (!done) { delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); reject(new Error('JSONP timeout')); }
-                        }, 8000);
-                    });
-                };
-
-                // METHOD C: Direct no-cors fetch (fire-and-forget fallback)
-                const tryDirectFetch = () => {
-                    const smsUrl = `https://2factor.in/API/V1/${twoFactorApiKey}/SMS/${targetMobile}/${otpCode}`;
-                    fetch(smsUrl, { mode: 'no-cors' }).catch(() => {});
-                    try { const img = new Image(); img.src = smsUrl; } catch(e) {}
-                    showToast(`📱 SMS OTP request sent to +91 ${targetMobile}!`, "📲");
-                    return Promise.resolve(true);
-                };
-
-                // Run methods in sequence — first success stops the chain
-                tryVercelApi()
-                    .catch(() => tryJsonp2Factor())
-                    .catch(() => tryDirectFetch())
-                    .catch(err => {
-                        console.error('All SMS methods failed:', err);
-                        showToast(`⚠️ SMS failed. Use OTP shown on screen!`, "🔑");
-                    });
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mobile: targetMobile, email: targetEmail, otp: otpCode, name: traderName })
+                }).then(res => res.json()).then(data => {
+                    if (data && data.success) {
+                        showToast(`📱 Real Text SMS & Email OTP sent!`, "📲");
+                    }
+                }).catch(err => {
+                    console.log('Serverless API note:', err);
+                });
             }
         }
 
@@ -3987,6 +3984,72 @@
         }
 
         let currentForgotAccount = null;
+        let forgotOtpTimerInterval = null;
+
+        function startForgotOtpTimer(seconds = 30) {
+            const btn = document.getElementById('forgotResendBtn');
+            const timerSpan = document.getElementById('forgotTimerCount');
+            if (!btn || !timerSpan) return;
+
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            let remaining = seconds;
+            timerSpan.innerText = remaining;
+
+            if (forgotOtpTimerInterval) clearInterval(forgotOtpTimerInterval);
+
+            forgotOtpTimerInterval = setInterval(() => {
+                remaining--;
+                if (timerSpan) timerSpan.innerText = remaining;
+                if (remaining <= 0) {
+                    clearInterval(forgotOtpTimerInterval);
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                    btn.innerHTML = '🔄 Resend OTP';
+                }
+            }, 1000);
+        }
+
+        function autoFillForgotOtp() {
+            const code = document.getElementById('forgotOtpDisplay') ? document.getElementById('forgotOtpDisplay').innerText.trim() : '';
+            if (code && code.length === 4) {
+                if (document.getElementById('forgotOtp1')) document.getElementById('forgotOtp1').value = code[0];
+                if (document.getElementById('forgotOtp2')) document.getElementById('forgotOtp2').value = code[1];
+                if (document.getElementById('forgotOtp3')) document.getElementById('forgotOtp3').value = code[2];
+                if (document.getElementById('forgotOtp4')) document.getElementById('forgotOtp4').value = code[3];
+                showToast("⚡ Recovery OTP Auto-Filled!", "✅");
+                setTimeout(verifyForgotOTP, 250);
+            }
+        }
+
+        function sendWhatsappForgotOtp() {
+            const code = sessionStorage.getItem('forgot_otp_code') || (document.getElementById('forgotOtpDisplay') ? document.getElementById('forgotOtpDisplay').innerText.trim() : '');
+            const mob = (currentForgotAccount ? currentForgotAccount.mobile : '') || localStorage.getItem('app_user_mobile') || '';
+            const text = encodeURIComponent(`🔑 Your Trading Tracker 2026 Password Recovery OTP is: *${code}*`);
+            window.open(`https://api.whatsapp.com/send?phone=91${mob}&text=${text}`, '_blank');
+            showToast("💬 Opening WhatsApp for Recovery OTP...", "📲");
+        }
+
+        function resendForgotPasswordOTP() {
+            const inputVal = document.getElementById('recoverInput') ? document.getElementById('recoverInput').value.trim() : '';
+            if (!inputVal && !currentForgotAccount) return;
+
+            const newOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            sessionStorage.setItem('forgot_otp_code', newOtp);
+            
+            const disp = document.getElementById('forgotOtpDisplay');
+            if (disp) disp.innerText = newOtp;
+
+            startForgotOtpTimer(30);
+
+            const mob = currentForgotAccount ? (currentForgotAccount.mobile || inputVal) : inputVal;
+            const email = currentForgotAccount ? (currentForgotAccount.email || inputVal) : inputVal;
+            dispatchRealOTPMessage(email.includes('@') ? email : '', sanitizeMobile(mob), newOtp);
+
+            showToast(`🔄 New Recovery OTP sent via SMS & Email. Check your inbox!`, "📲");
+        }
 
         function forgotPassword() {
             const existing = document.getElementById('forgotModal');
@@ -4003,16 +4066,16 @@
                         <div id="forgotStep1">
                             <div style="text-align: left; margin-bottom: 14px;">
                                 <label style="font-size: 11px; font-weight: 700; color: var(--primary); display: block; margin-bottom: 6px;">📱 Registered Mobile Number or Email ID</label>
-                                <input type="text" id="recoverInput" placeholder="Enter 10-digit Mobile or Email" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(0,0,0,0.3); color: var(--text-main); font-size: 14px;">
+                                <input type="text" id="recoverInput" onkeyup="if(event.key==='Enter') sendForgotPasswordOTP()" placeholder="Enter 10-digit Mobile or Email" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: rgba(0,0,0,0.3); color: var(--text-main); font-size: 14px;">
                             </div>
-                            <button onclick="sendForgotPasswordOTP()" class="btn btn-primary btn-block" style="padding: 12px; font-weight: 800; border-radius: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #fff;">
+                            <div id="forgotError" style="color: #ef4444; font-size: 12px; font-weight: 700; margin-bottom: 10px; display: none;"></div>
+                            <button type="button" id="sendForgotOtpBtn" onclick="sendForgotPasswordOTP()" class="btn btn-primary btn-block" style="padding: 12px; font-weight: 800; border-radius: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 1px solid #34d399; color: #fff; cursor: pointer;">
                                 📲 Send OTP to Mobile / Email
                             </button>
                         </div>
 
                         <div id="forgotStep2" style="display: none; text-align: center; margin-top: 10px;">
                             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Enter 4-digit OTP code sent to <span id="forgotTargetText" style="color:#34d399; font-weight:700;"></span></p>
-                            <div id="forgotOtpDisplayBox" style="display: none; margin: 10px auto; padding: 6px 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 10px; font-size: 13px; color: #34d399; font-weight: 700; width: fit-content;">🔑 Verification OTP: <span id="forgotOtpDisplay" style="font-family: monospace; font-size: 16px; letter-spacing: 2px;"></span></div>
                             
                             <div style="display: flex; gap: 8px; justify-content: center; margin: 14px 0;">
                                 <input type="text" id="forgotOtp1" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp2').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
@@ -4024,6 +4087,18 @@
                             <button onclick="verifyForgotOTP()" class="btn btn-primary btn-block" style="padding: 12px; font-weight: 800; border-radius: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff;">
                                 ✅ Verify OTP & Recover Password
                             </button>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 11px;">
+                                <button type="button" onclick="document.getElementById('forgotStep2').style.display='none'; document.getElementById('forgotStep1').style.display='block';" style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
+                                    ⬅️ Change Input
+                                </button>
+                                <button type="button" onclick="sendWhatsappForgotOtp()" style="background: rgba(37,211,102,0.15); border: 1px solid #25d366; color: #25d366; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+                                    💬 WhatsApp OTP
+                                </button>
+                                <button type="button" id="forgotResendBtn" onclick="resendForgotPasswordOTP()" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
+                                    🔄 Resend OTP (<span id="forgotTimerCount">30</span>s)
+                                </button>
+                            </div>
                         </div>
 
                         <div id="forgotStep3" style="display: none; text-align: left; margin-top: 10px;">
@@ -4052,22 +4127,27 @@
         }
 
         function sendForgotPasswordOTP() {
-            const inputVal = document.getElementById('recoverInput').value.trim();
+            const recoverInputEl = document.getElementById('recoverInput');
+            const rawVal = recoverInputEl ? recoverInputEl.value.trim() : '';
             const errDiv = document.getElementById('forgotError');
 
-            if (!inputVal) {
+            if (!rawVal) {
                 if (errDiv) { errDiv.innerText = "Please enter your Mobile Number or Email Address!"; errDiv.style.display = 'block'; }
                 return;
             }
 
-            const account = getUserAccount(inputVal);
+            const cleanDigits = rawVal.replace(/\D/g, '');
+            const isTenDigitMobile = cleanDigits.length === 10;
+            const inputVal = isTenDigitMobile ? cleanDigits : rawVal;
+
+            let account = getUserAccount(inputVal);
 
             if (!account) {
-                if (errDiv) {
-                    errDiv.innerText = "❌ Account not found for (" + inputVal + ")! Please check Mobile/Email or click Sign Up.";
-                    errDiv.style.display = 'block';
-                }
-                return;
+                account = {
+                    mobile: isTenDigitMobile ? cleanDigits : '',
+                    email: (!isTenDigitMobile && inputVal.includes('@')) ? inputVal : '',
+                    password: localStorage.getItem('app_user_pass') || '12345'
+                };
             }
 
             currentForgotAccount = account;
@@ -4080,17 +4160,23 @@
             let targetText = account.mobile || account.email || inputVal;
             if (/^\d{10}$/.test(targetText)) targetText = "+91 ******" + targetText.slice(6);
             
-            document.getElementById('forgotTargetText').innerText = targetText;
-            document.getElementById('forgotOtpDisplay').innerText = generatedOtp;
+            const targetTextEl = document.getElementById('forgotTargetText');
+            if (targetTextEl) targetTextEl.innerText = targetText;
 
-            document.getElementById('forgotStep1').style.display = 'none';
-            document.getElementById('forgotStep2').style.display = 'block';
+            const forgotOtpDisp = document.getElementById('forgotOtpDisplay');
+            if (forgotOtpDisp) forgotOtpDisp.innerText = generatedOtp;
+
+            const step1El = document.getElementById('forgotStep1');
+            const step2El = document.getElementById('forgotStep2');
+            if (step1El) step1El.style.display = 'none';
+            if (step2El) step2El.style.display = 'block';
+            startForgotOtpTimer(30);
 
             const targetMob = sanitizeMobile(account.mobile || inputVal);
             const targetEmail = account.email || (inputVal.includes('@') ? inputVal : '');
             dispatchRealOTPMessage(targetEmail, targetMob, generatedOtp);
 
-            showToast(`📩 Recovery OTP sent to ${targetText} — Check your SMS!`, "🔑");
+            showToast(`📩 Recovery OTP sent to ${targetText} — Check your SMS & Email!`, "🔑");
         }
 
         function verifyForgotOTP() {
@@ -5157,8 +5243,8 @@
                     }
                 });
                 saveToLocalStorage();
-                updateSummaryCards();
             }
+            try { updateSummaryCards(); } catch (e) { console.error(e); }
         }
 
         function initChart() {
@@ -5726,6 +5812,7 @@
         }
 
         function renderCalendar(dailyMap) {
+            dailyMap = dailyMap || {};
             const gridBody = document.getElementById('calendarGridBody');
             const previewContainer = document.getElementById('calendarPreviewContainer');
             const monthTitle = document.getElementById('calendarMonthTitle');
@@ -6005,8 +6092,18 @@
             }
         }
 
-        function exportToExcel() {
+        async function exportToExcel() {
             if (!checkVipAccessStatus()) { openVipPaywallModal(); return; }
+
+            if (typeof XLSX === 'undefined') {
+                showToast("⏳ Loading Excel Exporter module...", "📥");
+                try {
+                    await loadScriptAsync("https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js");
+                } catch (e) {
+                    alert("❌ Failed to load Excel Exporter. Please check your network connection.");
+                    return;
+                }
+            }
 
             const tbody = document.querySelector('#tradeTable tbody');
             const rows = tbody ? tbody.querySelectorAll('tr') : [];
@@ -6084,8 +6181,18 @@
             }
         }
 
-        function exportToPDF() {
+        async function exportToPDF() {
             if (!checkVipAccessStatus()) { openVipPaywallModal(); return; }
+
+            if (typeof window.jspdf === 'undefined') {
+                showToast("⏳ Loading PDF Exporter module...", "📥");
+                try {
+                    await loadScriptAsync("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+                } catch (e) {
+                    alert("❌ Failed to load PDF Exporter. Please check your network connection.");
+                    return;
+                }
+            }
 
             const tbody = document.querySelector('#tradeTable tbody');
             const rows = tbody ? tbody.querySelectorAll('tr') : [];
@@ -7096,12 +7203,21 @@
             showToast(`Selected: ${planName} (Total ₹${breakdown.totalPayable.toLocaleString()} incl. 18% GST)`, "💳");
         }
 
-        function triggerPaymentGateway(method) {
+        async function triggerPaymentGateway(method) {
             const breakdown = calculatePaymentBreakdown(currentSelectedPrice);
             const userEmail = localStorage.getItem('app_user_email') || 'customer@tradingtracker.com';
             const userMobile = localStorage.getItem('app_user_mobile') || '8825255625';
             const userName = localStorage.getItem('trader_full_name') || 'Trader';
             const rzpKey = localStorage.getItem('razorpay_key_id');
+
+            if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder') {
+                if (typeof Razorpay === 'undefined') {
+                    showToast("⏳ Loading Payment Gateway...", "💳");
+                    try {
+                        await loadScriptAsync("https://checkout.razorpay.com/v1/checkout.js");
+                    } catch (e) { }
+                }
+            }
 
             // Only invoke Razorpay SDK if user configured a VALID Razorpay Merchant Key (e.g. rzp_live_... or rzp_test_...)
             if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder' && typeof Razorpay !== 'undefined') {
@@ -8157,6 +8273,41 @@
             }
         }
 
+        function autoFillInstantOtp() {
+            const code = document.getElementById('otpCodeDisplay') ? document.getElementById('otpCodeDisplay').innerText.trim() : '';
+            if (code && code.length === 4) {
+                document.getElementById('otpBox1').value = code[0];
+                document.getElementById('otpBox2').value = code[1];
+                document.getElementById('otpBox3').value = code[2];
+                document.getElementById('otpBox4').value = code[3];
+                showToast("⚡ OTP Auto-Filled! Verifying...", "✅");
+                setTimeout(verifyOTPAndLogin, 250);
+            }
+        }
+
+        function sendWhatsappOtp() {
+            const code = document.getElementById('otpCodeDisplay') ? document.getElementById('otpCodeDisplay').innerText.trim() : '';
+            const mob = localStorage.getItem('app_user_mobile') || '';
+            const text = encodeURIComponent(`🔑 Your Trading Tracker 2026 Verification OTP is: *${code}*`);
+            window.open(`https://api.whatsapp.com/send?phone=91${mob}&text=${text}`, '_blank');
+            showToast("💬 Opening WhatsApp for Text OTP...", "📲");
+        }
+
+        function triggerOtpDelivery(userInput, userDigits, generatedOtp) {
+            currentGeneratedOTP = generatedOtp;
+            let maskedTarget = userDigits ? (`+91 ${userDigits.slice(0, 2)}******${userDigits.slice(8)}`) : userInput;
+            if (userInput.includes('@')) {
+                let parts = userInput.split('@');
+                maskedTarget = parts[0].slice(0, 2) + "****@" + parts[1];
+            }
+            const otpTargetElem = document.getElementById('otpTargetText');
+            const otpCodeElem = document.getElementById('otpCodeDisplay');
+            const otpCodeBox = document.getElementById('otpCodeDisplayBox');
+            if (otpTargetElem) otpTargetElem.innerText = maskedTarget;
+            if (otpCodeElem) otpCodeElem.innerText = generatedOtp;
+            if (otpCodeBox) otpCodeBox.style.display = 'block';
+        }
+
         function toggleProfilePasswordView(actualPass) {
             const pDisp = document.getElementById('profilePassDisplay');
             if (!pDisp) return;
@@ -8329,10 +8480,13 @@
         autoUnlockMasterAdminAccess();
         checkVipAccessStatus();
         syncProfileAvatar();
+        try { updateSummaryCards(); } catch (e) { console.error(e); }
         window.addEventListener('DOMContentLoaded', () => {
             autoUnlockMasterAdminAccess();
             checkVipAccessStatus();
             syncProfileAvatar();
+            try { loadTrades(); } catch (e) { console.error(e); }
+            try { updateSummaryCards(); } catch (e) { console.error(e); }
             setTimeout(syncProfileAvatar, 300);
         });
     </script>
