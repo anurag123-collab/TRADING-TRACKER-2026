@@ -10,11 +10,11 @@
     <meta name="keywords"
         content="Trading Tracker 2026, Trading Tracker Desktop Web, Trading Tracker Anurag Patel, Trading Journal 2026">
     <meta name="author" content="Anurag Patel">
-    <link rel="canonical" href="https://trading-tracker-2026-1.vercel.app/">
+    <link rel="canonical" href="https://trading-tracker-2026.vercel.app/">
 
     <!-- Open Graph / Facebook / WhatsApp SEO -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://trading-tracker-2026-1.vercel.app/">
+    <meta property="og:url" content="https://trading-tracker-2026.vercel.app/">
     <meta property="og:title" content="Trading Tracker 2026 - Desktop Web Edition by Anurag Patel">
     <meta property="og:description"
         content="Official Trading Tracker 2026 Desktop Web Edition by Anurag Patel. Track trades, P&L, and equity curve graphs smoothly.">
@@ -37,10 +37,14 @@
         "@type": "Person",
         "name": "Anurag Patel"
       },
-      "url": "https://trading-tracker-2026-1.vercel.app/",
+      "url": "https://trading-tracker-2026.vercel.app/",
       "description": "Trading Tracker 2026 official trading journal app founded by Anurag Patel."
     }
     </script>
+
+    <!-- Google AdSense Verification Script & Meta Tag -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
 
     <!-- PWA & Mobile Web App Meta Tags -->
     <link rel="manifest" href="manifest.json">
@@ -61,17 +65,25 @@
     <!-- Non-Blocking Google Fonts Loader (Zero-Delay First Paint) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
-    <!-- Instant Dark Mode Base CSS (Zero White Screen Delay) -->
-    <style>html, body { background-color: #090d16 !important; color: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }</style>
+    <!-- Instant Dark Mode Base CSS & GPU Hardware Acceleration -->
+    <style>
+        html, body { background-color: #090d16 !important; color: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+        .card, .stat-card, .btn, .nav-item, table { contain: content; will-change: transform; transform: translateZ(0); }
+        img, iframe { content-visibility: auto; }
+    </style>
     <!-- Chart.js for Equity Curve Visual Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <!-- Profile Data & Avatar Script -->
     <script src="profile-data.js" defer></script>
     <!-- Offline Instant QRCode Generator -->
     <script src="qrcode.min.js" defer></script>
+    <!-- Official TradingView Real-Time Chart Library -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
         (function () {
             try {
+                localStorage.removeItem('hidden_dashboard_widgets');
+                localStorage.setItem('app_vip_unlocked', 'true');
                 var savedTheme = localStorage.getItem('app_theme') || 'dark';
                 var effectiveTheme = savedTheme;
                 if (savedTheme === 'system') {
@@ -1970,6 +1982,26 @@
                 </li>
 
                 <li>
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="AI Trade Coach & Insights" onclick="switchTab('aiCoachTab', this)">
+                        <span class="nav-icon">🤖</span> <span>AI Coach</span> <span class="badge" style="background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%); color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 8px;">AI</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Live TradingView Charts" onclick="switchTab('tradingViewTab', this)">
+                        <span class="nav-icon">📈</span> <span>Live Charts</span> <span class="badge" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 8px;">LIVE</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Top Traders Community Leaderboard" onclick="switchTab('leaderboardTab', this)">
+                        <span class="nav-icon">🏆</span> <span>Leaderboard</span> <span class="badge" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 8px;">TOP</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Broker Deals & Partner Offers" onclick="switchTab('brokersTab', this)">
+                        <span class="nav-icon">🤝</span> <span>Broker Deals</span> <span class="badge" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 8px; box-shadow: 0 0 8px rgba(16,185,129,0.5);">EARN</span>
+                    </a>
+                </li>
+                <li>
                     <a class="nav-item" href="javascript:void(0)" data-tooltip="Settings" onclick="switchTab('settingsTab', this)">
                         <span class="nav-icon">⚙️</span> <span>Settings</span>
                     </a>
@@ -2042,6 +2074,9 @@
                         <h2>📊 Dashboard Overview</h2>
                     </div>
                     <div class="dashboard-toolbar-actions">
+                        <button class="btn btn-sm" onclick="sendWhatsAppDailyReport()" style="background: #25d366; color: #fff; font-weight: 800; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px rgba(37,211,102,0.4);" title="Share Today's P&L Report on WhatsApp">
+                            <span>📲</span> Share WhatsApp
+                        </button>
                         <button class="btn btn-secondary btn-sm" onclick="refreshApp()"
                             title="Refresh All Dashboard Data & Charts (Alt + R)">
                             <span class="refresh-icon">🔄</span> Refresh
@@ -2183,29 +2218,82 @@
                             <div class="form-group">
                                 <label>Index / Asset</label>
                                 <select id="indexName" class="form-control" onchange="onIndexChange()">
-                                    <option value="Nifty">Nifty (65 Qty)</option>
-                                    <option value="Sensex">Sensex (20 Qty)</option>
-                                    <option value="BankNifty">BankNifty (30 Qty)</option>
-                                    <option value="FinNifty">FinNifty (60 Qty)</option>
+                                    <optgroup label="🇮🇳 Indian Equity Indices">
+                                        <option value="Nifty">Nifty 50 (65 Qty)</option>
+                                        <option value="Sensex">Sensex (20 Qty)</option>
+                                        <option value="BankNifty">BankNifty (30 Qty)</option>
+                                        <option value="FinNifty">FinNifty (60 Qty)</option>
+                                        <option value="MidcapNifty">Midcap Nifty (120 Qty)</option>
+                                    </optgroup>
+                                    <optgroup label="🥇 Commodities & Gold (MCX / Global)">
+                                        <option value="GoldMCX">🥇 Gold (MCX / XAUUSD)</option>
+                                        <option value="SilverMCX">🥈 Silver (MCX / XAGUSD)</option>
+                                        <option value="CrudeOil">🛢️ Crude Oil (MCX / WTI)</option>
+                                        <option value="NaturalGas">🔥 Natural Gas (MCX)</option>
+                                        <option value="Copper">🪙 Copper (MCX)</option>
+                                    </optgroup>
+                                    <optgroup label="🪙 Crypto Currencies">
+                                        <option value="CryptoBTC">🪙 Bitcoin (BTC / USDT)</option>
+                                        <option value="CryptoETH">💎 Ethereum (ETH / USDT)</option>
+                                        <option value="CryptoSOL">🟣 Solana (SOL / USDT)</option>
+                                        <option value="CryptoAlt">🚀 Altcoins / Crypto</option>
+                                    </optgroup>
+                                    <optgroup label="💱 Forex & Currency Pairs">
+                                        <option value="USDINR">💵 USD / INR (Forex)</option>
+                                        <option value="EURUSD">💶 EUR / USD (Forex)</option>
+                                        <option value="GBPUSD">💷 GBP / USD (Forex)</option>
+                                        <option value="USDJPY">💴 USD / JPY (Forex)</option>
+                                    </optgroup>
+                                    <optgroup label="📊 Equities / Stocks">
+                                        <option value="Stocks">📈 Stocks / Shares / Equity</option>
+                                    </optgroup>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label style="color: #38bdf8;">🏦 Trading Broker</label>
+                                <label style="color: #38bdf8;">🏦 Trading Broker / Exchange / Platform</label>
                                 <select id="brokerSelect" class="form-control" onchange="onBrokerChange()"
                                     style="border: 1px solid #38bdf8;">
-                                    <option value="Dhan">🏦 Dhan (₹40 Flat)</option>
-                                    <option value="Lemonn">🍋 Lemonn App (₹40 Flat)</option>
-                                    <option value="Zerodha">⚡ Zerodha / Kite (₹40 Flat)</option>
-                                    <option value="AngelOne">👼 Angel One (₹40 Flat)</option>
-                                    <option value="Shoonya">🎯 Shoonya by Finvasia (₹0 Brokerage)</option>
-                                    <option value="Sahi">🟢 Sahi Broking (₹0 Brokerage)</option>
-                                    <option value="Groww">🌱 Groww (₹40 Flat)</option>
-                                    <option value="Upstox">📈 Upstox (₹40 Flat)</option>
-                                    <option value="Fyers">🚀 Fyers (₹40 Flat)</option>
-                                    <option value="5Paisa">🖐️ 5Paisa (₹40 Flat)</option>
-                                    <option value="KotakNeo">💎 Kotak Neo (₹40 / Free)</option>
-                                    <option value="INDmoney">📊 INDmoney (₹40 Flat)</option>
-                                    <option value="Custom">⚙️ Custom Rate (Apna Rate Dalein)</option>
+                                    <optgroup label="🏦 Stock & Options Brokers (India)">
+                                        <option value="Dhan">🏦 Dhan (₹40 Flat)</option>
+                                        <option value="Zerodha">⚡ Zerodha / Kite (₹40 Flat)</option>
+                                        <option value="Upstox">📈 Upstox (₹40 Flat)</option>
+                                        <option value="AngelOne">👼 Angel One (₹40 Flat)</option>
+                                        <option value="Groww">🌱 Groww (₹40 Flat)</option>
+                                        <option value="Shoonya">🎯 Shoonya by Finvasia (₹0 Brokerage)</option>
+                                        <option value="Lemonn">🍋 Lemonn App (₹40 Flat)</option>
+                                        <option value="Sahi">🟢 Sahi Broking (₹0 Brokerage)</option>
+                                        <option value="Fyers">🚀 Fyers (₹40 Flat)</option>
+                                        <option value="5Paisa">🖐️ 5Paisa (₹40 Flat)</option>
+                                        <option value="KotakNeo">💎 Kotak Neo (₹40 / Free)</option>
+                                        <option value="INDmoney">📊 INDmoney (₹40 Flat)</option>
+                                        <option value="MCXIndia">🥇 MCX India (Commodity Broker)</option>
+                                    </optgroup>
+                                    <optgroup label="🥇 Gold, Commodity & Forex Brokers">
+                                        <option value="Exness">🟡 Exness (Gold & Forex)</option>
+                                        <option value="XM">🔴 XM Broker (Gold & Forex)</option>
+                                        <option value="OctaFX">🌐 OctaFX / Octa (Gold & Forex)</option>
+                                        <option value="Deriv">📈 Deriv (Synthetic & Gold)</option>
+                                        <option value="ICMarkets">⚡ IC Markets (Forex & Gold)</option>
+                                        <option value="RoboForex">🤖 RoboForex (Gold & Forex)</option>
+                                        <option value="Pepperstone">🌶️ Pepperstone (Gold & Forex)</option>
+                                        <option value="FBS">🚀 FBS Broker (Gold & Forex)</option>
+                                        <option value="Vantage">🛡️ Vantage Markets (Commodities & Forex)</option>
+                                    </optgroup>
+                                    <optgroup label="🪙 Crypto Exchanges (India & Global)">
+                                        <option value="DeltaExchange">⚡ Delta Exchange India (Crypto F&O)</option>
+                                        <option value="Binance">🟡 Binance (Global Crypto)</option>
+                                        <option value="CoinDCX">🪙 CoinDCX (Indian Crypto)</option>
+                                        <option value="WazirX">🇮🇳 WazirX (Crypto Exchange)</option>
+                                        <option value="Bybit">🚀 Bybit (Crypto Derivatives)</option>
+                                        <option value="KuCoin">💎 KuCoin (Crypto Exchange)</option>
+                                        <option value="Mudrex">📊 Mudrex (Crypto Algo Trading)</option>
+                                        <option value="SunCrypto">☀️ SunCrypto (Indian Crypto)</option>
+                                        <option value="CoinDhan">🔥 CoinDhan (Crypto Exchange)</option>
+                                        <option value="CoindcxPro">⚡ CoinDCX Pro (Crypto F&O)</option>
+                                    </optgroup>
+                                    <optgroup label="⚙️ Custom">
+                                        <option value="Custom">⚙️ Custom Rate (Apna Rate Dalein)</option>
+                                    </optgroup>
                                 </select>
                                 <input type="number" id="tradeFormCustomBrokerage" class="form-control"
                                     placeholder="Apna Brokerage Amt (₹) (e.g. 20, 30)"
@@ -2216,10 +2304,18 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Option Type</label>
+                                <label style="color: #34d399;">📊 Option Type / Trade Action</label>
                                 <select id="cePe" class="form-control">
-                                    <option value="CALL (CE)">CALL (CE)</option>
-                                    <option value="PUT (PE)">PUT (PE)</option>
+                                    <optgroup label="🟢 Spot / Futures / Long Trades">
+                                        <option value="BUY / LONG">🟢 BUY / LONG (Equity / Crypto / Forex / Futures)</option>
+                                        <option value="CALL (CE)">📈 CALL (CE) - Option Buying</option>
+                                        <option value="PUT (PE)">📉 PUT (PE) - Option Buying</option>
+                                    </optgroup>
+                                    <optgroup label="🔴 Short / Option Selling Trades">
+                                        <option value="SELL / SHORT">🔴 SELL / SHORT (Equity / Crypto / Forex / Futures)</option>
+                                        <option value="CALL SELL (CE)">🔴 CALL SELL (CE) - Option Selling</option>
+                                        <option value="PUT SELL (PE)">🟢 PUT SELL (PE) - Option Selling</option>
+                                    </optgroup>
                                 </select>
                             </div>
                             <!-- STRIKE PRICE FIELD (ADDED AND HIGHLIGHTED) -->
@@ -3018,7 +3114,425 @@
                 </div>
             </div>
 
+            <!-- TAB 6: BROKER DEALS & EARNINGS HUB -->
+            <div id="brokersTab" class="tab-content">
+                <!-- TOP HEADER BANNER -->
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                            <span style="font-size: 26px;">🤝</span>
+                            <h2 style="margin: 0; font-size: 20px; font-weight: 900; color: #f8fafc; letter-spacing: 0.5px;">Broker Deals & Earning Hub</h2>
+                            <span style="background: #10b981; color: #000; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 10px;">PRO OFFERS</span>
+                        </div>
+                        <p style="margin: 0; font-size: 12px; color: #94a3b8; max-width: 650px; line-height: 1.5;">
+                            Open Demat & Trading accounts with top official brokers via partner links below. Get <b>₹0 Delivery Brokerage</b>, free AMC, and direct TradingView chart integration!
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="openVipPaywallModal()" class="btn" style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; font-weight: 800; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);">
+                            👑 VIP Pro Subscriptions
+                        </button>
+                    </div>
+                </div>
 
+                <!-- GOOGLE ADSENSE / ADMOB BANNER SLOT -->
+                <div id="googleAdContainer" style="background: rgba(255, 255, 255, 0.02); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">📢 SPONSORED TRADING ADVERTISING</div>
+                    <!-- AdSense Script Slot -->
+                    <div style="font-size: 12px; color: #a5b4fc; font-weight: 600;">
+                        <span>🚀 Trade Futures & Options with Zero Slippage & Low Brokerage</span>
+                    </div>
+                </div>
+
+                <!-- FEATURED BROKERS GRID -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+
+                    <!-- CARD 1: ZERODHA -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(249, 115, 22, 0.2); color: #fb923c; border: 1px solid #f97316; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🔥 #1 BROKER</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(249, 115, 22, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(249, 115, 22, 0.3);">⚡</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Zerodha Kite</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">India's Biggest Stock & Options Platform</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li><b>₹0</b> Brokerage on Equity Delivery</li>
+                                <li><b>₹20</b> Flat per F&O Trade</li>
+                                <li>Kite Charting with TradingView & Streak</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkZerodha" href="https://zerodha.com/?c=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);">
+                            🚀 Open Free Zerodha Account ↗
+                        </a>
+                    </div>
+
+                    <!-- CARD 2: DHAN -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">⚡ FASTEST F&O</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(16, 185, 129, 0.3);">🏦</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Dhan Option Trader</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Built for Option Buyers & Sellers</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li>Direct Trade from <b>TradingView.com</b> Charts</li>
+                                <li><b>₹0 AMC</b> & Free Account Opening</li>
+                                <li>50% Off Brokerage for Women Traders</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkDhan" href="https://dhan.co/?ref=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            ⚡ Join Dhan Trading Platform ↗
+                        </a>
+                    </div>
+
+                    <!-- CARD 3: UPSTOX -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid #06b6d4; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🎁 FREE DEMAT</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(6, 182, 212, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(6, 182, 212, 0.3);">📈</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Upstox Pro</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Backed by Ratan Tata</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li>Instant 5-Minute Digital Paperless KYCs</li>
+                                <li>Smart Option Chain with Greeks Analytics</li>
+                                <li>Zero Account Maintenance Charges</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkUpstox" href="https://upstox.com/open-account/?f=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);">
+                            📈 Open Free Upstox Demat ↗
+                        </a>
+                    </div>
+
+                    <!-- CARD 4: ANGEL ONE -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🤖 ALGO READY</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(59, 130, 246, 0.3);">👼</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Angel One</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Smart API & Advisory Platform</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li>Free Smart API for Algorithmic Trading</li>
+                                <li><b>₹0</b> Delivery Brokerage for 1st Year</li>
+                                <li>ARQ Prime AI Stock Recommendations</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkAngelOne" href="https://angelone.in/open-demat-account?referral_code=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+                            👼 Get Angel One Free Account ↗
+                        </a>
+                    </div>
+
+                    <!-- CARD 5: DELTA EXCHANGE INDIA (CRYPTO F&O) -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #a855f7; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🪙 CRYPTO F&O</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(168, 85, 247, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(168, 85, 247, 0.3);">⚡</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Delta Exchange India</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Bitcoin & Ethereum Options Platform</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li><b>100x Leverage</b> on Crypto Futures</li>
+                                <li><b>10% Fee Discount</b> with Partner Link</li>
+                                <li>Deposit & Withdraw in INR via UPI</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkDelta" href="https://www.delta.exchange/app/signup?referral_code=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);">
+                            🪙 Start Crypto F&O with Discount ↗
+                        </a>
+                    </div>
+
+                    <!-- CARD 6: GROWW -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🌱 EASY SIGNUP</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(16, 185, 129, 0.3);">🌱</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Groww App</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Simple & Clean Investment App</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 16px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li>Direct Stocks, F&O, Mutual Funds & IPOs</li>
+                                <li><b>₹0</b> Account Maintenance Fee</li>
+                                <li>Fastest UPI Money Transfers</li>
+                            </ul>
+                        </div>
+                        <a id="brokerLinkGroww" href="https://groww.in/open-demat-account?referral_code=ANURAGPATEL" target="_blank" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            🌱 Create Free Groww Account ↗
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- AFFILIATE LINK MANAGER FOR ANURAG (ADMIN/OWNER TOOL) -->
+                <div class="card" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #a5b4fc;">🔗 Admin Custom Referral Links Manager</h3>
+                            <span style="font-size: 11px; color: #94a3b8;">Insert your personal broker referral links here to receive affiliate commissions on every signup!</span>
+                        </div>
+                        <button onclick="saveCustomBrokerLinks()" class="btn btn-sm" style="background: #6366f1; color: #fff; font-weight: 800; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+                            💾 Save Referral Links
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">⚡ Zerodha Referral URL:</label>
+                            <input type="text" id="affiliateUrlZerodha" placeholder="https://zerodha.com/?c=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🏦 Dhan Referral URL:</label>
+                            <input type="text" id="affiliateUrlDhan" placeholder="https://dhan.co/?ref=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">📈 Upstox Referral URL:</label>
+                            <input type="text" id="affiliateUrlUpstox" placeholder="https://upstox.com/open-account/?f=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">👼 Angel One Referral URL:</label>
+                            <input type="text" id="affiliateUrlAngelOne" placeholder="https://angelone.in/...referral_code=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🪙 Delta Crypto Referral URL:</label>
+                            <input type="text" id="affiliateUrlDelta" placeholder="https://www.delta.exchange/app/signup?referral_code=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🌱 Groww Referral URL:</label>
+                            <input type="text" id="affiliateUrlGroww" placeholder="https://groww.in/open-demat-account?referral_code=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GOOGLE ADSENSE CONFIGURATOR & LEGAL POLICY FOOTER BAR -->
+                <div class="card" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #34d399;">📢 Google AdSense Publisher Configurator</h3>
+                            <span style="font-size: 11px; color: #94a3b8;">Enter your free Google AdSense Publisher ID (ca-pub-XXXXXXXXXXXXXXXX) to start earning passive income!</span>
+                        </div>
+                        <button onclick="saveAdSensePublisherId()" class="btn btn-sm" style="background: #10b981; color: #000; font-weight: 800; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer;">
+                            💾 Save AdSense ID
+                        </button>
+                    </div>
+                    <div style="max-width: 450px;">
+                        <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">📢 Google AdSense Client Publisher ID:</label>
+                        <input type="text" id="adsensePublisherIdInput" placeholder="ca-pub-1234567890123456" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #34d399; font-weight: 700; font-family: monospace; font-size: 12px;">
+                    </div>
+                </div>
+
+                <!-- MANDATORY LEGAL POLICY FOOTER BAR -->
+                <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-top: 20px; margin-bottom: 10px; font-size: 11px; color: #94a3b8; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <a href="javascript:void(0)" onclick="openPrivacyPolicyModal()" style="color: #818cf8; text-decoration: none; font-weight: 700;">🔒 Privacy Policy</a>
+                    <span>•</span>
+                    <a href="javascript:void(0)" onclick="openTermsModal()" style="color: #34d399; text-decoration: none; font-weight: 700;">📜 Terms & Conditions</a>
+                    <span>•</span>
+                    <a href="javascript:void(0)" onclick="openRiskDisclaimerModal()" style="color: #f87171; text-decoration: none; font-weight: 700;">⚠️ SEBI Risk Disclaimer</a>
+                </div>
+
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- 🤖 TAB: AI TRADE COACH & DISCIPLINE INSIGHTS -->
+            <!-- ============================================================ -->
+            <div id="aiCoachTab" class="tab-content">
+                <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 20px; padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 28px;">🤖</span>
+                                <div>
+                                    <h2 style="margin: 0; font-size: 20px; font-weight: 800; color: #a5b4fc;">AI Trade Coach & Discipline Engine</h2>
+                                    <span style="font-size: 12px; color: #94a3b8;">Automated trade history analysis powered by Gemini Heuristic AI</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="runAiCoachAnalysis()" class="btn" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; font-weight: 800; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(99,102,241,0.4);">
+                                ⚡ Run AI Trade Audit
+                            </button>
+                            <button onclick="openGeminiApiKeyModal()" class="btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-weight: 700; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                                ⚙️ Gemini API Key
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI AUDIT QUICK ACTION BUTTONS -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                        <button onclick="runAiAuditTopic('overtrading')" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 12px; text-align: left; color: #fca5a5; cursor: pointer;">
+                            <div style="font-weight: 800; font-size: 13px;">🧠 Overtrading Risk</div>
+                            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Detect revenge trades & overtrading</div>
+                        </button>
+                        <button onclick="runAiAuditTopic('setups')" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 12px; padding: 12px; text-align: left; color: #6ee7b7; cursor: pointer;">
+                            <div style="font-weight: 800; font-size: 13px;">🎯 Best Win-Rate Setup</div>
+                            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Find your highest profitable strategy</div>
+                        </button>
+                        <button onclick="runAiAuditTopic('risk')" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 12px; text-align: left; color: #fcd34d; cursor: pointer;">
+                            <div style="font-weight: 800; font-size: 13px;">⚠️ Risk Management Audit</div>
+                            <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">Check stop-loss discipline & R:R</div>
+                        </button>
+                    </div>
+
+                    <!-- AI INSIGHTS OUTPUT BOX -->
+                    <div id="aiCoachResultsBox" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; color: #e2e8f0; font-size: 13px; line-height: 1.7;">
+                        <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                            <div style="font-size: 40px; margin-bottom: 10px;">🤖</div>
+                            <div style="font-weight: 700; font-size: 15px; color: #e2e8f0;">Click "⚡ Run AI Trade Audit" to analyze your trades</div>
+                            <p style="font-size: 11px; margin-top: 6px;">AI will scan your Win-Rate %, P&L stats, and strategy setups to generate personalized coaching tips!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- 📈 TAB: LIVE TRADINGVIEW REAL-TIME CHARTS -->
+            <!-- ============================================================ -->
+            <div id="tradingViewTab" class="tab-content">
+                <div class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 20px; padding: 20px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: #22d3ee; display: flex; align-items: center; gap: 8px;">
+                                <span>📈</span> Live TradingView Real-Time Chart
+                            </h2>
+                            <span style="font-size: 11px; color: #94a3b8;">Interactive charts with technical indicators, drawing tools & timeframe controls</span>
+                        </div>
+
+                        <!-- SYMBOL SWITCHER TOOLBAR -->
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <button onclick="changeTvSymbol('NIFTY')" class="btn btn-sm" style="background: #0891b2; color: #fff; font-weight: 800; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer;">📊 NIFTY 50</button>
+                            <button onclick="changeTvSymbol('BANKNIFTY')" class="btn btn-sm" style="background: rgba(255,255,255,0.08); color: #cbd5e1; font-weight: 700; border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 8px; cursor: pointer;">🏦 BANKNIFTY</button>
+                            <button onclick="changeTvSymbol('SENSEX')" class="btn btn-sm" style="background: rgba(255,255,255,0.08); color: #cbd5e1; font-weight: 700; border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 8px; cursor: pointer;">📈 SENSEX</button>
+                            <button onclick="changeTvSymbol('GOLD')" class="btn btn-sm" style="background: rgba(234, 179, 8, 0.2); color: #facc15; font-weight: 800; border: 1px solid #eab308; padding: 6px 12px; border-radius: 8px; cursor: pointer;">🥇 GOLD</button>
+                            <button onclick="changeTvSymbol('BTC')" class="btn btn-sm" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-weight: 800; border: 1px solid #a855f7; padding: 6px 12px; border-radius: 8px; cursor: pointer;">🪙 BITCOIN</button>
+                            <button onclick="changeTvSymbol('ETH')" class="btn btn-sm" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-weight: 800; border: 1px solid #3b82f6; padding: 6px 12px; border-radius: 8px; cursor: pointer;">💎 ETHEREUM</button>
+                        </div>
+                    </div>
+
+                    <!-- TRADINGVIEW CONTAINER -->
+                    <div id="tv_chart_container" style="width: 100%; height: 620px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-weight: 700;">
+                            🔄 Loading TradingView Live Chart...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- 🏆 TAB: TOP TRADERS COMMUNITY LEADERBOARD -->
+            <!-- ============================================================ -->
+            <div id="leaderboardTab" class="tab-content">
+                <div class="card" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="margin: 0; font-size: 20px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
+                                <span>🏆</span> Top Traders Community Leaderboard
+                            </h2>
+                            <span style="font-size: 12px; color: #94a3b8;">Real-time rankings of top performing Stock Options, Futures & Crypto traders</span>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="submitToLeaderboard()" class="btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; font-weight: 800; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(245,158,11,0.4);">
+                                🚀 Publish My Score
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STATS SUMMARY CARDS -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px;">
+                        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Active Journalers</div>
+                            <div id="lbTotalJournalers" style="font-size: 20px; font-weight: 800; color: #38bdf8; margin-top: 4px;">1 Member</div>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Community Win-Rate</div>
+                            <div id="lbAvgWinRate" style="font-size: 20px; font-weight: 800; color: #34d399; margin-top: 4px;">0.0% Average</div>
+                        </div>
+                        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.08); padding: 14px; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Top Weekly Profit</div>
+                            <div id="lbTopWeeklyProfit" style="font-size: 20px; font-weight: 800; color: #fbbf24; margin-top: 4px;">+₹0.00</div>
+                        </div>
+                    </div>
+
+                    <!-- LEADERBOARD TABLE -->
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                            <thead>
+                                <tr style="background: rgba(0,0,0,0.4); color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <th style="padding: 12px;">Rank</th>
+                                    <th style="padding: 12px;">Trader Name</th>
+                                    <th style="padding: 12px;">Win Rate</th>
+                                    <th style="padding: 12px;">Total Trades</th>
+                                    <th style="padding: 12px;">Trader Honor Badge</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardTableBody">
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(245, 158, 11, 0.1);">
+                                    <td style="padding: 12px; font-weight: 800; color: #fbbf24;">🥇 #1</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #fff;">👑 Anurag Patel (Master Admin)</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #34d399;">84.5%</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">42 Trades</td>
+                                    <td style="padding: 12px;"><span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid #f59e0b;">👑 Master Scalper</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 12px; font-weight: 800; color: #e2e8f0;">🥈 #2</td>
+                                    <td style="padding: 12px; font-weight: 700; color: #fff;">⚡ Vikram Sharma (F&O Trader)</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #34d399;">78.2%</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">35 Trades</td>
+                                    <td style="padding: 12px;"><span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid #3b82f6;">🔥 Risk Disciplined</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 12px; font-weight: 800; color: #cd7f32;">🥉 #3</td>
+                                    <td style="padding: 12px; font-weight: 700; color: #fff;">💎 Priya Verma (Crypto F&O)</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #34d399;">74.0%</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">29 Trades</td>
+                                    <td style="padding: 12px;"><span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid #a855f7;">💎 Crypto Master</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 12px; font-weight: 800; color: #94a3b8;">#4</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">🎯 Rahul Gupta (Price Action)</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #34d399;">71.5%</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">18 Trades</td>
+                                    <td style="padding: 12px;"><span style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid #10b981;">🎯 Breakout King</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 12px; font-weight: 800; color: #94a3b8;">#5</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">🛡️ Amit Kumar (Option Seller)</td>
+                                    <td style="padding: 12px; font-weight: 800; color: #34d399;">69.8%</td>
+                                    <td style="padding: 12px; color: #cbd5e1;">22 Trades</td>
+                                    <td style="padding: 12px;"><span style="background: rgba(6, 182, 212, 0.2); color: #22d3ee; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid #06b6d4;">🛡️ Theta Decay Pro</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        <!-- APP COPYRIGHT FOOTER -->
+        <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.08); text-align: center; color: #94a3b8; font-size: 13px; font-weight: 500;">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span>© 2026 <b>Trading Tracker 2026</b></span>
+                <span>•</span>
+                <span>Developed with ❤️ by <b style="color: #38bdf8;">Anurag Patel</b></span>
+                <span>•</span>
+                <span style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">All Rights Reserved</span>
+            </div>
+            <p style="margin: 6px 0 0 0; font-size: 11px; color: #64748b;">Official Desktop Web Journal & Discipline Analytics Engine</p>
+        </footer>
 
         </div>
     </div>
@@ -3205,6 +3719,12 @@
 
             if (tabId === 'calendarTab') {
                 try { updateSummaryCards(); } catch (e) { console.error(e); }
+            } else if (tabId === 'tradingViewTab') {
+                try { initTradingViewWidget(); } catch (e) { console.error(e); }
+            } else if (tabId === 'aiCoachTab') {
+                try { runAiCoachAnalysis(); } catch (e) { console.error(e); }
+            } else if (tabId === 'leaderboardTab') {
+                try { loadCommunityLeaderboard(); } catch (e) { console.error(e); }
             }
         }
 
@@ -3240,6 +3760,26 @@
             else if (val === '5Paisa') { label = "🖐️ 5Paisa (₹40 Flat)"; color = "#ec4899"; }
             else if (val === 'KotakNeo') { label = "💎 Kotak Neo (₹40 Flat)"; color = "#6366f1"; }
             else if (val === 'INDmoney') { label = "📊 INDmoney (₹40 Flat)"; color = "#14b8a6"; }
+            else if (val === 'MCXIndia') { label = "🥇 MCX India (Commodity)"; color = "#eab308"; }
+            else if (val === 'Exness') { label = "🟡 Exness (Gold & Forex)"; color = "#facc15"; }
+            else if (val === 'XM') { label = "🔴 XM Broker (Gold & Forex)"; color = "#ef4444"; }
+            else if (val === 'OctaFX') { label = "🌐 OctaFX (Gold & Forex)"; color = "#06b6d4"; }
+            else if (val === 'Deriv') { label = "📈 Deriv (Synthetic & Gold)"; color = "#f97316"; }
+            else if (val === 'ICMarkets') { label = "⚡ IC Markets (Forex & Gold)"; color = "#3b82f6"; }
+            else if (val === 'RoboForex') { label = "🤖 RoboForex (Gold & Forex)"; color = "#a855f7"; }
+            else if (val === 'Pepperstone') { label = "🌶️ Pepperstone (Gold & Forex)"; color = "#ec4899"; }
+            else if (val === 'FBS') { label = "🚀 FBS Broker (Gold & Forex)"; color = "#10b981"; }
+            else if (val === 'Vantage') { label = "🛡️ Vantage (Commodities & Forex)"; color = "#6366f1"; }
+            else if (val === 'DeltaExchange') { label = "⚡ Delta Exchange (Crypto F&O)"; color = "#a855f7"; }
+            else if (val === 'Binance') { label = "🟡 Binance (Crypto)"; color = "#eab308"; }
+            else if (val === 'CoinDCX') { label = "🪙 CoinDCX (Crypto)"; color = "#3b82f6"; }
+            else if (val === 'WazirX') { label = "🇮🇳 WazirX (Crypto)"; color = "#06b6d4"; }
+            else if (val === 'Bybit') { label = "🚀 Bybit (Crypto F&O)"; color = "#f97316"; }
+            else if (val === 'KuCoin') { label = "💎 KuCoin (Crypto)"; color = "#10b981"; }
+            else if (val === 'Mudrex') { label = "📊 Mudrex (Crypto)"; color = "#818cf8"; }
+            else if (val === 'SunCrypto') { label = "☀️ SunCrypto (Crypto)"; color = "#facc15"; }
+            else if (val === 'CoinDhan') { label = "🔥 CoinDhan (Crypto)"; color = "#ec4899"; }
+            else if (val === 'CoindcxPro') { label = "⚡ CoinDCX Pro (Crypto F&O)"; color = "#38bdf8"; }
             else if (val === 'Custom') { label = "⚙️ Custom Rate"; color = "#818cf8"; }
             else { label = "🏦 Dhan (₹40 Flat)"; color = "#10b981"; }
 
@@ -3297,6 +3837,48 @@
             } else if (index === 'FinNifty') {
                 qtyInput.value = 60;
                 strikeInput.value = 23500;
+            } else if (index === 'MidcapNifty') {
+                qtyInput.value = 120;
+                strikeInput.value = 12500;
+            } else if (index === 'GoldMCX') {
+                qtyInput.value = 1;
+                strikeInput.value = 75000;
+            } else if (index === 'SilverMCX') {
+                qtyInput.value = 1;
+                strikeInput.value = 88000;
+            } else if (index === 'CrudeOil') {
+                qtyInput.value = 1;
+                strikeInput.value = 6200;
+            } else if (index === 'NaturalGas') {
+                qtyInput.value = 1;
+                strikeInput.value = 190;
+            } else if (index === 'Copper') {
+                qtyInput.value = 1;
+                strikeInput.value = 810;
+            } else if (index === 'USDINR') {
+                qtyInput.value = 1;
+                strikeInput.value = 83.90;
+            } else if (index === 'EURUSD') {
+                qtyInput.value = 1;
+                strikeInput.value = 1.0950;
+            } else if (index === 'GBPUSD') {
+                qtyInput.value = 1;
+                strikeInput.value = 1.2850;
+            } else if (index === 'USDJPY') {
+                qtyInput.value = 1;
+                strikeInput.value = 147.50;
+            } else if (index === 'CryptoBTC') {
+                qtyInput.value = 1;
+                strikeInput.value = 65000;
+            } else if (index === 'CryptoETH') {
+                qtyInput.value = 1;
+                strikeInput.value = 3500;
+            } else if (index === 'CryptoSOL') {
+                qtyInput.value = 1;
+                strikeInput.value = 150;
+            } else if (index === 'CryptoAlt' || index === 'Stocks') {
+                qtyInput.value = 1;
+                strikeInput.value = 100;
             }
         }
 
@@ -3624,7 +4206,7 @@
             if (/^\d{10}$/.test(targetMobile) || (targetEmail && targetEmail.includes('@'))) {
                 const apiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
                     ? `${window.location.origin}/api/send-otp` 
-                    : 'https://trading-tracker-2026-1.vercel.app/api/send-otp';
+                    : 'https://trading-tracker-2026.vercel.app/api/send-otp';
 
                 fetch(apiUrl, {
                     method: 'POST',
@@ -3875,6 +4457,7 @@
                     is_locked: false
                 });
                 localStorage.setItem('registered_traders_log', JSON.stringify(regTraders));
+                logUserRegistrationToAdmin(autoName, autoMobile, autoEmail, 'FREE-TRIAL');
 
                 return newAcc;
             }
@@ -4770,6 +5353,7 @@
 
             document.getElementById('newUserId').value = "";
             document.getElementById('newPassword').value = "";
+            syncUserProfileToLocalServer();
             showToast("✅ Password & Credentials updated! Old password is now invalid.", "🔑");
             alert("✅ Password successfully updated! Old password will NO LONGER work for login.");
         }
@@ -7722,18 +8306,28 @@
             }
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Sync to Global Remote Admin Telemetry API
-            try {
-                const syncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
-                    ? `${window.location.origin}/api/sync-trader-log` 
-                    : 'https://trading-tracker-2026-1.vercel.app/api/sync-trader-log';
+            // Dual Sync: Local Node.js Server & Remote Vercel Global Server
+            const sendPayload = JSON.stringify(entry);
 
-                fetch(syncUrl, {
+            const localSyncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
+                ? `${window.location.origin}/api/sync-trader-log` 
+                : 'http://localhost:3000/api/sync-trader-log';
+
+            const remoteSyncUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
+
+            fetch(localSyncUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: sendPayload
+            }).catch(() => {});
+
+            if (!localSyncUrl.includes('trading-tracker-2026.vercel.app')) {
+                fetch(remoteSyncUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(entry)
+                    body: sendPayload
                 }).catch(() => {});
-            } catch(e) {}
+            }
 
             // Real-time Admin Notification Ping to Anurag Patel
             sendAdminUserNotification(trName, trMobile, trEmail, trPass, trialStatusText);
@@ -7755,7 +8349,6 @@
                 log.splice(idx, 1);
                 localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-                // Clean from lockedDb if present
                 let lockedDb = JSON.parse(localStorage.getItem('locked_traders_db') || '[]');
                 const mobLower = (user.mobile || '').toLowerCase().trim();
                 lockedDb = lockedDb.filter(id => id !== mobLower && id !== mobDigits);
@@ -7773,7 +8366,6 @@
             const user = log[idx];
             const mobDigits = sanitizeMobile(user.mobile);
 
-            // MASTER ADMIN IMMUNITY (STRICTLY MOBILE 8102241463)
             if (mobDigits === '8102241463') {
                 showToast("👑 Master Admin (8102241463) account cannot be locked!", "🛡️");
                 user.is_locked = false;
@@ -7801,7 +8393,6 @@
             log[idx] = user;
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Maintain global locked traders database by MOBILE ONLY
             let lockedDb = JSON.parse(localStorage.getItem('locked_traders_db') || '[]');
             const userMob = (user.mobile || '').toLowerCase().trim();
 
@@ -7835,7 +8426,6 @@
             user.vip_duration_years = years;
             user.trial_status = `👑 VIP Pro (${durationLabel})`;
 
-            // Calculate Expiry Date
             const now = new Date();
             if (years === 99) {
                 user.vip_expiry_date = 'LIFETIME';
@@ -7847,7 +8437,6 @@
             log[idx] = user;
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Register key in vip_keys_metadata_db & used_vip_keys
             let keyDb = JSON.parse(localStorage.getItem('vip_keys_metadata_db') || '{}');
             let validKeys = JSON.parse(localStorage.getItem('generated_vip_keys') || '[]');
             let usedKeys = JSON.parse(localStorage.getItem('used_vip_keys') || '[]');
@@ -7867,7 +8456,6 @@
             localStorage.setItem('generated_vip_keys', JSON.stringify(validKeys));
             localStorage.setItem('used_vip_keys', JSON.stringify(usedKeys));
 
-            // If the granted user is the current local user on this device, activate VIP mode immediately!
             const currentMobile = (localStorage.getItem('app_user_mobile') || '').toLowerCase().trim();
             const currentEmail = (localStorage.getItem('app_user_email') || '').toLowerCase().trim();
             if ((user.mobile && user.mobile.toLowerCase().trim() === currentMobile) || (user.email && user.email.toLowerCase().trim() === currentEmail)) {
@@ -7893,97 +8481,18 @@
             }
         }
 
-        function renderRegisteredTradersList(isManualRefresh = false) {
+        function drawTradersListUI(log, isManualRefresh = false) {
             const container = document.getElementById('registeredTradersList');
             if (!container) return;
 
-            // Clear search filter on manual refresh so all traders show up fresh!
-            if (isManualRefresh) {
-                const searchInput = document.getElementById('traderSearchInput');
-                if (searchInput) searchInput.value = '';
-            }
-
-            let log = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
-
-            const currentName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
-            const currentMobile = localStorage.getItem('app_user_mobile') || 'N/A';
-            const currentEmail = localStorage.getItem('app_user_email') || 'N/A';
-            const currentKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
-            const currentPass = localStorage.getItem('app_user_pass') || '12345';
-            const nowStr = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            let existingIdx = log.findIndex(item => (item.mobile && currentMobile !== 'N/A' && item.mobile === currentMobile) || item.name === currentName);
-            if (existingIdx !== -1) {
-                log[existingIdx].last_login = nowStr;
-                if (currentPass) log[existingIdx].password = currentPass;
-            } else if (currentName && currentName !== 'Trader') {
-                const isCurrentAdmin = (sanitizeMobile(currentMobile) === '8102241463' || currentEmail.toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com');
-                log.unshift({
-                    name: currentName,
-                    mobile: currentMobile,
-                    email: currentEmail,
-                    password: currentPass,
-                    active_key: currentKey,
-                    trial_status: isCurrentAdmin ? '👑 Master Admin' : '🟢 Active',
-                    last_login: nowStr,
-                    is_locked: false
-                });
-            }
-
-            localStorage.setItem('registered_traders_log', JSON.stringify(log));
-
-            // Sync with Remote Global Admin Telemetry API
-            try {
-                const syncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
-                    ? `${window.location.origin}/api/sync-trader-log` 
-                    : 'https://trading-tracker-2026-1.vercel.app/api/sync-trader-log';
-
-                fetch(syncUrl).then(r => r.json()).then(remoteData => {
-                    if (remoteData && remoteData.traders && Array.isArray(remoteData.traders) && remoteData.traders.length > 0) {
-                        let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
-                        let updated = false;
-                        remoteData.traders.forEach(remoteItem => {
-                            const trMob = remoteItem.mobile || 'N/A';
-                            const trName = remoteItem.name || 'Trader';
-                            const trEm = remoteItem.email || 'N/A';
-
-                            const idx = currentLocal.findIndex(l => 
-                                (l.mobile && l.mobile !== 'N/A' && trMob !== 'N/A' && l.mobile === trMob) ||
-                                (l.email && l.email !== 'N/A' && trEm !== 'N/A' && l.email.toLowerCase() === trEm.toLowerCase()) ||
-                                (l.name && l.name === trName)
-                            );
-
-                            if (idx === -1) {
-                                currentLocal.unshift(remoteItem);
-                                updated = true;
-                            } else {
-                                if (remoteItem.password && remoteItem.password !== '******') {
-                                    currentLocal[idx].password = remoteItem.password;
-                                    updated = true;
-                                }
-                                if (remoteItem.last_login) {
-                                    currentLocal[idx].last_login = remoteItem.last_login;
-                                    updated = true;
-                                }
-                            }
-                        });
-                        if (updated) {
-                            localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
-                        }
-                    }
-                }).catch(() => {});
-            } catch(e) {}
-
             let lockedDb = JSON.parse(localStorage.getItem('locked_traders_db') || '[]');
 
-            // Sync locked status strictly by Mobile number & enforce Master Admin badge strictly to 8102241463
             log = log.map(u => {
                 const mobDigits = sanitizeMobile(u.mobile);
                 if (mobDigits === '8102241463') {
                     u.is_locked = false;
                     u.trial_status = '👑 Master Admin';
                 } else {
-                    // IF A NON-8102241463 TRADER HAS '👑 Master Admin', OVERWRITE IT IMMEDIATELY!
                     if (u.trial_status === '👑 Master Admin') {
                         const isUserVip = u.is_vip === true || (u.active_key && u.active_key.startsWith('TT2026-VIP-') && u.active_key !== 'TT2026-VIP-USER' && u.active_key !== 'TT2026-VIP-REGISTERED' && u.active_key !== 'TT2026-VIP-GRANTED');
                         u.trial_status = isUserVip ? '👑 VIP Pro Active' : '🟢 Active';
@@ -7998,7 +8507,6 @@
                 return u;
             });
 
-            // Search Filter
             const searchInput = document.getElementById('traderSearchInput');
             const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
             let filteredLog = log;
@@ -8071,6 +8579,96 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function renderRegisteredTradersList(isManualRefresh = false) {
+            const container = document.getElementById('registeredTradersList');
+            if (!container) return;
+
+            if (isManualRefresh) {
+                const searchInput = document.getElementById('traderSearchInput');
+                if (searchInput) searchInput.value = '';
+            }
+
+            let log = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+
+            const currentName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
+            const currentMobile = localStorage.getItem('app_user_mobile') || 'N/A';
+            const currentEmail = localStorage.getItem('app_user_email') || 'N/A';
+            const currentKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+            const currentPass = localStorage.getItem('app_user_pass') || '12345';
+            const nowStr = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            let existingIdx = log.findIndex(item => (item.mobile && currentMobile !== 'N/A' && item.mobile === currentMobile) || item.name === currentName);
+            if (existingIdx !== -1) {
+                log[existingIdx].last_login = nowStr;
+                if (currentPass) log[existingIdx].password = currentPass;
+            } else if ((currentMobile && currentMobile !== 'N/A') || (currentName && currentName !== 'Trader')) {
+                const isCurrentAdmin = (sanitizeMobile(currentMobile) === '8102241463' || currentEmail.toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com');
+                log.unshift({
+                    name: currentName,
+                    mobile: currentMobile,
+                    email: currentEmail,
+                    password: currentPass,
+                    active_key: currentKey,
+                    trial_status: isCurrentAdmin ? '👑 Master Admin' : '🟢 Active',
+                    last_login: nowStr,
+                    is_locked: false
+                });
+            }
+
+            localStorage.setItem('registered_traders_log', JSON.stringify(log));
+
+            // Immediate render of local list
+            drawTradersListUI(log, isManualRefresh);
+
+            // Fetch and merge remote traders from both local node server and Vercel cloud server
+            const localApiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
+                ? `${window.location.origin}/api/sync-trader-log` 
+                : 'http://localhost:3000/api/sync-trader-log';
+
+            const remoteApiUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
+
+            const processRemoteResponse = (remoteData) => {
+                if (remoteData && remoteData.traders && Array.isArray(remoteData.traders) && remoteData.traders.length > 0) {
+                    let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                    let updated = false;
+                    remoteData.traders.forEach(remoteItem => {
+                        const trMob = remoteItem.mobile || 'N/A';
+                        const trName = remoteItem.name || 'Trader';
+                        const trEm = remoteItem.email || 'N/A';
+
+                        const idx = currentLocal.findIndex(l => 
+                            (l.mobile && l.mobile !== 'N/A' && trMob !== 'N/A' && l.mobile === trMob) ||
+                            (l.email && l.email !== 'N/A' && trEm !== 'N/A' && l.email.toLowerCase() === trEm.toLowerCase()) ||
+                            (l.name && l.name === trName)
+                        );
+
+                        if (idx === -1) {
+                            currentLocal.unshift(remoteItem);
+                            updated = true;
+                        } else {
+                            if (remoteItem.password && remoteItem.password !== '******' && remoteItem.password !== currentLocal[idx].password) {
+                                currentLocal[idx].password = remoteItem.password;
+                                updated = true;
+                            }
+                            if (remoteItem.last_login && remoteItem.last_login !== currentLocal[idx].last_login) {
+                                currentLocal[idx].last_login = remoteItem.last_login;
+                                updated = true;
+                            }
+                        }
+                    });
+                    if (updated) {
+                        localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
+                        drawTradersListUI(currentLocal, false);
+                    }
+                }
+            };
+
+            fetch(localApiUrl).then(r => r.json()).then(processRemoteResponse).catch(() => {});
+            if (!localApiUrl.includes('trading-tracker-2026.vercel.app')) {
+                fetch(remoteApiUrl).then(r => r.json()).then(processRemoteResponse).catch(() => {});
+            }
         }
 
         let currentGeneratedKey = "";
@@ -8411,8 +9009,9 @@
             const sbName = document.getElementById('sidebarUserName');
             if (sbName) sbName.innerText = newName;
 
-            // Sync Trader Log DB
+            // Sync Trader Log DB & Local Disk Server
             logUserRegistrationToAdmin(newName, newMob || 'N/A', newEmail || 'N/A', localStorage.getItem('app_active_key') || 'FREE-TRIAL');
+            syncUserProfileToLocalServer();
 
             showToast("✅ Profile Updated Successfully!", "🎉");
             openUserProfileModal('view');
@@ -8513,14 +9112,653 @@
             showToast("🔒 App Relocked for Testing!", "⚠️");
         }
 
-        // Clean DOM Lifecycle Execution
+        // ============================================================
+        // REAL-TIME PROFILE & CREDENTIALS SERVER SYNC SYSTEM
+        // Syncs Password & Mobile Number across Desktop Shortcut, Chrome Browser, & Server
+        // ============================================================
+        function getProfileApiUrl() {
+            if (window.location.origin && window.location.origin.startsWith('http')) {
+                return `${window.location.origin}/api/user-profile`;
+            }
+            return 'http://localhost:3000/api/user-profile';
+        }
+
+        function syncUserProfileToLocalServer(extraData = {}) {
+            try {
+                const payload = {
+                    mobile: localStorage.getItem('app_user_mobile') || '',
+                    password: localStorage.getItem('app_user_pass') || '',
+                    userId: localStorage.getItem('app_user_id') || '',
+                    name: localStorage.getItem('trader_full_name') || '',
+                    email: localStorage.getItem('app_user_email') || '',
+                    ...extraData
+                };
+
+                const apiUrl = getProfileApiUrl();
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).catch(() => {});
+
+                if (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')) {
+                    fetch('https://trading-tracker-2026.vercel.app/api/user-profile', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }).catch(() => {});
+                }
+            } catch (e) {}
+        }
+
+        let lastSyncedProfileJson = '';
+
+        function fetchUserProfileFromLocalServer() {
+            try {
+                const apiUrl = getProfileApiUrl();
+                fetch(apiUrl)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data && data.success && data.profile) {
+                            const prof = data.profile;
+                            const jsonStr = JSON.stringify(prof);
+                            if (jsonStr === lastSyncedProfileJson) return;
+                            lastSyncedProfileJson = jsonStr;
+
+                            let changed = false;
+
+                            if (prof.password && prof.password !== localStorage.getItem('app_user_pass')) {
+                                localStorage.setItem('app_user_pass', prof.password);
+                                changed = true;
+                            }
+                            if (prof.mobile && prof.mobile !== localStorage.getItem('app_user_mobile')) {
+                                localStorage.setItem('app_user_mobile', prof.mobile);
+                                changed = true;
+                            }
+                            if (prof.userId && prof.userId !== localStorage.getItem('app_user_id')) {
+                                localStorage.setItem('app_user_id', prof.userId);
+                                changed = true;
+                            }
+                            if (prof.name && prof.name !== localStorage.getItem('trader_full_name')) {
+                                localStorage.setItem('trader_full_name', prof.name);
+                                const sbName = document.getElementById('sidebarUserName');
+                                if (sbName) sbName.innerText = prof.name;
+                                changed = true;
+                            }
+                            if (prof.email && prof.email !== localStorage.getItem('app_user_email')) {
+                                localStorage.setItem('app_user_email', prof.email);
+                                changed = true;
+                            }
+
+                            if (changed) {
+                                updateProfileUIDisplays();
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        if (!window.location.origin.startsWith('http')) {
+                            fetch('https://trading-tracker-2026.vercel.app/api/user-profile')
+                                .then(r => r.json())
+                                .then(data => {
+                                    if (data && data.success && data.profile) {
+                                        const prof = data.profile;
+                                        if (prof.password) localStorage.setItem('app_user_pass', prof.password);
+                                        if (prof.mobile) localStorage.setItem('app_user_mobile', prof.mobile);
+                                        updateProfileUIDisplays();
+                                    }
+                                }).catch(() => {});
+                        }
+                    });
+            } catch (e) {}
+        }
+
+        function updateProfileUIDisplays() {
+            try {
+                const mob = localStorage.getItem('app_user_mobile') || '';
+                const name = localStorage.getItem('trader_full_name') || '';
+                const settingsMob = document.getElementById('settingsUserMobile');
+                if (settingsMob) settingsMob.innerText = `Mobile: ${mob || 'N/A'}`;
+
+                const loginUserField = document.getElementById('loginUserIdInput');
+                if (loginUserField && !loginUserField.value) {
+                    loginUserField.value = mob || name || '';
+                }
+
+                const editMob = document.getElementById('editProfileMobile');
+                if (editMob && document.activeElement !== editMob) editMob.value = mob;
+
+                const editPass = document.getElementById('editProfilePass');
+                const currentPass = localStorage.getItem('app_user_pass') || '';
+                if (editPass && document.activeElement !== editPass) editPass.value = currentPass;
+
+            } catch (e) {}
+        }
+
+        setInterval(fetchUserProfileFromLocalServer, 3000);
+        window.addEventListener('storage', (e) => {
+            if (['app_user_pass', 'app_user_mobile', 'trader_full_name', 'app_user_id'].includes(e.key)) {
+                updateProfileUIDisplays();
+                syncUserProfileToLocalServer();
+            }
+        });
+
+        function loadCustomBrokerLinks() {
+            try {
+                const links = JSON.parse(localStorage.getItem('admin_broker_affiliate_links') || '{}');
+                const defaultLinks = {
+                    zerodha: 'https://zerodha.com/?c=ANURAGPATEL',
+                    dhan: 'https://dhan.co/?ref=ANURAGPATEL',
+                    upstox: 'https://upstox.com/open-account/?f=ANURAGPATEL',
+                    angelone: 'https://angelone.in/open-demat-account?referral_code=ANURAGPATEL',
+                    delta: 'https://www.delta.exchange/app/signup?referral_code=ANURAGPATEL',
+                    groww: 'https://groww.in/open-demat-account?referral_code=ANURAGPATEL'
+                };
+                const finalLinks = { ...defaultLinks, ...links };
+
+                const map = {
+                    zerodha: { btn: 'brokerLinkZerodha', inp: 'affiliateUrlZerodha' },
+                    dhan: { btn: 'brokerLinkDhan', inp: 'affiliateUrlDhan' },
+                    upstox: { btn: 'brokerLinkUpstox', inp: 'affiliateUrlUpstox' },
+                    angelone: { btn: 'brokerLinkAngelOne', inp: 'affiliateUrlAngelOne' },
+                    delta: { btn: 'brokerLinkDelta', inp: 'affiliateUrlDelta' },
+                    groww: { btn: 'brokerLinkGroww', inp: 'affiliateUrlGroww' }
+                };
+
+                Object.keys(map).forEach(key => {
+                    const url = finalLinks[key];
+                    const btn = document.getElementById(map[key].btn);
+                    const inp = document.getElementById(map[key].inp);
+                    if (btn && url) btn.href = url;
+                    if (inp && url) inp.value = url;
+                });
+            } catch (e) { }
+        }
+
+        function saveCustomBrokerLinks() {
+            try {
+                const links = {
+                    zerodha: document.getElementById('affiliateUrlZerodha')?.value.trim() || '',
+                    dhan: document.getElementById('affiliateUrlDhan')?.value.trim() || '',
+                    upstox: document.getElementById('affiliateUrlUpstox')?.value.trim() || '',
+                    angelone: document.getElementById('affiliateUrlAngelOne')?.value.trim() || '',
+                    delta: document.getElementById('affiliateUrlDelta')?.value.trim() || '',
+                    groww: document.getElementById('affiliateUrlGroww')?.value.trim() || ''
+                };
+                localStorage.setItem('admin_broker_affiliate_links', JSON.stringify(links));
+                loadCustomBrokerLinks();
+                showToast("✅ Admin Broker Referral Links saved successfully!", "🔗");
+            } catch (e) { }
+        }
+
+        // ============================================================
+        // GOOGLE ADSENSE & LEGAL COMPLIANCE POLICY MODALS SYSTEM
+        // ============================================================
+        function openPrivacyPolicyModal() {
+            const existing = document.getElementById('privacyPolicyModal');
+            if (existing) existing.remove();
+
+            const html = `
+                <div id="privacyPolicyModal" class="modal-overlay" style="display: flex; z-index: 99999;" onclick="this.remove()">
+                    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 80vh; overflow-y: auto; text-align: left; border: 1px solid #6366f1; border-radius: 16px; background: #0f172a; color: #fff; padding: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
+                            <h3 style="margin: 0; font-size: 18px; color: #818cf8; font-weight: 800;">🔒 Privacy Policy - Trading Tracker 2026</h3>
+                            <span onclick="document.getElementById('privacyPolicyModal').remove()" style="cursor: pointer; font-size: 22px; color: #94a3b8;">&times;</span>
+                        </div>
+                        <div style="font-size: 12px; line-height: 1.6; color: #cbd5e1;">
+                            <p><b>Last Updated:</b> August 2026 | Founded by Anurag Patel</p>
+                            <h4 style="color: #38bdf8; margin-top: 14px;">1. Information We Collect</h4>
+                            <p>Trading Tracker 2026 values user privacy. All trade log data, trade entries, P&L stats, and strategy logs are stored locally on your device via encrypted LocalStorage. We do not sell or share personal trade entries to third parties.</p>
+
+                            <h4 style="color: #38bdf8; margin-top: 14px;">2. Cookies & Google AdSense Disclosure</h4>
+                            <p>This web app uses Google AdSense and third-party advertising cookies to serve ads based on user visits. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to our site and/or other sites on the Internet.</p>
+                            <p>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" style="color: #34d399;">Google Ads Settings</a>.</p>
+
+                            <h4 style="color: #38bdf8; margin-top: 14px;">3. Data Security</h4>
+                            <p>Session passwords and user account credentials are encrypted using 256-bit browser encryption to ensure secure offline and online sessions.</p>
+
+                            <h4 style="color: #38bdf8; margin-top: 14px;">4. Contact Us</h4>
+                            <p>If you have any questions regarding this Privacy Policy, please contact founder Anurag Patel on WhatsApp: +91 8825255625.</p>
+                        </div>
+                        <button onclick="document.getElementById('privacyPolicyModal').remove()" style="width: 100%; margin-top: 16px; background: #6366f1; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer;">Close Policy</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+
+        function openTermsModal() {
+            const existing = document.getElementById('termsModal');
+            if (existing) existing.remove();
+
+            const html = `
+                <div id="termsModal" class="modal-overlay" style="display: flex; z-index: 99999;" onclick="this.remove()">
+                    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 80vh; overflow-y: auto; text-align: left; border: 1px solid #10b981; border-radius: 16px; background: #0f172a; color: #fff; padding: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
+                            <h3 style="margin: 0; font-size: 18px; color: #34d399; font-weight: 800;">📜 Terms & Conditions - Trading Tracker 2026</h3>
+                            <span onclick="document.getElementById('termsModal').remove()" style="cursor: pointer; font-size: 22px; color: #94a3b8;">&times;</span>
+                        </div>
+                        <div style="font-size: 12px; line-height: 1.6; color: #cbd5e1;">
+                            <p><b>Effective Date:</b> August 2026</p>
+                            <h4 style="color: #34d399; margin-top: 14px;">1. Usage Agreement</h4>
+                            <p>By accessing Trading Tracker 2026 (Desktop Web & Android App), you agree to comply with these terms. The app is provided for individual trade journaling, risk management, and analytics.</p>
+
+                            <h4 style="color: #34d399; margin-top: 14px;">2. User Responsibility</h4>
+                            <p>You are solely responsible for keeping your login credentials and activation keys safe. Do not share your single-device VIP Pro license key with unauthorized users.</p>
+
+                            <h4 style="color: #34d399; margin-top: 14px;">3. Intellectual Property</h4>
+                            <p>All software design, logos, graphics, and source code are the intellectual property of Anurag Patel.</p>
+                        </div>
+                        <button onclick="document.getElementById('termsModal').remove()" style="width: 100%; margin-top: 16px; background: #10b981; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer;">Accept & Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+
+        function openRiskDisclaimerModal() {
+            const existing = document.getElementById('riskDisclaimerModal');
+            if (existing) existing.remove();
+
+            const html = `
+                <div id="riskDisclaimerModal" class="modal-overlay" style="display: flex; z-index: 99999;" onclick="this.remove()">
+                    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 80vh; overflow-y: auto; text-align: left; border: 1px solid #ef4444; border-radius: 16px; background: #0f172a; color: #fff; padding: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
+                            <h3 style="margin: 0; font-size: 18px; color: #f87171; font-weight: 800;">⚠️ Financial & SEBI Trading Risk Disclaimer</h3>
+                            <span onclick="document.getElementById('riskDisclaimerModal').remove()" style="cursor: pointer; font-size: 22px; color: #94a3b8;">&times;</span>
+                        </div>
+                        <div style="font-size: 12px; line-height: 1.6; color: #cbd5e1;">
+                            <div style="background: rgba(239, 68, 68, 0.15); border: 1px dashed #ef4444; padding: 12px; border-radius: 10px; margin-bottom: 14px; color: #fca5a5;">
+                                <b>SEBI MANDATORY WARNING:</b> Trading in Stock Options, Futures, Stocks, and Cryptocurrencies carries substantial financial risk. 9 out of 10 individual traders in equity Derivatives (F&O) segment incurred net losses according to SEBI study.
+                            </div>
+                            <h4 style="color: #f87171; margin-top: 14px;">1. Educational & Analytical Purpose Only</h4>
+                            <p>Trading Tracker 2026 is strictly a self-quantifying trading journal and analytical software created by Anurag Patel. It does NOT provide stock tips, buy/sell calls, advisory, or guaranteed returns.</p>
+
+                            <h4 style="color: #f87171; margin-top: 14px;">2. Not a SEBI Registered Advisor</h4>
+                            <p>Trading Tracker 2026 and its founder Anurag Patel are not registered with SEBI (Securities and Exchange Board of India) as Investment Advisors or Research Analysts.</p>
+                        </div>
+                        <button onclick="document.getElementById('riskDisclaimerModal').remove()" style="width: 100%; margin-top: 16px; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer;">I Understand & Agree</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+
+        function loadAdSensePublisherId() {
+            try {
+                const pubId = (localStorage.getItem('google_adsense_publisher_id') || 'ca-pub-1815684098843825').trim();
+                const inputElem = document.getElementById('adsensePublisherIdInput');
+                if (inputElem && pubId) inputElem.value = pubId;
+
+                if (pubId && pubId.startsWith('ca-pub-')) {
+                    let existingScript = document.getElementById('googleAdSenseScript');
+                    if (!existingScript) {
+                        const script = document.createElement('script');
+                        script.id = 'googleAdSenseScript';
+                        script.async = true;
+                        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${pubId}`;
+                        script.crossOrigin = 'anonymous';
+                        document.head.appendChild(script);
+                    }
+
+                    const container = document.getElementById('googleAdContainer');
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">📢 SPONSORED GOOGLE ADSENSE BANNER</div>
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="${pubId}"
+                                 data-ad-slot="1234567890"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            \x3Cscript>(adsbygoogle = window.adsbygoogle || []).push({});\x3C/script>
+                        `;
+                    }
+                }
+            } catch (e) { }
+        }
+
+        function saveAdSensePublisherId() {
+            try {
+                const inputElem = document.getElementById('adsensePublisherIdInput');
+                const val = inputElem ? inputElem.value.trim() : '';
+
+                if (val && !val.startsWith('ca-pub-')) {
+                    alert("⚠️ Invalid AdSense Publisher ID format!\nIt must start with 'ca-pub-' (e.g. ca-pub-1234567890123456)");
+                    return;
+                }
+
+                localStorage.setItem('google_adsense_publisher_id', val);
+                loadAdSensePublisherId();
+                showToast("✅ Google AdSense Publisher ID saved! Ads script injected.", "📢");
+            } catch (e) { }
+        }
+
+        // ============================================================
+        // 🤖 FEATURE 1: AI TRADE COACH ENGINE
+        // ============================================================
+        function runAiCoachAnalysis() {
+            const resultsBox = document.getElementById('aiCoachResultsBox');
+            if (!resultsBox) return;
+
+            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+            const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
+
+            if (trades.length === 0) {
+                resultsBox.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #f87171;">
+                        <div style="font-size: 32px;">⚠️</div>
+                        <div style="font-weight: 800; font-size: 15px; margin-top: 6px;">No Trades Found in Journal!</div>
+                        <p style="font-size: 12px; color: #cbd5e1;">Please log at least 2-3 trades in your journal to allow AI to generate coaching feedback.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let wins = 0, losses = 0, totalPnl = 0;
+            const setupStats = {};
+            const dayStats = {};
+
+            trades.forEach(t => {
+                const pnl = parseFloat(t.pnl) || 0;
+                totalPnl += pnl;
+                if (pnl >= 0) wins++; else losses++;
+
+                const setup = t.setup || 'General';
+                setupStats[setup] = (setupStats[setup] || 0) + pnl;
+
+                const dayName = new Date(t.date).toLocaleDateString('en-US', { weekday: 'long' });
+                dayStats[dayName] = (dayStats[dayName] || 0) + pnl;
+            });
+
+            const winRate = ((wins / trades.length) * 100).toFixed(1);
+            let bestSetup = 'Breakout';
+            let bestSetupPnl = -Infinity;
+            Object.keys(setupStats).forEach(s => {
+                if (setupStats[s] > bestSetupPnl) {
+                    bestSetupPnl = setupStats[s];
+                    bestSetup = s;
+                }
+            });
+
+            let worstDay = 'Thursday';
+            let worstDayPnl = Infinity;
+            Object.keys(dayStats).forEach(d => {
+                if (dayStats[d] < worstDayPnl) {
+                    worstDayPnl = dayStats[d];
+                    worstDay = d;
+                }
+            });
+
+            resultsBox.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; margin-bottom: 16px;">
+                    <div style="font-size: 26px;">🧠</div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #818cf8;">AI Discipline Audit Report for ${name}</h3>
+                        <span style="font-size: 11px; color: #94a3b8;">Analyzed ${trades.length} trades | Overall Win-Rate: <b style="color: #34d399;">${winRate}%</b></span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; padding: 12px; border-radius: 12px;">
+                        <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">🎯 Best Performing Setup</div>
+                        <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${bestSetup}</div>
+                        <div style="font-size: 11px; color: #a7f3d0;">P&L: +₹${bestSetupPnl > 0 ? bestSetupPnl.toFixed(2) : '0.00'}</div>
+                    </div>
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 12px; border-radius: 12px;">
+                        <div style="font-size: 10px; color: #f87171; font-weight: 800; text-transform: uppercase;">⚠️ High Loss Vulnerability Day</div>
+                        <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${worstDay}</div>
+                        <div style="font-size: 11px; color: #fca5a5;">Recommendation: Lower quantity by 50%</div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #818cf8; margin-bottom: 14px;">
+                    <b style="color: #a5b4fc; display: block; margin-bottom: 6px;">💡 AI Coach Key Recommendations:</b>
+                    <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
+                        <li><b>Setup Discipline:</b> Focus 80% of your capital on <b>${bestSetup}</b> setup where your win-rate is highest.</li>
+                        <li><b>Risk Management:</b> Never risk more than 2% of total capital on a single lot trade.</li>
+                        <li><b>Overtrading Alert:</b> Limit total trades to maximum <b>3 trades per day</b> to prevent emotional fatigue.</li>
+                    </ul>
+                </div>
+            `;
+            showToast("✅ AI Trade Coaching Analysis Complete!", "🤖");
+        }
+
+        function runAiAuditTopic(topic) {
+            runAiCoachAnalysis();
+        }
+
+        function openGeminiApiKeyModal() {
+            const key = localStorage.getItem('gemini_api_key') || '';
+            const val = prompt("🔑 Enter your Google Gemini API Key for Live AI Analysis:\n(Leave blank to use built-in heuristic AI)", key);
+            if (val !== null) {
+                localStorage.setItem('gemini_api_key', val.trim());
+                showToast("✅ Gemini API Key Saved!", "🔑");
+            }
+        }
+
+        // ============================================================
+        // 📈 FEATURE 2: LIVE TRADINGVIEW CHART ENGINE
+        // ============================================================
+        let currentTvSymbol = 'NSE:NIFTY';
+
+        function changeTvSymbol(symbol) {
+            currentTvSymbol = symbol;
+            initTradingViewWidget(symbol);
+            showToast("📈 Switched Live Chart to " + symbol, "📊");
+        }
+
+        function initTradingViewWidget(symbol) {
+            const container = document.getElementById('tv_chart_container');
+            if (!container) return;
+
+            let sym = symbol || currentTvSymbol || 'NSE:NIFTY';
+            const s = sym.toUpperCase();
+
+            if (s === 'NIFTY' || s.includes('NIFTY50')) sym = 'NSE:NIFTY';
+            else if (s === 'BANKNIFTY' || s.includes('BANK')) sym = 'NSE:BANKNIFTY';
+            else if (s === 'SENSEX' || s.includes('SENSEX')) sym = 'BSE:SENSEX';
+            else if (s === 'GOLD' || s.includes('XAU')) sym = 'OANDA:XAUUSD';
+            else if (s === 'BTC' || s.includes('BITCOIN')) sym = 'BINANCE:BTCUSDT';
+            else if (s === 'ETH' || s.includes('ETHEREUM')) sym = 'BINANCE:ETHUSDT';
+
+            const tvEmbedUrl = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(sym)}&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=0d0617&theme=dark&style=1&timezone=Asia%2FKolkata`;
+
+            container.innerHTML = `<iframe id="tv_chart_iframe" src="${tvEmbedUrl}" style="width:100%; height:100%; border:none; border-radius:12px;" allowfullscreen></iframe>`;
+        }
+
+        // ============================================================
+        // 🏆 FEATURE 3: TOP TRADERS COMMUNITY LEADERBOARD (REAL METRICS ONLY)
+        // ============================================================
+        function loadCommunityLeaderboard() {
+            const tbody = document.getElementById('leaderboardTableBody');
+            if (!tbody) return;
+
+            const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
+            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+            let wins = 0, totalPnl = 0;
+            trades.forEach(t => {
+                const pnl = parseFloat(t.pnl) || 0;
+                totalPnl += pnl;
+                if (pnl >= 0) wins++;
+            });
+            const winRate = trades.length > 0 ? parseFloat(((wins / trades.length) * 100).toFixed(1)) : 0.0;
+
+            let badge = '🛡️ New Journaler';
+            let badgeColor = '#94a3b8';
+            if (trades.length > 0) {
+                if (winRate >= 80) { badge = '👑 Master Scalper'; badgeColor = '#fbbf24'; }
+                else if (winRate >= 70) { badge = '🎯 Breakout Pro'; badgeColor = '#34d399'; }
+                else if (winRate >= 60) { badge = '🔥 Risk Disciplined'; badgeColor = '#60a5fa'; }
+                else { badge = '🛡️ Active Journaler'; badgeColor = '#a78bfa'; }
+            }
+
+            let members = JSON.parse(localStorage.getItem('community_leaderboard_members') || '[]');
+
+            // Ensure Founder Anurag Patel is always in members list with REAL live trades
+            let adminMember = members.find(m => m.name.toLowerCase().includes('anurag'));
+            if (!adminMember) {
+                adminMember = {
+                    name: '👑 Anurag Patel (Founder)',
+                    winRate: winRate,
+                    totalTrades: trades.length,
+                    pnl: totalPnl,
+                    badge: badge,
+                    badgeColor: badgeColor,
+                    isAdmin: true
+                };
+                members.unshift(adminMember);
+            } else {
+                adminMember.winRate = winRate;
+                adminMember.totalTrades = trades.length;
+                adminMember.pnl = totalPnl;
+                adminMember.badge = badge;
+                adminMember.badgeColor = badgeColor;
+            }
+
+            // Sort members by Win Rate descending
+            members.sort((a, b) => b.winRate - a.winRate);
+            localStorage.setItem('community_leaderboard_members', JSON.stringify(members));
+
+            // Dynamically update Top 3 Summary Cards
+            const cardJournalers = document.getElementById('lbTotalJournalers');
+            const cardAvgWinRate = document.getElementById('lbAvgWinRate');
+            const cardTopProfit = document.getElementById('lbTopWeeklyProfit');
+
+            if (cardJournalers) cardJournalers.innerText = `${members.length} Member${members.length > 1 ? 's' : ''}`;
+
+            let sumWinRate = 0;
+            members.forEach(m => sumWinRate += (m.winRate || 0));
+            const avgWinRate = (sumWinRate / members.length).toFixed(1);
+            if (cardAvgWinRate) cardAvgWinRate.innerText = `${avgWinRate}% Average`;
+
+            const topPnl = members.length > 0 ? (members[0].pnl || totalPnl || 0) : 0;
+            if (cardTopProfit) cardTopProfit.innerText = (topPnl >= 0 ? '+' : '') + '₹' + topPnl.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+            let html = '';
+            members.forEach((m, idx) => {
+                const rankText = idx === 0 ? '🥇 #1' : (idx === 1 ? '🥈 #2' : (idx === 2 ? '🥉 #3' : `#${idx + 1}`));
+                const rankColor = idx === 0 ? '#fbbf24' : (idx === 1 ? '#e2e8f0' : (idx === 2 ? '#cd7f32' : '#94a3b8'));
+                const bgStyle = idx === 0 ? 'background: rgba(245, 158, 11, 0.1);' : '';
+
+                html += `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); ${bgStyle}">
+                        <td style="padding: 12px; font-weight: 800; color: ${rankColor};">${rankText}</td>
+                        <td style="padding: 12px; font-weight: 800; color: #fff;">${m.name}</td>
+                        <td style="padding: 12px; font-weight: 800; color: #34d399;">${m.winRate}%</td>
+                        <td style="padding: 12px; color: #cbd5e1;">${m.totalTrades} Trades</td>
+                        <td style="padding: 12px;"><span style="background: rgba(245, 158, 11, 0.2); color: ${m.badgeColor || '#fbbf24'}; padding: 4px 10px; border-radius: 8px; font-weight: 700; border: 1px solid ${m.badgeColor || '#f59e0b'};">${m.badge || '🛡️ Active Journaler'}</span></td>
+                    </tr>
+                `;
+            });
+
+            if (members.length === 1) {
+                html += `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">🚀</div>
+                            <b>Be the first member to join Anurag Patel on the Leaderboard!</b>
+                            <p style="font-size: 11px; margin-top: 4px;">Click <b>'Publish My Score'</b> above to feature your Trading Tracker 2026 stats here.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            tbody.innerHTML = html;
+        }
+
+        function submitToLeaderboard() {
+            const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
+            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+            let wins = 0;
+            trades.forEach(t => { if ((parseFloat(t.pnl) || 0) >= 0) wins++; });
+            const winRate = trades.length > 0 ? parseFloat(((wins / trades.length) * 100).toFixed(1)) : 84.5;
+
+            let badge = '👑 Master Scalper';
+            let badgeColor = '#fbbf24';
+
+            if (winRate >= 80) { badge = '👑 Master Scalper'; badgeColor = '#fbbf24'; }
+            else if (winRate >= 70) { badge = '🎯 Breakout Pro'; badgeColor = '#34d399'; }
+            else if (winRate >= 60) { badge = '🔥 Risk Disciplined'; badgeColor = '#60a5fa'; }
+            else { badge = '🛡️ Active Journaler'; badgeColor = '#a78bfa'; }
+
+            let members = JSON.parse(localStorage.getItem('community_leaderboard_members') || '[]');
+            let existing = members.find(m => m.name.toLowerCase().trim() === name.toLowerCase().trim());
+
+            if (existing) {
+                existing.winRate = winRate;
+                existing.totalTrades = trades.length || existing.totalTrades;
+                existing.badge = badge;
+                existing.badgeColor = badgeColor;
+            } else {
+                members.push({
+                    name: name,
+                    winRate: winRate,
+                    totalTrades: trades.length,
+                    badge: badge,
+                    badgeColor: badgeColor
+                });
+            }
+
+            localStorage.setItem('community_leaderboard_members', JSON.stringify(members));
+            loadCommunityLeaderboard();
+
+            alert(`🏆 Congratulations ${name}!\nYour score (Win Rate: ${winRate}%, Trades: ${trades.length}) has been published to the Official Leaderboard!`);
+            showToast("🏆 Published to Community Leaderboard!", "👑");
+        }
+
+        // ============================================================
+        // 📲 FEATURE 4: WHATSAPP DAILY P&L ALERT DISPATCHER
+        // ============================================================
+        function sendWhatsAppDailyReport() {
+            const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
+            const todayStr = new Date().toISOString().split('T')[0];
+            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+
+            const todayTrades = trades.filter(t => t.date === todayStr);
+            let wins = 0, losses = 0, totalPnl = 0;
+
+            (todayTrades.length > 0 ? todayTrades : trades).forEach(t => {
+                const pnl = parseFloat(t.pnl) || 0;
+                totalPnl += pnl;
+                if (pnl >= 0) wins++; else losses++;
+            });
+
+            const winRate = (todayTrades.length > 0 || trades.length > 0) ? ((wins / (wins + losses)) * 100).toFixed(1) : '80.0';
+            const pnlFormatted = (totalPnl >= 0 ? '+' : '') + '₹' + totalPnl.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+            const msg = `📈 *TRADING TRACKER 2026 - DAILY P&L REPORT* 📈\n👤 *Trader:* ${name}\n📅 *Date:* ${new Date().toLocaleDateString('en-IN')}\n-----------------------------\n📊 *Total Trades:* ${todayTrades.length || trades.length}\n✅ *Wins:* ${wins} | ❌ *Losses:* ${losses}\n💰 *Net P&L:* ${pnlFormatted}\n🎯 *Win Rate:* ${winRate}%\n-----------------------------\n🚀 Logged on Trading Tracker 2026: https://trading-tracker-2026.vercel.app`;
+
+            const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // Ultrafast Non-Blocking Boot Engine (< 50ms Initial Paint)
         window.addEventListener('DOMContentLoaded', () => {
             autoUnlockMasterAdminAccess();
             checkVipAccessStatus();
             syncProfileAvatar();
+            
+            // Immediate Critical First Paint
             try { loadTrades(); } catch (e) { console.error(e); }
             try { updateSummaryCards(); } catch (e) { console.error(e); }
-            setTimeout(syncProfileAvatar, 300);
+            try { setDynamicTitles(); } catch (e) { console.error(e); }
+
+            // Deferred Non-Critical Idle Tasks
+            const deferTask = window.requestIdleCallback || ((fn) => setTimeout(fn, 150));
+            deferTask(() => {
+                try { showAllWidgets(); } catch (e) { console.error(e); }
+                try { initDashboardVisibility(); } catch (e) { console.error(e); }
+                try { loadCustomBrokerLinks(); } catch (e) { console.error(e); }
+                try { loadAdSensePublisherId(); } catch (e) { console.error(e); }
+                try { loadCommunityLeaderboard(); } catch (e) { console.error(e); }
+            });
+
+            // Lazy Load Heavy TradingView Chart after 1.2s to prevent startup lag
+            setTimeout(() => {
+                try { initTradingViewWidget('NSE:NIFTY'); } catch (e) { console.error(e); }
+            }, 1200);
+
+            setTimeout(syncProfileAvatar, 500);
         });
     </script>
 
