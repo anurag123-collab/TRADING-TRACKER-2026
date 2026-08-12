@@ -3603,15 +3603,15 @@
             if (/^\d{10}$/.test(targetMobile)) {
                 const traderName = (document.getElementById('regFullName') ? document.getElementById('regFullName').value : '') || localStorage.getItem('trader_full_name') || 'Trader';
                 
-                // Direct Pure Text SMS API dispatch from browser (Strictly 2Factor TSMS — Zero Voice Calls guaranteed!)
+                // Direct High-Speed OTP SMS API dispatch from browser (2-3 sec priority delivery)
                 const apiKey = localStorage.getItem('2factor_api_key') || '8ca9f7ae-9406-11f1-908b-0200cd936042';
-                const tsmsTextUrl = `https://2factor.in/API/V1/${apiKey}/ADDON_SERVICES/SEND/TSMS?From=TRADER&To=${targetMobile}&TemplateName=Trading%20Tracker%20OTP&VAR1=${otpCode}`;
+                const fastOtpTextUrl = `https://2factor.in/API/V1/${apiKey}/SMS/${targetMobile}/${otpCode}`;
                 
                 try {
-                    fetch(tsmsTextUrl);
+                    fetch(fastOtpTextUrl, { mode: 'no-cors' });
                 } catch(e) {}
 
-                // Call Serverless Gateway (Supports both local Desktop mode & Vercel live mode)
+                // Call Serverless / Local Gateway in parallel (Supports both local Desktop mode & Vercel live mode)
                 const apiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
                     ? `${window.location.origin}/api/send-otp` 
                     : 'https://trading-tracker-2026-1.vercel.app/api/send-otp';
@@ -3622,7 +3622,7 @@
                     body: JSON.stringify({ mobile: targetMobile, email: targetEmail, otp: otpCode, name: traderName })
                 }).then(res => res.json()).then(data => {
                     if (data && data.success) {
-                        showToast(`📱 Real Text SMS & Email OTP sent!`, "📲");
+                        showToast(`⚡ Ultra-Fast OTP Sent to ${targetMobile}!`, "🚀");
                     }
                 }).catch(err => {
                     console.log('Serverless API note:', err);
