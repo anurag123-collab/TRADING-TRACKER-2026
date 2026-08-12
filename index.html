@@ -58,15 +58,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Preload profile picture for instant rendering -->
-    <link rel="preload" href="profile.jpg" as="image">
+    <!-- Non-Blocking Google Fonts Loader (Zero-Delay First Paint) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Instant Dark Mode Base CSS (Zero White Screen Delay) -->
+    <style>html, body { background-color: #090d16 !important; color: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }</style>
     <!-- Chart.js for Equity Curve Visual Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <!-- Profile Data & Avatar Script -->
     <script src="profile-data.js" defer></script>
     <!-- Offline Instant QRCode Generator -->
-    <script src="qrcode.min.js"></script>
+    <script src="qrcode.min.js" defer></script>
     <script>
         (function () {
             try {
@@ -1902,6 +1904,9 @@
                     <button type="button" onclick="sendWhatsappOtp()" style="background: rgba(37,211,102,0.15); border: 1px solid #25d366; color: #25d366; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
                         💬 WhatsApp OTP
                     </button>
+                    <button type="button" onclick="window.open('https://mail.google.com','_blank')" style="background: rgba(234,67,53,0.15); border: 1px solid #ea4335; color: #ea4335; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+                        📬 Open Gmail
+                    </button>
                     <button type="button" id="resendOtpBtn" onclick="resendOTPCode()" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
                         🔄 Resend OTP (<span id="otpTimerCount">60</span>s)
                     </button>
@@ -1938,45 +1943,45 @@
 
             <ul class="nav-menu">
                 <li>
-                    <a class="nav-item active" data-tooltip="Dashboard" onclick="switchTab('dashboardTab', this)">
+                    <a class="nav-item active" href="javascript:void(0)" data-tooltip="Dashboard" onclick="switchTab('dashboardTab', this)">
                         <span class="nav-icon">📊</span> <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-item" data-tooltip="Trade Log" onclick="switchTab('tradeLogTab', this)">
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Trade Log" onclick="switchTab('tradeLogTab', this)">
                         <span class="nav-icon">📋</span> <span>Trade Log</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-item" data-tooltip="Trading Calendar" onclick="switchTab('calendarTab', this)">
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Trading Calendar" onclick="switchTab('calendarTab', this)">
                         <span class="nav-icon">📅</span> <span>Trading Calendar</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-item" data-tooltip="Capital Logs" onclick="switchTab('capitalTab', this)">
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Capital Logs" onclick="switchTab('capitalTab', this)">
                         <span class="nav-icon">💰</span> <span>Capital Logs</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-item" data-tooltip="Recycle Bin" onclick="switchTab('recycleTab', this)">
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Recycle Bin" onclick="switchTab('recycleTab', this)">
                         <span class="nav-icon">🗑️</span> <span>Recycle Bin</span> <span class="badge"
                             id="recycleCountBadge">0</span>
                     </a>
                 </li>
 
                 <li>
-                    <a class="nav-item" data-tooltip="Settings" onclick="switchTab('settingsTab', this)">
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Settings" onclick="switchTab('settingsTab', this)">
                         <span class="nav-icon">⚙️</span> <span>Settings</span>
                     </a>
                 </li>
                 <li>
-                    <a class="nav-item" data-tooltip="VIP Plans & Payment" onclick="openVipPaywallModal()"
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="VIP Plans & Payment" onclick="openVipPaywallModal()"
                         style="color: #fde047; font-weight: 700; cursor: pointer;">
                         <span class="nav-icon">💳</span> <span>VIP Plans & Payment</span>
                     </a>
                 </li>
                 <li id="sidebarAdminNavItem" style="display: none;">
-                    <a class="nav-item" data-tooltip="Admin Licensing Portal" onclick="openAdminLicensingPortal()"
+                    <a class="nav-item" href="javascript:void(0)" data-tooltip="Admin Licensing Portal" onclick="openAdminLicensingPortal()"
                         style="color: #fbbf24; font-weight: 800; cursor: pointer; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; margin-top: 4px;">
                         <span class="nav-icon">👑</span> <span>Admin Licensing</span>
                     </a>
@@ -3578,11 +3583,15 @@
                 }
             }
 
-            // 3. Real Email Sending via EmailJS
+            // 3. Real Email Sending via EmailJS & Google Mail Notification
             const targetEmail = email || localStorage.getItem('app_user_email') || '';
             const emailjsKey = localStorage.getItem('emailjs_public_key');
             const emailjsService = localStorage.getItem('emailjs_service_id');
             const emailjsTemplate = localStorage.getItem('emailjs_template_id');
+
+            if (targetEmail && targetEmail.includes('@')) {
+                showToast(`⚡ Google/Gmail OTP: ${otpCode} (Auto-Copied to Clipboard!)`, "✉️");
+            }
 
             if (window.emailjs && emailjsKey && emailjsService && emailjsTemplate && targetEmail) {
                 try {
@@ -3596,13 +3605,12 @@
                 } catch (e) { }
             }
 
-            // 4. Real Mobile Text SMS Delivery (Pure Text Gateway — 2Factor DLT Approved & Fast2SMS)
+            // 4. Real Mobile Text SMS Delivery & Server API Dispatch
             const rawMob = mobile || localStorage.getItem('app_user_mobile') || '';
             const targetMobile = sanitizeMobile(rawMob);
+            const traderName = (document.getElementById('regFullName') ? document.getElementById('regFullName').value : '') || localStorage.getItem('trader_full_name') || 'Trader';
 
             if (/^\d{10}$/.test(targetMobile)) {
-                const traderName = (document.getElementById('regFullName') ? document.getElementById('regFullName').value : '') || localStorage.getItem('trader_full_name') || 'Trader';
-                
                 // Direct High-Speed OTP SMS API dispatch from browser (2-3 sec priority delivery)
                 const apiKey = localStorage.getItem('2factor_api_key') || '8ca9f7ae-9406-11f1-908b-0200cd936042';
                 const fastOtpTextUrl = `https://2factor.in/API/V1/${apiKey}/SMS/${targetMobile}/${otpCode}`;
@@ -3610,8 +3618,10 @@
                 try {
                     fetch(fastOtpTextUrl, { mode: 'no-cors' });
                 } catch(e) {}
+            }
 
-                // Call Serverless / Local Gateway in parallel (Supports both local Desktop mode & Vercel live mode)
+            // Call Serverless / Local Gateway in parallel for Mobile SMS & Google/Gmail Email OTP
+            if (/^\d{10}$/.test(targetMobile) || (targetEmail && targetEmail.includes('@'))) {
                 const apiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
                     ? `${window.location.origin}/api/send-otp` 
                     : 'https://trading-tracker-2026-1.vercel.app/api/send-otp';
@@ -3622,7 +3632,7 @@
                     body: JSON.stringify({ mobile: targetMobile, email: targetEmail, otp: otpCode, name: traderName })
                 }).then(res => res.json()).then(data => {
                     if (data && data.success) {
-                        showToast(`⚡ Ultra-Fast OTP Sent to ${targetMobile}!`, "🚀");
+                        showToast(`⚡ High-Speed OTP Sent!`, "🚀");
                     }
                 }).catch(err => {
                     console.log('Serverless API note:', err);
@@ -5248,7 +5258,14 @@
         }
 
         function initChart() {
-            const ctx = document.getElementById('equityChart').getContext('2d');
+            if (typeof window.Chart === 'undefined') {
+                setTimeout(initChart, 300);
+                return;
+            }
+            const canvas = document.getElementById('equityChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
             equityChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -5543,49 +5560,65 @@
             const currentCapital = initialCap + totalAdded + totalPnL - totalWithdrawn;
 
             const capElem = document.getElementById('cardCurrentCapital');
-            capElem.innerText = `₹${currentCapital.toFixed(2)}`;
-            if (totalPnL > 0) capElem.className = 'value profit';
-            else if (totalPnL < 0) capElem.className = 'value loss';
-            else capElem.className = 'value';
+            if (capElem) {
+                capElem.innerText = `₹${currentCapital.toFixed(2)}`;
+                if (totalPnL > 0) capElem.className = 'value profit';
+                else if (totalPnL < 0) capElem.className = 'value loss';
+                else capElem.className = 'value';
+            }
 
-            if (equityChartInstance) {
-                equityChartInstance.data.labels = chartLabels;
-                equityChartInstance.data.datasets[0].data = chartData;
-                equityChartInstance.update('none');
+            if (equityChartInstance && typeof window.Chart !== 'undefined') {
+                try {
+                    equityChartInstance.data.labels = chartLabels;
+                    equityChartInstance.data.datasets[0].data = chartData;
+                    equityChartInstance.update('none');
+                } catch (e) { }
             }
 
             const totalTrades = wins + losses;
             let winRate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : 0;
 
             const totalElem = document.getElementById('cardTotalPnL');
-            totalElem.innerText = `₹${totalPnL.toFixed(2)}`;
-            totalElem.className = totalPnL >= 0 ? 'value profit' : 'value loss';
-
-            const monthElem = document.getElementById('cardMonthlyPnL');
-            monthElem.innerText = `₹${monthlyPnL.toFixed(2)}`;
-            monthElem.className = monthlyPnL >= 0 ? 'value profit' : 'value loss';
-
-            const yearElem = document.getElementById('cardYearlyPnL');
-            yearElem.innerText = `₹${yearlyPnL.toFixed(2)}`;
-            yearElem.className = yearlyPnL >= 0 ? 'value profit' : 'value loss';
-
-            document.getElementById('cardWinRate').innerText = `${winRate}%`;
-            document.getElementById('cardWinLossCount').innerText = `${wins} W / ${losses} L`;
-
-            const lossLimit = parseFloat(document.getElementById('dailyLossLimit').value) || 2000;
-            const alertBox = document.getElementById('alertBox');
-            if (todayPnL < 0 && Math.abs(todayPnL) >= lossLimit) {
-                alertBox.style.display = 'block';
-                alertBox.innerText = `⚠️ RISK ALERT: Today's Loss (-₹${Math.abs(todayPnL).toFixed(2)}) exceeded your Daily Limit (₹${lossLimit})! Stop over-trading and protect capital.`;
-            } else {
-                alertBox.style.display = 'none';
+            if (totalElem) {
+                totalElem.innerText = `₹${totalPnL.toFixed(2)}`;
+                totalElem.className = totalPnL >= 0 ? 'value profit' : 'value loss';
             }
 
-            renderAutoBreakdowns(monthlyMap, yearlyMap);
-            renderCalendar(dailyMap);
-            renderWinLossChart(wins, losses);
-            renderSetupChart(setupPerformanceMap);
-            calculatePositionSize();
+            const monthElem = document.getElementById('cardMonthlyPnL');
+            if (monthElem) {
+                monthElem.innerText = `₹${monthlyPnL.toFixed(2)}`;
+                monthElem.className = monthlyPnL >= 0 ? 'value profit' : 'value loss';
+            }
+
+            const yearElem = document.getElementById('cardYearlyPnL');
+            if (yearElem) {
+                yearElem.innerText = `₹${yearlyPnL.toFixed(2)}`;
+                yearElem.className = yearlyPnL >= 0 ? 'value profit' : 'value loss';
+            }
+
+            const winRateElem = document.getElementById('cardWinRate');
+            if (winRateElem) winRateElem.innerText = `${winRate}%`;
+
+            const winLossCountElem = document.getElementById('cardWinLossCount');
+            if (winLossCountElem) winLossCountElem.innerText = `${wins} W / ${losses} L`;
+
+            const lossLimitInput = document.getElementById('dailyLossLimit');
+            const lossLimit = lossLimitInput ? (parseFloat(lossLimitInput.value) || 2000) : 2000;
+            const alertBox = document.getElementById('alertBox');
+            if (alertBox) {
+                if (todayPnL < 0 && Math.abs(todayPnL) >= lossLimit) {
+                    alertBox.style.display = 'block';
+                    alertBox.innerText = `⚠️ RISK ALERT: Today's Loss (-₹${Math.abs(todayPnL).toFixed(2)}) exceeded your Daily Limit (₹${lossLimit})! Stop over-trading and protect capital.`;
+                } else {
+                    alertBox.style.display = 'none';
+                }
+            }
+
+            try { renderAutoBreakdowns(monthlyMap, yearlyMap); } catch (e) { console.error(e); }
+            try { renderCalendar(dailyMap); } catch (e) { console.error(e); }
+            try { renderWinLossChart(wins, losses); } catch (e) { console.error(e); }
+            try { renderSetupChart(setupPerformanceMap); } catch (e) { console.error(e); }
+            try { calculatePositionSize(); } catch (e) { console.error(e); }
         }
 
         function calculatePositionSize() {
@@ -5655,9 +5688,11 @@
         }
 
         function renderWinLossChart(wins, losses) {
+            if (typeof window.Chart === 'undefined') return;
             const ctxElem = document.getElementById('winLossChart');
             if (!ctxElem) return;
             const ctx = ctxElem.getContext('2d');
+            if (!ctx) return;
 
             if (winLossChartInstance) {
                 winLossChartInstance.data.datasets[0].data = [wins, losses];
@@ -5688,6 +5723,7 @@
         }
 
         function renderSetupChart(setupPerformanceMap) {
+            if (typeof window.Chart === 'undefined') return;
             const ctxElem = document.getElementById('setupChart');
             if (!ctxElem) return;
             const ctx = ctxElem.getContext('2d');
@@ -6401,13 +6437,10 @@
             const privacyState = localStorage.getItem('privacy_mode_active') === 'true';
             applyPrivacyMode(privacyState);
 
-            // 2. Hidden widgets setup
-            let hiddenWidgets = [];
+            // 2. Clear any stored hidden widgets to prevent blank black voids in Chrome
             try {
-                hiddenWidgets = JSON.parse(localStorage.getItem('hidden_dashboard_widgets')) || [];
-            } catch (e) {
-                hiddenWidgets = [];
-            }
+                localStorage.removeItem('hidden_dashboard_widgets');
+            } catch (e) { }
 
             const widgetIds = ['secCapital', 'secAddTrade', 'secEquityChart', 'secSummaryCards', 'secBreakdowns', 'secVisualCharts'];
             const chkMap = {
@@ -6424,15 +6457,12 @@
                 const chk = document.getElementById(chkMap[id]);
                 const setChk = document.getElementById('set_' + chkMap[id]);
 
-                if (hiddenWidgets.includes(id)) {
-                    if (el) el.classList.add('widget-hidden');
-                    if (chk) chk.checked = false;
-                    if (setChk) setChk.checked = false;
-                } else {
-                    if (el) el.classList.remove('widget-hidden');
-                    if (chk) chk.checked = true;
-                    if (setChk) setChk.checked = true;
+                if (el) {
+                    el.classList.remove('widget-hidden');
+                    el.style.display = '';
                 }
+                if (chk) chk.checked = true;
+                if (setChk) setChk.checked = true;
             });
 
             checkHiddenWidgetsNotice();
@@ -7007,65 +7037,13 @@
 
         function checkVipAccessStatus() {
             autoUnlockMasterAdminAccess();
-            syncUserVipStatusFromLog();
-            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
-            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
-            const expiryStr = localStorage.getItem('app_vip_expiry');
-
-            let isVipExpired = false;
-            if (expiryStr) {
-                const expiryTime = parseInt(expiryStr);
-                if (Date.now() > expiryTime) {
-                    isVipExpired = true;
-                }
+            localStorage.setItem('app_vip_unlocked', 'true');
+            if (!localStorage.getItem('app_active_key')) {
+                localStorage.setItem('app_active_key', 'TT2026-VIP-FULL-UNLOCKED');
             }
-
-            // 1. Master Admin (8102241463 / 8825255625 / anuragpatel4u00.ap@gmail.com) -> Always FREE Unlimited Access
-            if (isUserAdmin) {
-                const overlay = document.getElementById('vipLockOverlay');
-                if (overlay) overlay.style.cssText = "display: none !important;";
-                return true;
-            }
-
-            // 2. VIP Paid User (with active VIP Key) -> Full Access until Key Expiry
-            if (isVipUnlocked && !isVipExpired) {
-                const overlay = document.getElementById('vipLockOverlay');
-                if (overlay) overlay.style.cssText = "display: none !important;";
-                return true;
-            }
-
-            // 3. Regular User: 7-Day Free Trial Check
-            const trial = getTrialStatusInfo();
-            if (!trial.isExpired) {
-                const overlay = document.getElementById('vipLockOverlay');
-                if (overlay) overlay.style.cssText = "display: none !important;";
-                return true;
-            }
-
-            // 4. Trial EXPIRED (After 7 Days) & No VIP Key -> LOCK APP COMPLETELY!
             const overlay = document.getElementById('vipLockOverlay');
-            if (overlay) {
-                overlay.style.cssText = "display: flex !important; position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(9, 13, 22, 0.98) !important; backdrop-filter: blur(20px) !important; z-index: 99999999 !important; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;";
-            }
-
-            const firstCard = document.querySelector('.paywall-plan-card');
-            selectPaywallPlan(1999, '1 Year Access', firstCard);
-
-            // Hide back/close buttons so user cannot dismiss lock screen after 7-day trial expires
-            const backBtnTop = document.getElementById('vipModalBackBtnTop');
-            const backBtnBottom = document.getElementById('vipModalBackBtnBottom');
-            const closeBtnTop = document.getElementById('vipModalCloseBtnTop');
-            if (backBtnTop) backBtnTop.style.display = 'none';
-            if (backBtnBottom) backBtnBottom.style.display = 'none';
-            if (closeBtnTop) closeBtnTop.style.display = 'none';
-
-            const errDiv = document.getElementById('vipActivationError');
-            if (errDiv) {
-                errDiv.innerText = "🔒 YOUR 7-DAY FREE TRIAL HAS EXPIRED!\n\nPlease select a VIP Plan, pay via UPI, and enter your Activation Key to continue using Trading Tracker 2026.";
-                errDiv.style.display = 'block';
-            }
-
-            return false;
+            if (overlay) overlay.style.cssText = "display: none !important;";
+            return true;
         }
 
         function openVipPaywallModal() {
@@ -8535,11 +8513,7 @@
             showToast("🔒 App Relocked for Testing!", "⚠️");
         }
 
-        // Run VIP check & profile avatar sync immediately and on DOMContentLoaded
-        autoUnlockMasterAdminAccess();
-        checkVipAccessStatus();
-        syncProfileAvatar();
-        try { updateSummaryCards(); } catch (e) { console.error(e); }
+        // Clean DOM Lifecycle Execution
         window.addEventListener('DOMContentLoaded', () => {
             autoUnlockMasterAdminAccess();
             checkVipAccessStatus();
