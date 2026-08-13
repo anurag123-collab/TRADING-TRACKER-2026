@@ -2440,12 +2440,13 @@
                             <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                                 <input type="text" id="tradeChartUrl" class="form-control" style="flex: 1;"
                                     placeholder="Paste chart link e.g. https://s3.tradingview.com/...">
-                                <label class="btn btn-secondary btn-sm"
-                                    style="margin: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    style="margin: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;"
+                                    onclick="document.getElementById('tradeChartFile').click();">
                                     <span>📁 Upload Photo</span>
-                                    <input type="file" id="tradeChartFile" accept="image/*" style="display: none;"
-                                        onchange="handleChartFileUpload(event)">
-                                </label>
+                                </button>
+                                <input type="file" id="tradeChartFile" accept="image/*" style="display: none;"
+                                    onchange="handleChartFileUpload(event)">
                             </div>
                             <div id="chartPreviewContainer"
                                 style="display: none; margin-top: 8px; position: relative; width: fit-content;">
@@ -2454,6 +2455,21 @@
                                 <button type="button" class="card-action-btn"
                                     style="position: absolute; top: -6px; right: -6px; background: var(--danger); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px;"
                                     onclick="clearChartPreview()">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 8px; background: rgba(99, 102, 241, 0.05); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border);">
+                            <label style="font-size: 11px; font-weight: 700; color: #818cf8; text-transform: uppercase; display: block; margin-bottom: 6px;">🛡️ Psychology & Discipline Checklist</label>
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px;">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox" id="ruleSLFollowed" checked style="accent-color: var(--primary);"> Followed SL
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox" id="ruleNoRevenge" checked style="accent-color: var(--primary);"> No Revenge Trade
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox" id="ruleSetupWaited" checked style="accent-color: var(--primary);"> Waited for Setup
+                                </label>
                             </div>
                         </div>
 
@@ -2890,6 +2906,27 @@
                         </div>
                         <button class="btn btn-primary btn-block" style="margin-top: 16px;"
                             onclick="updateCredentials()">Update Password & ID</button>
+                    </div>
+                    <!-- ONE-CLICK DATA BACKUP & RESTORE CARD -->
+                    <div class="card" style="grid-column: span 2; margin-top: 16px;">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title"><span>💾</span> One-Click Data Backup & Restore (JSON / CSV)</div>
+                                <div class="card-subtitle">Export full trade backup or restore history across devices</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding-top: 6px;">
+                            <button class="btn btn-primary" onclick="exportJSONBackup()">
+                                📦 Export JSON Backup
+                            </button>
+                            <button class="btn btn-success" onclick="exportToCSV()">
+                                📊 Export CSV File
+                            </button>
+                            <label class="btn btn-secondary" style="margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                                <span>📂 Restore from Backup File (.json)</span>
+                                <input type="file" accept=".json" style="display: none;" onchange="importJSONBackup(event)">
+                            </label>
+                        </div>
                     </div>
                     <!-- THEME PRESETS CARD -->
                     <div class="card" style="grid-column: span 2; margin-top: 16px;">
@@ -3331,9 +3368,15 @@
                             💾 Save AdSense ID
                         </button>
                     </div>
-                    <div style="max-width: 450px;">
-                        <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">📢 Google AdSense Client Publisher ID:</label>
-                        <input type="text" id="adsensePublisherIdInput" placeholder="ca-pub-1234567890123456" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #34d399; font-weight: 700; font-family: monospace; font-size: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 10px;">
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">📢 Google AdSense Publisher ID (Required):</label>
+                            <input type="text" id="adsensePublisherIdInput" placeholder="ca-pub-1815684098843825" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #34d399; font-weight: 700; font-family: monospace; font-size: 12px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🎯 Ad Slot ID (Optional / Auto-Ads):</label>
+                            <input type="text" id="adsenseSlotIdInput" placeholder="e.g. 1234567890 (Leave blank for Auto-Ads)" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #38bdf8; font-weight: 700; font-family: monospace; font-size: 12px;">
+                        </div>
                     </div>
                 </div>
 
@@ -3665,22 +3708,97 @@
             }
         }
 
-        function handleChartFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
+        // Universal Image Compressor to prevent QuotaExceededError in localStorage
+        function compressImageFile(file, maxWidth, maxHeight, quality, callback) {
+            if (!file || !file.type || !file.type.startsWith('image/')) {
+                showToast("⚠️ Please select a valid image file (JPG/PNG)", "⚠️");
+                return;
+            }
             const reader = new FileReader();
+            reader.onerror = function () {
+                showToast("❌ Error reading photo file", "❌");
+            };
             reader.onload = function (e) {
-                const base64Img = e.target.result;
-                const urlInput = document.getElementById('tradeChartUrl');
-                const prevImg = document.getElementById('chartPreviewImg');
-                const prevCont = document.getElementById('chartPreviewContainer');
-                if (urlInput) urlInput.value = base64Img;
-                if (prevImg) prevImg.src = base64Img;
-                if (prevCont) prevCont.style.display = 'block';
+                const img = new Image();
+                img.onerror = function () {
+                    showToast("❌ Failed to parse image file", "❌");
+                };
+                img.onload = function () {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                        if (height > maxHeight) {
+                            width = Math.round((width * maxHeight) / height);
+                            height = maxHeight;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                        callback(compressedBase64);
+                    } catch (err) {
+                        console.error('Image compression error:', err);
+                        callback(e.target.result);
+                    }
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
+
+        function handleChartFileUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            compressImageFile(file, 800, 600, 0.7, function (compressedBase64) {
+                try {
+                    const urlInput = document.getElementById('tradeChartUrl');
+                    const prevImg = document.getElementById('chartPreviewImg');
+                    const prevCont = document.getElementById('chartPreviewContainer');
+                    if (urlInput) urlInput.value = compressedBase64;
+                    if (prevImg) prevImg.src = compressedBase64;
+                    if (prevCont) prevCont.style.display = 'block';
+                    showToast("📸 Chart Photo Attached & Compressed!", "✅");
+                } catch (err) {
+                    console.error("Chart preview error:", err);
+                    showToast("❌ Error attaching chart image", "❌");
+                } finally {
+                    try { event.target.value = ''; } catch (e) { }
+                }
+            });
+        }
+
+        // Global Paste Listener for Clipboard Chart Screenshots (Ctrl+V)
+        document.addEventListener('paste', function (e) {
+            const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+            if (!items) return;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type && items[i].type.indexOf('image') !== -1) {
+                    const file = items[i].getAsFile();
+                    if (file) {
+                        compressImageFile(file, 800, 600, 0.7, function (compressedBase64) {
+                            const urlInput = document.getElementById('tradeChartUrl');
+                            const prevImg = document.getElementById('chartPreviewImg');
+                            const prevCont = document.getElementById('chartPreviewContainer');
+                            if (urlInput) urlInput.value = compressedBase64;
+                            if (prevImg) prevImg.src = compressedBase64;
+                            if (prevCont) prevCont.style.display = 'block';
+                            showToast("📸 Clipboard Screenshot Attached!", "✅");
+                        });
+                        break;
+                    }
+                }
+            }
+        });
 
         function clearChartPreview() {
             const urlInput = document.getElementById('tradeChartUrl');
@@ -5615,7 +5733,7 @@
             const starStr = '⭐'.repeat(parseInt(rating) || 3);
 
             const chartBtnHtml = chartUrl
-                ? `<button class="btn btn-secondary btn-sm" onclick="openChartModal('${chartUrl.replace(/'/g, "\\'")}', '${index} ${strike} (${date})')">📷 View Chart</button>`
+                ? `<button class="btn btn-secondary btn-sm" onclick="viewTradeChartFromRow(this)">📷 View Chart</button>`
                 : `<span style="color: var(--text-muted); font-size: 11px;">No Chart</span>`;
 
             newRow.innerHTML = `
@@ -5688,6 +5806,7 @@
             const lots = row.getAttribute('data-lots');
             const qtyLot = row.getAttribute('data-qtylot');
             const mindset = row.getAttribute('data-mindset');
+            const chartUrl = row.getAttribute('data-charturl');
 
             if (date) document.getElementById('tradeDate').value = date;
             if (index) {
@@ -5717,6 +5836,17 @@
             if (lots) document.getElementById('lots').value = lots;
             if (qtyLot) document.getElementById('qtyPerLot').value = qtyLot;
             if (mindset) document.getElementById('traderMindset').value = mindset;
+
+            if (chartUrl) {
+                const urlInput = document.getElementById('tradeChartUrl');
+                const prevImg = document.getElementById('chartPreviewImg');
+                const prevCont = document.getElementById('chartPreviewContainer');
+                if (urlInput) urlInput.value = chartUrl;
+                if (prevImg) prevImg.src = chartUrl;
+                if (prevCont) prevCont.style.display = 'block';
+            } else {
+                clearChartPreview();
+            }
 
             row.remove();
             saveToLocalStorage();
@@ -5898,6 +6028,20 @@
             document.getElementById('chartModalLink').href = url;
             document.getElementById('chartModalInfo').innerText = title || '';
             document.getElementById('chartModal').style.display = 'flex';
+        }
+
+        function viewTradeChartFromRow(btn) {
+            const row = btn.closest('tr');
+            if (!row) return;
+            const url = row.getAttribute('data-charturl');
+            const index = row.getAttribute('data-index') || '';
+            const strike = row.getAttribute('data-strike') || '';
+            const date = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText) : '';
+            if (url) {
+                openChartModal(url, `${index} ${strike} (${date})`);
+            } else {
+                showToast("⚠️ No chart photo attached to this trade", "⚠️");
+            }
         }
 
         function closeChartModal() {
@@ -8847,9 +8991,14 @@
                             <!-- EDIT PROFILE CONTENT -->
                             <div id="profileEditContent" style="display: ${initialMode === 'edit' ? 'block' : 'none'};">
                                 <div style="text-align: center; margin-bottom: 16px;">
-                                    <div style="position: relative; width: 84px; height: 84px; margin: 0 auto 10px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, #6366f1, #a855f7);">
+                                    <div style="position: relative; width: 88px; height: 88px; margin: 0 auto 10px; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, #6366f1, #a855f7); cursor: pointer;" onclick="document.getElementById('userProfileAvatarFile').click();" title="Click to upload profile photo">
                                         <img id="profileEditAvatarPreview" src="${avatarSrc}" onerror="this.src='profile.ico';" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #000;">
+                                        <div style="position: absolute; bottom: 0; right: 0; background: #6366f1; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 2px solid #0f172a; box-shadow: 0 2px 6px rgba(0,0,0,0.5);">📷</div>
                                     </div>
+                                    <button type="button" class="btn" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px dashed #6366f1; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px;" onclick="document.getElementById('userProfileAvatarFile').click();">
+                                        <span>📷 Upload Profile Photo</span>
+                                    </button>
+                                    <input type="file" id="userProfileAvatarFile" accept="image/*" style="display: none;" onchange="previewAndSaveCustomAvatar(event)">
                                 </div>
 
                                 <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -8958,24 +9107,28 @@
             const file = event.target.files && event.target.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const base64 = e.target.result;
-                window.PROFILE_AVATAR_BASE64 = base64;
-                localStorage.setItem('custom_user_avatar', base64);
+            compressImageFile(file, 300, 300, 0.7, function (compressedBase64) {
+                try {
+                    window.PROFILE_AVATAR_BASE64 = compressedBase64;
+                    localStorage.setItem('custom_user_avatar', compressedBase64);
 
-                const vImg = document.getElementById('profileViewAvatarImg');
-                const eImg = document.getElementById('profileEditAvatarPreview');
-                if (vImg) vImg.src = base64;
-                if (eImg) eImg.src = base64;
+                    const vImg = document.getElementById('profileViewAvatarImg');
+                    const eImg = document.getElementById('profileEditAvatarPreview');
+                    if (vImg) vImg.src = compressedBase64;
+                    if (eImg) eImg.src = compressedBase64;
 
-                // Sync across all avatar images on screen
-                const imgs = document.querySelectorAll('.login-avatar-img, .brand-avatar-img, .profile-avatar-img');
-                imgs.forEach(img => img.src = base64);
+                    // Sync across all avatar images on screen
+                    const imgs = document.querySelectorAll('.login-avatar-img, .brand-avatar-img, .profile-avatar-img');
+                    imgs.forEach(img => img.src = compressedBase64);
 
-                showToast("📸 Profile Photo Updated Successfully!", "🎉");
-            };
-            reader.readAsDataURL(file);
+                    showToast("📸 Profile Photo Updated Successfully!", "🎉");
+                } catch (err) {
+                    console.error("Avatar save error:", err);
+                    showToast("❌ Photo size too large for storage. Please pick a smaller image.", "❌");
+                } finally {
+                    try { event.target.value = ''; } catch (e) { }
+                }
+            });
         }
 
         function saveUserProfileChanges() {
@@ -9386,8 +9539,13 @@
         function loadAdSensePublisherId() {
             try {
                 const pubId = (localStorage.getItem('google_adsense_publisher_id') || 'ca-pub-1815684098843825').trim();
-                const inputElem = document.getElementById('adsensePublisherIdInput');
-                if (inputElem && pubId) inputElem.value = pubId;
+                const slotId = (localStorage.getItem('google_adsense_slot_id') || '').trim();
+
+                const pubInputElem = document.getElementById('adsensePublisherIdInput');
+                if (pubInputElem && pubId) pubInputElem.value = pubId;
+
+                const slotInputElem = document.getElementById('adsenseSlotIdInput');
+                if (slotInputElem) slotInputElem.value = slotId;
 
                 if (pubId && pubId.startsWith('ca-pub-')) {
                     let existingScript = document.getElementById('googleAdSenseScript');
@@ -9402,34 +9560,50 @@
 
                     const container = document.getElementById('googleAdContainer');
                     if (container) {
+                        const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                        const slotAttr = slotId ? `data-ad-slot="${slotId}"` : '';
+
                         container.innerHTML = `
-                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">📢 SPONSORED GOOGLE ADSENSE BANNER</div>
+                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                                <span>📢 SPONSORED GOOGLE ADSENSE BANNER</span>
+                                <span style="color: #34d399; font-size: 9px; font-weight: 600;">Client ID: ${pubId}</span>
+                            </div>
                             <ins class="adsbygoogle"
-                                 style="display:block"
+                                 style="display:block; min-height: 90px;"
                                  data-ad-client="${pubId}"
-                                 data-ad-slot="1234567890"
+                                 ${slotAttr}
                                  data-ad-format="auto"
                                  data-full-width-responsive="true"></ins>
-                            \x3Cscript>(adsbygoogle = window.adsbygoogle || []).push({});\x3C/script>
+                            ${isLocal ? `<div style="margin-top: 6px; font-size: 11px; color: #fbbf24; background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.3); padding: 6px 10px; border-radius: 6px;">ℹ️ <b>Preview Mode (Localhost/Offline):</b> Google AdSense Script Active (\x3Ccode>${pubId}\x3C/code>). Live ads will display when served on your registered web domain.</div>` : ''}
                         `;
+
+                        try {
+                            (window.adsbygoogle = window.adsbygoogle || []).push({});
+                        } catch(err) {
+                            console.log('AdSense Push Notice:', err);
+                        }
                     }
                 }
-            } catch (e) { }
+            } catch (e) { console.error(e); }
         }
 
         function saveAdSensePublisherId() {
             try {
-                const inputElem = document.getElementById('adsensePublisherIdInput');
-                const val = inputElem ? inputElem.value.trim() : '';
+                const pubInputElem = document.getElementById('adsensePublisherIdInput');
+                const slotInputElem = document.getElementById('adsenseSlotIdInput');
 
-                if (val && !val.startsWith('ca-pub-')) {
-                    alert("⚠️ Invalid AdSense Publisher ID format!\nIt must start with 'ca-pub-' (e.g. ca-pub-1234567890123456)");
+                const pubVal = pubInputElem ? pubInputElem.value.trim() : '';
+                const slotVal = slotInputElem ? slotInputElem.value.trim() : '';
+
+                if (pubVal && !pubVal.startsWith('ca-pub-')) {
+                    alert("⚠️ Invalid AdSense Publisher ID format!\nIt must start with 'ca-pub-' (e.g. ca-pub-1815684098843825)");
                     return;
                 }
 
-                localStorage.setItem('google_adsense_publisher_id', val);
+                localStorage.setItem('google_adsense_publisher_id', pubVal);
+                localStorage.setItem('google_adsense_slot_id', slotVal);
                 loadAdSensePublisherId();
-                showToast("✅ Google AdSense Publisher ID saved! Ads script injected.", "📢");
+                showToast("✅ AdSense Settings Saved Successfully!", "📢");
             } catch (e) { }
         }
 
@@ -9574,7 +9748,7 @@
             if (!tbody) return;
 
             const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
-            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+            const trades = JSON.parse(localStorage.getItem('trades_history') || localStorage.getItem('trades') || '[]');
             let wins = 0, totalPnl = 0;
             trades.forEach(t => {
                 const pnl = parseFloat(t.pnl) || 0;
@@ -9594,8 +9768,8 @@
 
             let members = JSON.parse(localStorage.getItem('community_leaderboard_members') || '[]');
 
-            // Ensure Founder Anurag Patel is always in members list with REAL live trades
-            let adminMember = members.find(m => m.name.toLowerCase().includes('anurag'));
+            // Force update Founder Anurag Patel entry with REAL live trades count, Win Rate & PnL
+            let adminMember = members.find(m => m.name.toLowerCase().includes('anurag') || m.isAdmin);
             if (!adminMember) {
                 adminMember = {
                     name: '👑 Anurag Patel (Founder)',
@@ -9627,7 +9801,7 @@
             if (cardJournalers) cardJournalers.innerText = `${members.length} Member${members.length > 1 ? 's' : ''}`;
 
             let sumWinRate = 0;
-            members.forEach(m => sumWinRate += (m.winRate || 0));
+            members.forEach(m => sumWinRate += (parseFloat(m.winRate) || 0));
             const avgWinRate = (sumWinRate / members.length).toFixed(1);
             if (cardAvgWinRate) cardAvgWinRate.innerText = `${avgWinRate}% Average`;
 
@@ -9651,58 +9825,54 @@
                 `;
             });
 
-            if (members.length === 1) {
-                html += `
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                        <td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">
-                            <div style="font-size: 24px; margin-bottom: 6px;">🚀</div>
-                            <b>Be the first member to join Anurag Patel on the Leaderboard!</b>
-                            <p style="font-size: 11px; margin-top: 4px;">Click <b>'Publish My Score'</b> above to feature your Trading Tracker 2026 stats here.</p>
-                        </td>
-                    </tr>
-                `;
-            }
-
             tbody.innerHTML = html;
         }
 
         function submitToLeaderboard() {
             const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
-            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
-            let wins = 0;
-            trades.forEach(t => { if ((parseFloat(t.pnl) || 0) >= 0) wins++; });
-            const winRate = trades.length > 0 ? parseFloat(((wins / trades.length) * 100).toFixed(1)) : 84.5;
+            const trades = JSON.parse(localStorage.getItem('trades_history') || localStorage.getItem('trades') || '[]');
+            let wins = 0, totalPnl = 0;
+            trades.forEach(t => {
+                const pnl = parseFloat(t.pnl) || 0;
+                totalPnl += pnl;
+                if (pnl >= 0) wins++;
+            });
+            const winRate = trades.length > 0 ? parseFloat(((wins / trades.length) * 100).toFixed(1)) : 0.0;
 
-            let badge = '👑 Master Scalper';
-            let badgeColor = '#fbbf24';
-
-            if (winRate >= 80) { badge = '👑 Master Scalper'; badgeColor = '#fbbf24'; }
-            else if (winRate >= 70) { badge = '🎯 Breakout Pro'; badgeColor = '#34d399'; }
-            else if (winRate >= 60) { badge = '🔥 Risk Disciplined'; badgeColor = '#60a5fa'; }
-            else { badge = '🛡️ Active Journaler'; badgeColor = '#a78bfa'; }
+            let badge = '🛡️ New Journaler';
+            let badgeColor = '#94a3b8';
+            if (trades.length > 0) {
+                if (winRate >= 80) { badge = '👑 Master Scalper'; badgeColor = '#fbbf24'; }
+                else if (winRate >= 70) { badge = '🎯 Breakout Pro'; badgeColor = '#34d399'; }
+                else if (winRate >= 60) { badge = '🔥 Risk Disciplined'; badgeColor = '#60a5fa'; }
+                else { badge = '🛡️ Active Journaler'; badgeColor = '#a78bfa'; }
+            }
 
             let members = JSON.parse(localStorage.getItem('community_leaderboard_members') || '[]');
-            let existing = members.find(m => m.name.toLowerCase().trim() === name.toLowerCase().trim());
+            let existing = members.find(m => m.name.toLowerCase().trim().includes(name.toLowerCase().trim()) || m.isAdmin);
 
             if (existing) {
                 existing.winRate = winRate;
-                existing.totalTrades = trades.length || existing.totalTrades;
+                existing.totalTrades = trades.length;
+                existing.pnl = totalPnl;
                 existing.badge = badge;
                 existing.badgeColor = badgeColor;
             } else {
                 members.push({
-                    name: name,
+                    name: '👑 ' + name + ' (Founder)',
                     winRate: winRate,
                     totalTrades: trades.length,
+                    pnl: totalPnl,
                     badge: badge,
-                    badgeColor: badgeColor
+                    badgeColor: badgeColor,
+                    isAdmin: true
                 });
             }
 
             localStorage.setItem('community_leaderboard_members', JSON.stringify(members));
             loadCommunityLeaderboard();
 
-            alert(`🏆 Congratulations ${name}!\nYour score (Win Rate: ${winRate}%, Trades: ${trades.length}) has been published to the Official Leaderboard!`);
+            alert(`🏆 Congratulations ${name}!\nYour score (Win Rate: ${winRate}%, Trades: ${trades.length}, Profit: ₹${totalPnl.toFixed(2)}) has been published to the Official Leaderboard!`);
             showToast("🏆 Published to Community Leaderboard!", "👑");
         }
 
@@ -9715,21 +9885,133 @@
             const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
 
             const todayTrades = trades.filter(t => t.date === todayStr);
+            const activeTradesList = todayTrades.length > 0 ? todayTrades : trades;
+            const totalTradeCount = activeTradesList.length;
+
             let wins = 0, losses = 0, totalPnl = 0;
 
-            (todayTrades.length > 0 ? todayTrades : trades).forEach(t => {
+            activeTradesList.forEach(t => {
                 const pnl = parseFloat(t.pnl) || 0;
                 totalPnl += pnl;
                 if (pnl >= 0) wins++; else losses++;
             });
 
-            const winRate = (todayTrades.length > 0 || trades.length > 0) ? ((wins / (wins + losses)) * 100).toFixed(1) : '80.0';
+            const winRate = totalTradeCount > 0 ? ((wins / totalTradeCount) * 100).toFixed(1) : '0.0';
             const pnlFormatted = (totalPnl >= 0 ? '+' : '') + '₹' + totalPnl.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
-            const msg = `📈 *TRADING TRACKER 2026 - DAILY P&L REPORT* 📈\n👤 *Trader:* ${name}\n📅 *Date:* ${new Date().toLocaleDateString('en-IN')}\n-----------------------------\n📊 *Total Trades:* ${todayTrades.length || trades.length}\n✅ *Wins:* ${wins} | ❌ *Losses:* ${losses}\n💰 *Net P&L:* ${pnlFormatted}\n🎯 *Win Rate:* ${winRate}%\n-----------------------------\n🚀 Logged on Trading Tracker 2026: https://trading-tracker-2026.vercel.app`;
+            const msg = `📈 *TRADING TRACKER 2026 - DAILY P&L REPORT* 📈\n👤 *Trader:* ${name}\n📅 *Date:* ${new Date().toLocaleDateString('en-IN')}\n-----------------------------\n📊 *Total Trades:* ${totalTradeCount}\n✅ *Wins:* ${wins} | ❌ *Losses:* ${losses}\n💰 *Net P&L:* ${pnlFormatted}\n🎯 *Win Rate:* ${winRate}%\n-----------------------------\n🚀 Logged on Trading Tracker 2026: https://trading-tracker-2026.vercel.app`;
 
             const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
+        }
+
+        // ============================================================
+        // 💾 FEATURE 5: CSV EXPORT & JSON BACKUP / RESTORE ENGINE
+        // ============================================================
+        function exportToCSV() {
+            const tbody = document.querySelector('#tradeTable tbody');
+            const rows = tbody ? tbody.querySelectorAll('tr') : [];
+            if (!rows || rows.length === 0 || (rows.length === 1 && rows[0].innerText.includes("empty"))) {
+                alert("⚠️ No trade records available to export!");
+                return;
+            }
+            let csvLines = ["Date,Index,Type,Strike,Broker,Setup,Timeframe,Buy Price,Sell Price,Quantity,Brokerage,Govt Tax,Total Charges,Rating,Net P&L"];
+            rows.forEach(row => {
+                const date = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim()) : '';
+                const index = row.getAttribute('data-index') || 'Option';
+                const cepe = row.getAttribute('data-cepe') || '';
+                const strike = row.getAttribute('data-strike') || '';
+                const broker = row.getAttribute('data-broker') || 'Dhan';
+                const setup = row.getAttribute('data-setup') || '';
+                const timeframe = row.getAttribute('data-timeframe') || '';
+                const buy = parseFloat(row.getAttribute('data-buy') || 0);
+                const sell = parseFloat(row.getAttribute('data-sell') || 0);
+                const lots = parseFloat(row.getAttribute('data-lots') || 1);
+                const qtyLot = parseFloat(row.getAttribute('data-qtylot') || 1);
+                const rating = row.getAttribute('data-rating') || '3';
+                const pnl = parseFloat(row.getAttribute('data-pnl') || 0);
+                const brokerage = parseFloat(row.getAttribute('data-brokerage') || 40);
+                const govtCharges = parseFloat(row.getAttribute('data-govtcharges') || 0);
+                const totalCharges = parseFloat(row.getAttribute('data-totalcharges') || (brokerage + govtCharges));
+
+                csvLines.push(`"${date}","${index}","${cepe}","${strike}","${broker}","${setup}","${timeframe}",${buy},${sell},${lots * qtyLot},${brokerage},${govtCharges},${totalCharges},"${rating}",${pnl}`);
+            });
+            const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Trading_Tracker_Trades_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("📥 Exported Trade Log to CSV!", "📊");
+        }
+
+        function exportJSONBackup() {
+            const backupData = {
+                version: "2.9.0",
+                exportDate: new Date().toISOString(),
+                vertical_trades: localStorage.getItem('vertical_trades') || '',
+                initial_capital: localStorage.getItem('initial_capital') || '50000',
+                total_added_capital: localStorage.getItem('total_added_capital') || '0',
+                total_withdrawn: localStorage.getItem('total_withdrawn') || '0',
+                deposit_history: JSON.parse(localStorage.getItem('deposit_history') || '[]'),
+                withdrawal_history: JSON.parse(localStorage.getItem('withdrawal_history') || '[]'),
+                trader_full_name: localStorage.getItem('trader_full_name') || 'Anurag Patel',
+                app_user_id: localStorage.getItem('app_user_id') || 'Anurag Patel'
+            };
+
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Trading_Tracker_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("💾 Backup JSON File Exported Successfully!", "📦");
+        }
+
+        function importJSONBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.vertical_trades !== undefined) {
+                        localStorage.setItem('vertical_trades', data.vertical_trades);
+                        if (data.initial_capital) localStorage.setItem('initial_capital', data.initial_capital);
+                        if (data.total_added_capital) localStorage.setItem('total_added_capital', data.total_added_capital);
+                        if (data.total_withdrawn) localStorage.setItem('total_withdrawn', data.total_withdrawn);
+                        if (data.deposit_history) localStorage.setItem('deposit_history', JSON.stringify(data.deposit_history));
+                        if (data.withdrawal_history) localStorage.setItem('withdrawal_history', JSON.stringify(data.withdrawal_history));
+                        if (data.trader_full_name) localStorage.setItem('trader_full_name', data.trader_full_name);
+
+                        loadTrades();
+                        renderFundHistories();
+                        updateSummaryCards();
+                        showToast("🎉 Data Restored Successfully from Backup!", "✅");
+                        alert("🎉 Backup Restored Successfully! All trades, capital settings, and history have been restored.");
+                    } else {
+                        alert("❌ Invalid backup file structure.");
+                    }
+                } catch (err) {
+                    alert("❌ Failed to parse backup JSON file: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Service Worker Offline Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    console.log('✅ Service Worker registered successfully:', reg.scope);
+                }).catch(err => {
+                    console.log('⚠️ Service Worker registration failed:', err);
+                });
+            });
         }
 
         // Ultrafast Non-Blocking Boot Engine (< 50ms Initial Paint)
@@ -9742,6 +10024,7 @@
             try { loadTrades(); } catch (e) { console.error(e); }
             try { updateSummaryCards(); } catch (e) { console.error(e); }
             try { setDynamicTitles(); } catch (e) { console.error(e); }
+            try { loadCommunityLeaderboard(); } catch (e) { console.error(e); }
 
             // Deferred Non-Critical Idle Tasks
             const deferTask = window.requestIdleCallback || ((fn) => setTimeout(fn, 150));
@@ -9750,7 +10033,6 @@
                 try { initDashboardVisibility(); } catch (e) { console.error(e); }
                 try { loadCustomBrokerLinks(); } catch (e) { console.error(e); }
                 try { loadAdSensePublisherId(); } catch (e) { console.error(e); }
-                try { loadCommunityLeaderboard(); } catch (e) { console.error(e); }
             });
 
             // Lazy Load Heavy TradingView Chart after 1.2s to prevent startup lag
