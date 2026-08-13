@@ -77,6 +77,8 @@
     <script src="profile-data.js" defer></script>
     <!-- Offline Instant QRCode Generator -->
     <script src="qrcode.min.js" defer></script>
+    <!-- Official Razorpay Checkout Payment Gateway SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     <!-- Official TradingView Real-Time Chart Library -->
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
@@ -1421,47 +1423,50 @@
         style="display: none; position: fixed; inset: 0; background: rgba(5, 7, 15, 0.95); backdrop-filter: blur(20px); z-index: 99999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
         
         <div
-            style="background: linear-gradient(165deg, #0f172a 0%, #1e1b4b 50%, #090d16 100%); border: 2px solid rgba(99, 102, 241, 0.5); border-radius: 28px; width: 100%; max-width: 820px; box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 40px rgba(99, 102, 241, 0.3); overflow: hidden; color: white; position: relative; font-family: 'Inter', system-ui, sans-serif;">
+            style="background: linear-gradient(165deg, #090d16 0%, #1e1b4b 50%, #0f172a 100%); border: 2px solid rgba(129, 140, 248, 0.4); border-radius: 28px; width: 100%; max-width: 860px; box-shadow: 0 30px 90px rgba(0,0,0,0.95), 0 0 50px rgba(99, 102, 241, 0.25); overflow: hidden; color: white; position: relative; font-family: 'Inter', system-ui, sans-serif;">
             
-            <!-- GLOWING TOP BANNER -->
+            <!-- ULTRA-PREMIUM GLOWING TOP BANNER -->
             <div
-                style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #d946ef 100%); padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; position: relative; border-bottom: 1px solid rgba(255,255,255,0.15);">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                style="background: linear-gradient(135deg, rgba(79, 70, 229, 0.95) 0%, rgba(147, 51, 234, 0.95) 50%, rgba(217, 70, 239, 0.95) 100%); padding: 20px 26px; display: flex; justify-content: space-between; align-items: center; position: relative; border-bottom: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="width: 48px; height: 48px; background: rgba(255,255,255,0.25); backdrop-filter: blur(12px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 6px 18px rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.4);">
                         👑
                     </div>
                     <div>
-                        <div style="font-weight: 900; font-size: 18px; letter-spacing: -0.3px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                        <div style="font-weight: 900; font-size: 20px; letter-spacing: -0.3px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px;">
                             Trading Tracker 2026 Pro
+                            <span style="font-size: 10px; background: rgba(16, 185, 129, 0.9); color: #000; font-weight: 900; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.5px; text-transform: uppercase;">
+                                🛡️ RAZORPAY VERIFIED
+                            </span>
                         </div>
-                        <div style="font-size: 11px; color: #e0e7ff; font-weight: 500;">
-                            Official Instant Activation & VIP Paywall Gateway
+                        <div style="font-size: 11.5px; color: #e0e7ff; font-weight: 600; margin-top: 2px;">
+                            ⚡ Instant Auto-Activation & VIP Paywall Gateway
                         </div>
                     </div>
                 </div>
 
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <button id="vipModalBackBtnTop" onclick="closeVipPaywallModal()" type="button" title="Back to App"
-                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 10px; padding: 6px 14px; font-weight: 700; cursor: pointer; font-size: 11px; backdrop-filter: blur(6px); transition: all 0.2s;">
+                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 10px; padding: 7px 16px; font-weight: 800; cursor: pointer; font-size: 11px; backdrop-filter: blur(6px); transition: all 0.2s;">
                         ⬅️ Back
                     </button>
                     <button id="vipModalCloseBtnTop" onclick="closeVipPaywallModal()" type="button" title="Close"
-                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 50%; width: 32px; height: 32px; font-weight: bold; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
+                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 50%; width: 34px; height: 34px; font-weight: bold; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
                 </div>
             </div>
 
             <!-- TWO-COLUMN GRID BODY -->
             <div style="display: grid; grid-template-columns: 1fr 340px; gap: 0; background: transparent;">
                 
-                <!-- LEFT PANEL: PLAN SELECTOR & KEY ACTIVATION -->
+                <!-- LEFT PANEL: PLAN SELECTOR & RAZORPAY PAY BUTTON -->
                 <div style="padding: 24px; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <!-- PLAN SELECTION HEADER -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 12px; font-weight: 800; color: #fde047; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <span style="font-size: 12px; font-weight: 900; color: #fde047; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
                                 🏷️ SELECT YOUR MEMBERSHIP PLAN:
                             </span>
-                            <span style="font-size: 10px; color: #34d399; font-weight: 700; background: rgba(52, 211, 153, 0.15); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                            <span style="font-size: 10px; color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.15); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(52, 211, 153, 0.35);">
                                 ⚡ Includes 18% Govt GST
                             </span>
                         </div>
@@ -1469,86 +1474,92 @@
                         <!-- 6 FLEXIBLE PLAN CARDS GRID -->
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
                             <div onclick="selectPaywallPlan(1999, '1 Year Access', this)" class="paywall-plan-card active"
-                                style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.1)); border: 2px solid #10b981; border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);">
+                                style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.1)); border: 2px solid #10b981; border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #a7f3d0; font-weight: 800; text-transform: uppercase;">1 YEAR VIP</span>
-                                    <span style="font-size: 9px; background: #10b981; color: #000; font-weight: 900; padding: 1px 6px; border-radius: 8px;">BEST VALUE</span>
+                                    <span style="font-size: 10.5px; color: #a7f3d0; font-weight: 900; text-transform: uppercase;">1 YEAR VIP</span>
+                                    <span style="font-size: 8.5px; background: #10b981; color: #000; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">BEST VALUE</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #34d399;">₹1,999</div>
-                                <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹2,359</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #34d399;">₹1,999</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹2,359</div>
                             </div>
 
                             <div onclick="selectPaywallPlan(3500, '2 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease;">
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; text-transform: uppercase;">2 YEARS VIP</span>
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">2 YEARS VIP</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #60a5fa;">₹3,500</div>
-                                <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹4,130</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹3,500</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹4,130</div>
                             </div>
 
                             <div onclick="selectPaywallPlan(5500, '3 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease;">
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; text-transform: uppercase;">3 YEARS VIP</span>
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">3 YEARS VIP</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #60a5fa;">₹5,500</div>
-                                <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹6,490</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹5,500</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹6,490</div>
                             </div>
 
                             <div onclick="selectPaywallPlan(7500, '4 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease;">
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; text-transform: uppercase;">4 YEARS VIP</span>
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">4 YEARS VIP</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #60a5fa;">₹7,500</div>
-                                <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹8,850</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹7,500</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹8,850</div>
                             </div>
 
                             <div onclick="selectPaywallPlan(9500, '5 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease;">
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; text-transform: uppercase;">5 YEARS VIP</span>
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">5 YEARS VIP</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #60a5fa;">₹9,500</div>
-                                <div style="font-size: 9px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹11,210</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹9,500</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18% GST = ₹11,210</div>
                             </div>
 
                             <div onclick="selectPaywallPlan(14999, 'Lifetime Access', this)" class="paywall-plan-card"
-                                style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.1)); border: 1.5px solid rgba(168, 85, 247, 0.5); border-radius: 14px; padding: 12px; cursor: pointer; transition: all 0.25s ease;">
+                                style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(147, 51, 234, 0.12)); border: 1.5px solid rgba(168, 85, 247, 0.6); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span style="font-size: 10px; color: #e9d5ff; font-weight: 800; text-transform: uppercase;">LIFETIME VIP</span>
-                                    <span style="font-size: 9px; background: #a855f7; color: #fff; font-weight: 900; padding: 1px 6px; border-radius: 8px;">KING PLAN</span>
+                                    <span style="font-size: 10.5px; color: #e9d5ff; font-weight: 900; text-transform: uppercase;">LIFETIME VIP</span>
+                                    <span style="font-size: 8.5px; background: #a855f7; color: #fff; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">KING PLAN</span>
                                 </div>
-                                <div style="font-size: 18px; font-weight: 900; color: #c084fc;">₹14,999</div>
-                                <div style="font-size: 9px; color: #d8b4fe; font-weight: 600; margin-top: 2px;">+18% GST = ₹17,699</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #c084fc;">₹14,999</div>
+                                <div style="font-size: 9.5px; color: #d8b4fe; font-weight: 600; margin-top: 2px;">+18% GST = ₹17,699</div>
                             </div>
                         </div>
 
                         <!-- LIVE PRICE BREAKDOWN CARD -->
                         <div
-                            style="background: rgba(99, 102, 241, 0.1); border: 1.5px dashed rgba(99, 102, 241, 0.4); border-radius: 16px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+                            style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(79, 70, 229, 0.08) 100%); border: 1.5px dashed rgba(99, 102, 241, 0.5); border-radius: 16px; padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
                             <div>
-                                <div id="selectedPlanLabel" style="font-size: 11px; text-transform: uppercase; color: #a5b4fc; font-weight: 800; letter-spacing: 0.5px;">
+                                <div id="selectedPlanLabel" style="font-size: 11px; text-transform: uppercase; color: #a5b4fc; font-weight: 900; letter-spacing: 0.5px;">
                                     1 YEAR VIP ACCESS PLAN
                                 </div>
                                 <div id="selectedPlanPrice" style="font-size: 24px; font-weight: 900; color: #10b981; margin-top: 2px;">
                                     ₹2,359 <span style="font-size: 11px; font-weight: 500; color: #94a3b8;">(₹1,999 + 18% GST)</span>
                                 </div>
                             </div>
-                            <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 12px;">
+                            <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 11px; font-weight: 900; padding: 6px 12px; border-radius: 12px; display: flex; align-items: center; gap: 4px;">
                                 🛡️ 100% SECURE
                             </div>
                         </div>
 
+                        <!-- INSTANT ONLINE RAZORPAY PAYMENT BUTTON -->
+                        <button onclick="triggerPaymentGateway('razorpay')" id="razorpayMainPayBtn" type="button"
+                            style="width: 100%; padding: 16px; margin-bottom: 18px; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #d946ef 100%); color: white; border: none; border-radius: 16px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.25s ease; border: 1.5px solid rgba(255,255,255,0.25);">
+                            <span style="font-size: 20px;">💳</span> <span id="razorpayBtnText">PAY ONLINE VIA RAZORPAY (₹2,359)</span> <span style="font-size: 18px;">⚡</span>
+                        </button>
+
                         <!-- VIP ACTIVATION KEY SECTION -->
-                        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 14px;">
-                            <label style="font-size: 11px; font-weight: 800; color: #fde047; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">
+                        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 14px;">
+                            <label style="font-size: 11px; font-weight: 900; color: #fde047; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">
                                 🔑 ALREADY HAVE A VIP ACTIVATION KEY?
                             </label>
                             <div style="display: flex; gap: 8px;">
                                 <input type="text" id="vipKeyInput" placeholder="ENTER VIP ACTIVATION KEY"
-                                    style="flex: 1; padding: 11px; border-radius: 10px; border: 1.5px solid #6366f1; background: rgba(15, 23, 42, 0.8); color: white; font-family: monospace; font-weight: 800; font-size: 13px; text-transform: uppercase; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);">
+                                    style="flex: 1; padding: 11px 14px; border-radius: 10px; border: 1.5px solid #6366f1; background: rgba(15, 23, 42, 0.85); color: white; font-family: monospace; font-weight: 800; font-size: 13px; text-transform: uppercase; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);">
                                 <button onclick="submitVipActivationKey()"
                                     style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; padding: 11px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); transition: transform 0.2s;">
                                     🚀 Activate Key
@@ -1564,36 +1575,64 @@
                     </div>
                 </div>
 
-                <!-- RIGHT PANEL: CLEAN SCANNER QR CODE & UPI ID -->
-                <div style="padding: 24px; background: rgba(0, 0, 0, 0.25); display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
+                <!-- RIGHT PANEL: RAZORPAY TRUST BADGES & INSTANT SUPPORT -->
+                <div style="padding: 24px; background: rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;">
                     
                     <div style="width: 100%;">
-                        <div id="paywallQrTitle" style="font-size: 11px; font-weight: 800; color: #a5b4fc; text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px;">
-                            📲 SCANNER QR CODE (PAY ₹2,359)
+                        <div style="font-size: 12.5px; font-weight: 900; color: #a5b4fc; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.6px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            🔒 RAZORPAY SECURE GATEWAY
                         </div>
 
-                        <!-- LIVE DYNAMIC INSTANT SCANNER QR CODE CONTAINER -->
-                        <div style="background: white; padding: 14px; border-radius: 20px; display: inline-block; box-shadow: 0 12px 35px rgba(0,0,0,0.6); margin-bottom: 16px; border: 3.5px solid #6366f1;">
-                            <div id="paywallQrContainer" style="width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 10px; overflow: hidden;"></div>
+                        <!-- TRUST BADGE CARD -->
+                        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(99, 102, 241, 0.35); padding: 16px; border-radius: 18px; margin-bottom: 16px; text-align: left;">
+                            <div style="font-size: 12.5px; font-weight: 900; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                ⚡ Instant Auto-Activation
+                            </div>
+                            <div style="font-size: 11px; color: #94a3b8; line-height: 1.5;">
+                                Your payment is processed instantly via Razorpay 256-bit bank-grade SSL encrypted gateway.
+                            </div>
                         </div>
 
-                        <!-- COPY UPI ID BOX -->
-                        <div style="background: rgba(0,0,0,0.6); padding: 10px 14px; border-radius: 12px; border: 1.5px solid rgba(99, 102, 241, 0.4); font-family: monospace; font-size: 14px; color: #38bdf8; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);">
-                            <span>8102241463@yapl</span>
-                            <button onclick="copyUpiId('8102241463@yapl')"
-                                style="background: #38bdf8; color: #000; border: none; padding: 5px 10px; border-radius: 8px; font-weight: 900; font-size: 11px; cursor: pointer; transition: transform 0.2s;">📋 COPY</button>
+                        <!-- SUPPORTED METHODS BADGES -->
+                        <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 18px; text-align: left; margin-bottom: 16px;">
+                            <div style="font-size: 11px; font-weight: 900; color: #fde047; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
+                                💳 ACCEPTED PAYMENT MODES:
+                            </div>
+                            <!-- VISUAL BADGES GRID -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); padding: 4px 9px; border-radius: 8px;">📱 Google Pay</span>
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4); padding: 4px 9px; border-radius: 8px;">📱 PhonePe</span>
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(14, 165, 233, 0.2); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.4); padding: 4px 9px; border-radius: 8px;">📱 Paytm</span>
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 4px 9px; border-radius: 8px;">📱 BHIM UPI</span>
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 4px 9px; border-radius: 8px;">💳 Credit/Debit</span>
+                                <span style="font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 9px; border-radius: 8px;">🏦 Net Banking</span>
+                            </div>
+                        </div>
+
+                        <!-- PRO BENEFITS LIST -->
+                        <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px; border-radius: 18px; text-align: left; margin-bottom: 16px;">
+                            <div style="font-size: 11px; font-weight: 900; color: #a7f3d0; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">
+                                ✨ WHAT YOU GET WITH PRO:
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: #cbd5e1; font-weight: 600;">
+                                <div>✅ Unlimited Stock & Option Trade Logs</div>
+                                <div>✅ Real-Time Equity Curve & Win Rate Graph</div>
+                                <div>✅ Multi-Device Cloud Sync (Web & Mobile)</div>
+                                <div>✅ Lifetime Free Updates & VIP Support</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- WHATSAPP PROOF BUTTON -->
+                    <!-- WHATSAPP SUPPORT BUTTON -->
                     <a id="paywallWaButton"
-                        href="https://wa.me/918825255625?text=Hi%20Anurag%20Patel,%20I%20have%20paid%20Rs.2359%20for%201%20Year%20Access%20VIP%20Access.%20Please%20send%20my%20Activation%20Key."
+                        href="https://wa.me/918825255625?text=Hi%20Anurag%20Patel,%20I%20have%20a%20query%20regarding%20Trading%20Tracker%202026%20VIP%20Access."
                         target="_blank"
-                        style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border-radius: 14px; font-weight: 900; font-size: 12px; text-decoration: none; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); transition: transform 0.2s;">
-                        <span>💬</span> <span>WhatsApp Screenshot (8825255625)</span>
+                        style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border-radius: 16px; font-weight: 900; font-size: 12.5px; text-decoration: none; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); transition: transform 0.2s;">
+                        <span>💬</span> <span>WhatsApp Support (8825255625)</span>
                     </a>
 
                 </div>
+            </div>
             </div>
 
         </div>
@@ -2083,12 +2122,12 @@
                         </button>
 
                         <button class="btn btn-success btn-sm" onclick="exportToExcel()"
-                            title="Download Trades as Excel (.xlsx)">
-                            <span>📊</span> Download Excel
+                            title="Download Trades as Excel (.xlsx) [VIP PRO Feature]">
+                            <span>📊</span> Download Excel <span style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span>
                         </button>
                         <button class="btn btn-primary btn-sm" onclick="exportToPDF()"
-                            title="Download Trades as PDF Report">
-                            <span>📄</span> Download PDF
+                            title="Download Trades as PDF Report [VIP PRO Feature]">
+                            <span>📄</span> Download PDF <span style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span>
                         </button>
                         <button class="btn btn-secondary btn-sm" id="btnPrivacyToggle" onclick="togglePrivacyMode()">
                             <span id="privacyIcon">👁️</span> <span id="privacyText">Hide Values</span>
@@ -6857,7 +6896,14 @@
         }
 
         async function exportToExcel() {
-            if (!checkVipAccessStatus()) { openVipPaywallModal(); return; }
+            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+
+            if (!isVipUnlocked && !isUserAdmin) {
+                showToast("🔒 Excel Exports are reserved for VIP PRO Members. Upgrade to download!", "⚠️");
+                openVipPaywallModal();
+                return;
+            }
 
             if (typeof XLSX === 'undefined') {
                 showToast("⏳ Loading Excel Exporter module...", "📥");
@@ -6946,7 +6992,14 @@
         }
 
         async function exportToPDF() {
-            if (!checkVipAccessStatus()) { openVipPaywallModal(); return; }
+            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+
+            if (!isVipUnlocked && !isUserAdmin) {
+                showToast("🔒 PDF Report Exports are reserved for VIP PRO Members. Upgrade to download!", "⚠️");
+                openVipPaywallModal();
+                return;
+            }
 
             if (typeof window.jspdf === 'undefined') {
                 showToast("⏳ Loading PDF Exporter module...", "📥");
@@ -7685,7 +7738,7 @@
             } else {
                 // Anyone else is strictly NOT Admin!
                 localStorage.removeItem('is_user_admin');
-                if (localStorage.getItem('app_active_key') === 'TT2026-MASTER-ADMIN-ANURAG') {
+                if (localStorage.getItem('app_active_key') === 'TT2026-MASTER-ADMIN-ANURAG' || localStorage.getItem('app_active_key') === 'TT2026-VIP-FULL-UNLOCKED') {
                     localStorage.removeItem('app_active_key');
                     localStorage.removeItem('app_vip_unlocked');
                 }
@@ -7765,13 +7818,31 @@
 
         function checkVipAccessStatus() {
             autoUnlockMasterAdminAccess();
-            localStorage.setItem('app_vip_unlocked', 'true');
-            if (!localStorage.getItem('app_active_key')) {
-                localStorage.setItem('app_active_key', 'TT2026-VIP-FULL-UNLOCKED');
-            }
+            syncUserVipStatusFromLog();
+
+            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+            const trial = getTrialStatusInfo();
+
             const overlay = document.getElementById('vipLockOverlay');
-            if (overlay) overlay.style.cssText = "display: none !important;";
-            return true;
+
+            if (isVipUnlocked || isUserAdmin) {
+                if (overlay) overlay.style.cssText = "display: none !important;";
+                try { renderVipBadgeAndInfo(); } catch(e) {}
+                return true;
+            }
+
+            if (!trial.isExpired) {
+                // 🎁 7-Day Free Trial is Active
+                if (overlay) overlay.style.cssText = "display: none !important;";
+                try { renderVipBadgeAndInfo(); } catch(e) {}
+                return true;
+            }
+
+            // ⏰ 7-Day Free Trial Expired & Not VIP -> Lock App & Show Paywall
+            try { renderVipBadgeAndInfo(); } catch(e) {}
+            openVipPaywallModal();
+            return false;
         }
 
         function openVipPaywallModal() {
@@ -7880,6 +7951,11 @@
                 planPrice.innerHTML = `₹${breakdown.totalPayable.toLocaleString()} <span style="font-size: 11px; font-weight: 500; color: #94a3b8;">(₹${breakdown.basePrice.toLocaleString()} + 18% GST: ₹${breakdown.gstAmount.toLocaleString()})</span>`;
             }
 
+            const rzpBtnText = document.getElementById('razorpayBtnText');
+            if (rzpBtnText) {
+                rzpBtnText.innerText = `PAY ONLINE VIA RAZORPAY (₹${breakdown.totalPayable.toLocaleString()})`;
+            }
+
             const qrTitle = document.getElementById('paywallQrTitle');
             if (qrTitle) {
                 qrTitle.innerText = `📲 SCANNER QR CODE (PAY ₹${breakdown.totalPayable.toLocaleString()})`;
@@ -7918,7 +7994,7 @@
             const userEmail = localStorage.getItem('app_user_email') || 'customer@tradingtracker.com';
             const userMobile = localStorage.getItem('app_user_mobile') || '8825255625';
             const userName = localStorage.getItem('trader_full_name') || 'Trader';
-            const rzpKey = localStorage.getItem('razorpay_key_id');
+            const rzpKey = localStorage.getItem('razorpay_key_id') || 'rzp_live_TPHS2Ev8R8ubH7';
 
             if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder') {
                 if (typeof Razorpay === 'undefined') {
@@ -9538,8 +9614,30 @@
 
         function loadAdSensePublisherId() {
             try {
+                const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+                const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+                const container = document.getElementById('googleAdContainer');
+
+                // 👑 VIP / ADMIN USERS GET 100% AD-FREE EXPERIENCE
+                if (isVipUnlocked || isUserAdmin) {
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: #34d399; font-weight: 800; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-size: 16px;">👑</span>
+                                    <span>VIP PRO UNLOCKED: Ad-Free Premium Experience Active!</span>
+                                </div>
+                                <span style="background: rgba(16, 185, 129, 0.25); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 10px; border-radius: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;">🚫 NO ADS</span>
+                            </div>
+                        `;
+                    }
+                    return;
+                }
+
+                // 📺 FREE / 7-DAY TRIAL USERS: RENDER GOOGLE ADSENSE ADS
+                const trial = (typeof getTrialStatusInfo === 'function') ? getTrialStatusInfo() : { isExpired: false, daysRemaining: 7, hoursRemaining: 0 };
                 const pubId = (localStorage.getItem('google_adsense_publisher_id') || 'ca-pub-1815684098843825').trim();
-                const slotId = (localStorage.getItem('google_adsense_slot_id') || '').trim();
+                const slotId = (localStorage.getItem('google_adsense_slot_id') || '1350192334').trim();
 
                 const pubInputElem = document.getElementById('adsensePublisherIdInput');
                 if (pubInputElem && pubId) pubInputElem.value = pubId;
@@ -9558,15 +9656,18 @@
                         document.head.appendChild(script);
                     }
 
-                    const container = document.getElementById('googleAdContainer');
                     if (container) {
                         const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                         const slotAttr = slotId ? `data-ad-slot="${slotId}"` : '';
 
+                        const trialBadge = !trial.isExpired 
+                            ? `<span style="color: #60a5fa; font-size: 9.5px; font-weight: 700; background: rgba(96, 165, 250, 0.15); padding: 2px 8px; border-radius: 8px;">⚡ 7-Day Free Trial (${trial.daysRemaining}d ${trial.hoursRemaining}h left)</span>`
+                            : `<span style="color: #ef4444; font-size: 9.5px; font-weight: 700; background: rgba(239, 68, 68, 0.15); padding: 2px 8px; border-radius: 8px;">⏰ Trial Expired (Upgrade for No Ads)</span>`;
+
                         container.innerHTML = `
-                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                                 <span>📢 SPONSORED GOOGLE ADSENSE BANNER</span>
-                                <span style="color: #34d399; font-size: 9px; font-weight: 600;">Client ID: ${pubId}</span>
+                                ${trialBadge}
                             </div>
                             <ins class="adsbygoogle"
                                  style="display:block; min-height: 90px;"
@@ -9574,7 +9675,7 @@
                                  ${slotAttr}
                                  data-ad-format="auto"
                                  data-full-width-responsive="true"></ins>
-                            ${isLocal ? `<div style="margin-top: 6px; font-size: 11px; color: #fbbf24; background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.3); padding: 6px 10px; border-radius: 6px;">ℹ️ <b>Preview Mode (Localhost/Offline):</b> Google AdSense Script Active (\x3Ccode>${pubId}\x3C/code>). Live ads will display when served on your registered web domain.</div>` : ''}
+                            ${isLocal ? `<div style="margin-top: 6px; font-size: 11px; color: #fbbf24; background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.3); padding: 6px 10px; border-radius: 6px;">ℹ️ <b>Preview Mode (Localhost/Offline):</b> Google AdSense Active (\x3Ccode>${pubId}\x3C/code>). Live ads will display when served on your registered web domain.</div>` : ''}
                         `;
 
                         try {
