@@ -5969,7 +5969,15 @@
 
         function saveToLocalStorage() {
             const tbody = document.querySelector('#tradeTable tbody');
-            localStorage.setItem('vertical_trades', tbody.innerHTML);
+            if (tbody) {
+                localStorage.setItem('vertical_trades', tbody.innerHTML);
+            }
+            try {
+                if (typeof getLoggedTrades === 'function') {
+                    const trades = getLoggedTrades();
+                    localStorage.setItem('trades_history', JSON.stringify(trades));
+                }
+            } catch (e) { }
         }
 
         function loadTrades() {
@@ -9872,19 +9880,105 @@
         // ============================================================
         // 🤖 FEATURE 1: AI TRADE COACH ENGINE
         // ============================================================
-        function runAiCoachAnalysis() {
+        function getLoggedTrades() {
+            let trades = [];
+            const tbody = document.querySelector('#tradeTable tbody');
+            let rows = tbody ? Array.from(tbody.querySelectorAll('tr')) : [];
+
+            if (rows.length === 0 || (rows.length === 1 && rows[0].innerText.includes("empty"))) {
+                const savedHtml = localStorage.getItem('vertical_trades');
+                if (savedHtml) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = `<table><tbody>${savedHtml}</tbody></table>`;
+                    rows = Array.from(tempDiv.querySelectorAll('tr'));
+                }
+            }
+
+            rows.forEach(row => {
+                const text = row.innerText || '';
+                if (text.includes("No trades logged") || text.includes("No Trades Found")) return;
+
+                const dateCell = row.cells && row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim()) : '';
+                let pnlVal = 0;
+                if (row.hasAttribute('data-pnl')) {
+                    pnlVal = parseFloat(row.getAttribute('data-pnl')) || 0;
+                } else if (row.cells && row.cells[8]) {
+                    pnlVal = parseFloat(row.cells[8].getAttribute('data-pnl') || row.cells[8].innerText.replace(/[^0-9.-]/g, '')) || 0;
+                } else if (row.cells && row.cells[7]) {
+                    pnlVal = parseFloat(row.cells[7].getAttribute('data-pnl') || row.cells[7].innerText.replace(/[^0-9.-]/g, '')) || 0;
+                }
+
+                const setupVal = row.getAttribute('data-setup') || 'General';
+                const mindsetVal = row.getAttribute('data-mindset') || 'Neutral';
+                const buyVal = parseFloat(row.getAttribute('data-buy')) || 0;
+                const sellVal = parseFloat(row.getAttribute('data-sell')) || 0;
+                const indexVal = row.getAttribute('data-index') || 'Nifty';
+                const cepeVal = row.getAttribute('data-cepe') || 'CE';
+                const strikeVal = row.getAttribute('data-strike') || '';
+                const ratingVal = row.getAttribute('data-rating') || '3';
+                const slVal = parseFloat(row.getAttribute('data-sl')) || 0;
+                const targetVal = parseFloat(row.getAttribute('data-target')) || 0;
+
+                if (dateCell || buyVal || sellVal || pnlVal !== 0) {
+                    trades.push({
+                        date: dateCell || new Date().toISOString().split('T')[0],
+                        index: indexVal,
+                        cepe: cepeVal,
+                        strike: strikeVal,
+                        setup: setupVal,
+                        mindset: mindsetVal,
+                        buy: buyVal,
+                        sell: sellVal,
+                        sl: slVal,
+                        target: targetVal,
+                        pnl: pnlVal,
+                        rating: ratingVal
+                    });
+                }
+            });
+
+            if (trades.length === 0) {
+                try {
+                    trades = JSON.parse(localStorage.getItem('trades_history') || localStorage.getItem('trades') || '[]');
+                } catch (e) { trades = []; }
+            } else {
+                try {
+                    localStorage.setItem('trades_history', JSON.stringify(trades));
+                } catch (e) { }
+            }
+            return trades;
+        }
+
+        function getDayNameFromDateStr(dateStr) {
+            if (!dateStr) return 'Monday';
+            let d = new Date(dateStr);
+            if (isNaN(d.getTime())) {
+                const parts = dateStr.split(/[-/.]/);
+                if (parts.length === 3) {
+                    if (parts[0].length === 4) {
+                        d = new Date(parts[0], parts[1] - 1, parts[2]);
+                    } else {
+                        d = new Date(parts[2], parts[1] - 1, parts[0]);
+                    }
+                }
+            }
+            if (isNaN(d.getTime())) return 'Monday';
+            return d.toLocaleDateString('en-US', { weekday: 'long' });
+        }
+
+        function runAiCoachAnalysis(topic = 'all') {
             const resultsBox = document.getElementById('aiCoachResultsBox');
             if (!resultsBox) return;
 
-            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
-            const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
+            const trades = getLoggedTrades();
+            const name = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
 
             if (trades.length === 0) {
                 resultsBox.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: #f87171;">
-                        <div style="font-size: 32px;">⚠️</div>
-                        <div style="font-weight: 800; font-size: 15px; margin-top: 6px;">No Trades Found in Journal!</div>
-                        <p style="font-size: 12px; color: #cbd5e1;">Please log at least 2-3 trades in your journal to allow AI to generate coaching feedback.</p>
+                    <div style="text-align: center; padding: 24px; color: #f87171;">
+                        <div style="font-size: 36px; margin-bottom: 8px;">⚠️</div>
+                        <div style="font-weight: 800; font-size: 16px; margin-top: 6px;">No Trades Found in Journal!</div>
+                        <p style="font-size: 13px; color: #cbd5e1; margin-top: 6px;">Please log your trades in the <b>Trade Log</b> tab first to allow AI to generate coaching feedback.</p>
                     </div>
                 `;
                 return;
@@ -9893,6 +9987,7 @@
             let wins = 0, losses = 0, totalPnl = 0;
             const setupStats = {};
             const dayStats = {};
+            let slFollowed = 0;
 
             trades.forEach(t => {
                 const pnl = parseFloat(t.pnl) || 0;
@@ -9900,67 +9995,156 @@
                 if (pnl >= 0) wins++; else losses++;
 
                 const setup = t.setup || 'General';
-                setupStats[setup] = (setupStats[setup] || 0) + pnl;
+                if (!setupStats[setup]) setupStats[setup] = { pnl: 0, wins: 0, total: 0 };
+                setupStats[setup].pnl += pnl;
+                setupStats[setup].total += 1;
+                if (pnl >= 0) setupStats[setup].wins += 1;
 
-                const dayName = new Date(t.date).toLocaleDateString('en-US', { weekday: 'long' });
-                dayStats[dayName] = (dayStats[dayName] || 0) + pnl;
+                const dayName = getDayNameFromDateStr(t.date);
+                if (!dayStats[dayName]) dayStats[dayName] = { pnl: 0, count: 0 };
+                dayStats[dayName].pnl += pnl;
+                dayStats[dayName].count += 1;
+
+                if (t.sl && t.buy && t.buy > t.sl) {
+                    slFollowed++;
+                }
             });
 
             const winRate = ((wins / trades.length) * 100).toFixed(1);
+
             let bestSetup = 'Breakout';
             let bestSetupPnl = -Infinity;
             Object.keys(setupStats).forEach(s => {
-                if (setupStats[s] > bestSetupPnl) {
-                    bestSetupPnl = setupStats[s];
+                if (setupStats[s].pnl > bestSetupPnl) {
+                    bestSetupPnl = setupStats[s].pnl;
                     bestSetup = s;
                 }
             });
+            if (bestSetupPnl === -Infinity) bestSetupPnl = 0;
 
             let worstDay = 'Thursday';
             let worstDayPnl = Infinity;
             Object.keys(dayStats).forEach(d => {
-                if (dayStats[d] < worstDayPnl) {
-                    worstDayPnl = dayStats[d];
+                if (dayStats[d].pnl < worstDayPnl) {
+                    worstDayPnl = dayStats[d].pnl;
                     worstDay = d;
                 }
             });
+            if (worstDayPnl === Infinity) worstDayPnl = 0;
+
+            let maxTradesInDay = 0;
+            let overtradingDay = '';
+            Object.keys(dayStats).forEach(d => {
+                if (dayStats[d].count > maxTradesInDay) {
+                    maxTradesInDay = dayStats[d].count;
+                    overtradingDay = d;
+                }
+            });
+
+            let topicHeader = `AI Discipline Audit Report for ${name}`;
+            let topicBadge = `Analyzed ${trades.length} trades | Overall Win-Rate: <b style="color: #34d399;">${winRate}%</b> | Net P&L: <b style="color: ${totalPnl >= 0 ? '#34d399' : '#f87171'};">${totalPnl >= 0 ? '+' : ''}₹${totalPnl.toFixed(2)}</b>`;
+
+            let focusContentHtml = '';
+
+            if (topic === 'overtrading') {
+                topicHeader = `🧠 Overtrading Risk Audit for ${name}`;
+                const riskLevel = maxTradesInDay > 4 ? 'HIGH RISK 🚨' : (maxTradesInDay > 2 ? 'MODERATE ⚠️' : 'LOW (DISCIPLINED) ✅');
+                const riskColor = maxTradesInDay > 4 ? '#ef4444' : (maxTradesInDay > 2 ? '#f59e0b' : '#10b981');
+
+                focusContentHtml = `
+                    <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid ${riskColor}; padding: 14px; border-radius: 12px; margin-bottom: 16px;">
+                        <div style="font-size: 11px; color: ${riskColor}; font-weight: 800; text-transform: uppercase;">Overtrading Risk Status</div>
+                        <div style="font-weight: 800; font-size: 18px; color: #fff; margin-top: 4px;">${riskLevel}</div>
+                        <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">Peak daily activity: <b>${maxTradesInDay} trade(s)</b> on ${overtradingDay || 'active session'}.</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #ef4444; margin-bottom: 14px;">
+                        <b style="color: #fca5a5; display: block; margin-bottom: 6px;">🎯 Anti-Overtrading Action Plan:</b>
+                        <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
+                            <li><b>Daily Cap:</b> Set a hard limit of <b>max 2-3 quality trades per day</b>.</li>
+                            <li><b>Revenge Trade Protection:</b> If 2 consecutive trades hit SL, stop trading for the day.</li>
+                            <li><b>Quality Focus:</b> Only take high conviction trades matching your rules.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (topic === 'setups') {
+                topicHeader = `🎯 Best Win-Rate Setup Analysis for ${name}`;
+                const setupWinRate = setupStats[bestSetup] ? ((setupStats[bestSetup].wins / setupStats[bestSetup].total) * 100).toFixed(1) : winRate;
+
+                focusContentHtml = `
+                    <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid #10b981; padding: 14px; border-radius: 12px; margin-bottom: 16px;">
+                        <div style="font-size: 11px; color: #34d399; font-weight: 800; text-transform: uppercase;">Highest Profit Setup</div>
+                        <div style="font-weight: 800; font-size: 18px; color: #fff; margin-top: 4px;">${bestSetup} (${setupWinRate}% Win Rate)</div>
+                        <div style="font-size: 12px; color: #a7f3d0; margin-top: 4px;">Generated P&L: +₹${bestSetupPnl > 0 ? bestSetupPnl.toFixed(2) : '0.00'}</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #10b981; margin-bottom: 14px;">
+                        <b style="color: #6ee7b7; display: block; margin-bottom: 6px;">💡 Strategy Optimization Tips:</b>
+                        <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
+                            <li><b>Double Down:</b> Allocate 70%+ of your daily capital exclusively to <b>${bestSetup}</b>.</li>
+                            <li><b>Filter Low Probability Setups:</b> Avoid entering trades without clear setup confirmation.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (topic === 'risk') {
+                topicHeader = `⚠️ Risk Management & SL Audit for ${name}`;
+                const slPct = trades.length > 0 ? ((slFollowed / trades.length) * 100).toFixed(1) : '100';
+
+                focusContentHtml = `
+                    <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid #f59e0b; padding: 14px; border-radius: 12px; margin-bottom: 16px;">
+                        <div style="font-size: 11px; color: #fcd34d; font-weight: 800; text-transform: uppercase;">Stop Loss Discipline Rate</div>
+                        <div style="font-weight: 800; font-size: 18px; color: #fff; margin-top: 4px;">${slPct}% Defined SL Compliance</div>
+                        <div style="font-size: 12px; color: #fef3c7; margin-top: 4px;">${slFollowed} of ${trades.length} trades had a system Stop-Loss defined.</div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #f59e0b; margin-bottom: 14px;">
+                        <b style="color: #fde047; display: block; margin-bottom: 6px;">🛡️ Risk Rules:</b>
+                        <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
+                            <li><b>Strict SL:</b> Always place SL in terminal order window before entering.</li>
+                            <li><b>1:2 R:R Ratio:</b> Ensure target is minimum 2x of risk points.</li>
+                            <li><b>Capital Protection:</b> Max risk per trade should not exceed 1-2% of total account capital.</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                focusContentHtml = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; padding: 12px; border-radius: 12px;">
+                            <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">🎯 Best Performing Setup</div>
+                            <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${bestSetup}</div>
+                            <div style="font-size: 11px; color: #a7f3d0;">P&L: +₹${bestSetupPnl > 0 ? bestSetupPnl.toFixed(2) : '0.00'}</div>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 12px; border-radius: 12px;">
+                            <div style="font-size: 10px; color: #f87171; font-weight: 800; text-transform: uppercase;">⚠️ High Loss Vulnerability Day</div>
+                            <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${worstDay}</div>
+                            <div style="font-size: 11px; color: #fca5a5;">P&L: ${worstDayPnl < 0 ? '-' : ''}₹${Math.abs(worstDayPnl).toFixed(2)}</div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #818cf8; margin-bottom: 14px;">
+                        <b style="color: #a5b4fc; display: block; margin-bottom: 6px;">💡 AI Coach Key Recommendations:</b>
+                        <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
+                            <li><b>Setup Discipline:</b> Focus 80% of your capital on <b>${bestSetup}</b> setup where your win-rate is highest.</li>
+                            <li><b>Risk Management:</b> Never risk more than 2% of total capital on a single trade.</li>
+                            <li><b>Overtrading Alert:</b> Limit total trades to maximum <b>3 trades per day</b> to prevent emotional fatigue.</li>
+                        </ul>
+                    </div>
+                `;
+            }
 
             resultsBox.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 14px; margin-bottom: 16px;">
                     <div style="font-size: 26px;">🧠</div>
                     <div>
-                        <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #818cf8;">AI Discipline Audit Report for ${name}</h3>
-                        <span style="font-size: 11px; color: #94a3b8;">Analyzed ${trades.length} trades | Overall Win-Rate: <b style="color: #34d399;">${winRate}%</b></span>
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #818cf8;">${topicHeader}</h3>
+                        <span style="font-size: 11px; color: #94a3b8;">${topicBadge}</span>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px;">
-                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; padding: 12px; border-radius: 12px;">
-                        <div style="font-size: 10px; color: #34d399; font-weight: 800; text-transform: uppercase;">🎯 Best Performing Setup</div>
-                        <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${bestSetup}</div>
-                        <div style="font-size: 11px; color: #a7f3d0;">P&L: +₹${bestSetupPnl > 0 ? bestSetupPnl.toFixed(2) : '0.00'}</div>
-                    </div>
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; padding: 12px; border-radius: 12px;">
-                        <div style="font-size: 10px; color: #f87171; font-weight: 800; text-transform: uppercase;">⚠️ High Loss Vulnerability Day</div>
-                        <div style="font-weight: 800; font-size: 15px; color: #fff; margin-top: 4px;">${worstDay}</div>
-                        <div style="font-size: 11px; color: #fca5a5;">Recommendation: Lower quantity by 50%</div>
-                    </div>
-                </div>
-
-                <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 12px; border-left: 4px solid #818cf8; margin-bottom: 14px;">
-                    <b style="color: #a5b4fc; display: block; margin-bottom: 6px;">💡 AI Coach Key Recommendations:</b>
-                    <ul style="margin: 0; padding-left: 18px; color: #cbd5e1; font-size: 12px;">
-                        <li><b>Setup Discipline:</b> Focus 80% of your capital on <b>${bestSetup}</b> setup where your win-rate is highest.</li>
-                        <li><b>Risk Management:</b> Never risk more than 2% of total capital on a single lot trade.</li>
-                        <li><b>Overtrading Alert:</b> Limit total trades to maximum <b>3 trades per day</b> to prevent emotional fatigue.</li>
-                    </ul>
-                </div>
+                ${focusContentHtml}
             `;
             showToast("✅ AI Trade Coaching Analysis Complete!", "🤖");
         }
 
         function runAiAuditTopic(topic) {
-            runAiCoachAnalysis();
+            runAiCoachAnalysis(topic);
         }
 
         function openGeminiApiKeyModal() {
@@ -10010,7 +10194,7 @@
             if (!tbody) return;
 
             const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
-            const trades = JSON.parse(localStorage.getItem('trades_history') || localStorage.getItem('trades') || '[]');
+            const trades = getLoggedTrades();
             let wins = 0, totalPnl = 0;
             trades.forEach(t => {
                 const pnl = parseFloat(t.pnl) || 0;
@@ -10092,7 +10276,7 @@
 
         function submitToLeaderboard() {
             const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
-            const trades = JSON.parse(localStorage.getItem('trades_history') || localStorage.getItem('trades') || '[]');
+            const trades = getLoggedTrades();
             let wins = 0, totalPnl = 0;
             trades.forEach(t => {
                 const pnl = parseFloat(t.pnl) || 0;
@@ -10149,7 +10333,7 @@
             }
             const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
             const todayStr = new Date().toISOString().split('T')[0];
-            const trades = JSON.parse(localStorage.getItem('trades_history') || '[]');
+            const trades = getLoggedTrades();
 
             const todayTrades = trades.filter(t => t.date === todayStr);
             const activeTradesList = todayTrades.length > 0 ? todayTrades : trades;
