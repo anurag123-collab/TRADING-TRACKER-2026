@@ -10465,6 +10465,71 @@
             });
         }
 
+        // ============================================================
+        // 🔔 3:45 PM DAILY MARKET CLOSE NOTIFICATION ENGINE
+        // ============================================================
+        function initDailyMarketCloseNotification() {
+            if (!("Notification" in window)) return;
+
+            if (Notification.permission === "default") {
+                setTimeout(() => {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            try { showToast("🔔 3:45 PM Market Close Daily Reminders Active!", "🔔"); } catch(e){}
+                            scheduleMarketCloseCheck();
+                        }
+                    }).catch(e => {});
+                }, 4000);
+            } else if (Notification.permission === "granted") {
+                scheduleMarketCloseCheck();
+            }
+        }
+
+        function scheduleMarketCloseCheck() {
+            checkAndTrigger345Notification();
+            setInterval(checkAndTrigger345Notification, 60000);
+        }
+
+        function checkAndTrigger345Notification() {
+            if (Notification.permission !== "granted") return;
+
+            const now = new Date();
+            const day = now.getDay();
+            if (day === 0 || day === 6) return; // Skip Weekends (Saturday & Sunday)
+
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // Target 15:45 IST (3:45 PM)
+            if (hours === 15 && minutes === 45) {
+                const todayStr = now.toISOString().split('T')[0];
+                const lastNotified = localStorage.getItem('last_345_notification_date');
+
+                if (lastNotified !== todayStr) {
+                    localStorage.setItem('last_345_notification_date', todayStr);
+
+                    const title = "📈 Market Closed! Log Today's Trades";
+                    const options = {
+                        body: "Indian stock markets are closed. Log your trades in Trading Tracker 2026 to update your AI Discipline Score!",
+                        icon: "./profile.jpg",
+                        badge: "./profile.jpg",
+                        tag: "market-close-reminder",
+                        requireInteraction: true
+                    };
+
+                    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+                        navigator.serviceWorker.ready.then(registration => {
+                            registration.showNotification(title, options);
+                        }).catch(() => {
+                            try { new Notification(title, options); } catch(e){}
+                        });
+                    } else {
+                        try { new Notification(title, options); } catch(e){}
+                    }
+                }
+            }
+        }
+
         // Ultrafast Non-Blocking Boot Engine (< 50ms Initial Paint)
         window.addEventListener('DOMContentLoaded', () => {
             autoUnlockMasterAdminAccess();
@@ -10484,6 +10549,7 @@
                 try { initDashboardVisibility(); } catch (e) { console.error(e); }
                 try { loadCustomBrokerLinks(); } catch (e) { console.error(e); }
                 try { loadAdSensePublisherId(); } catch (e) { console.error(e); }
+                try { initDailyMarketCloseNotification(); } catch (e) { console.error(e); }
             });
 
             // Lazy Load Heavy TradingView Chart after 1.2s to prevent startup lag
