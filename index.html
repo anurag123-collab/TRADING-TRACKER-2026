@@ -1783,7 +1783,10 @@
                 <div style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
                     <div
                         style="font-size: 12px; font-weight: 800; color: #38bdf8; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>👥 LOGGED-IN TRADERS & USER IDs LOG</span>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span>👥 LOGGED-IN TRADERS & USER IDs LOG</span>
+                            <span id="registeredTradersCountBadge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 800;">(0 Connected)</span>
+                        </div>
                         <button onclick="renderRegisteredTradersList(true)"
                             style="background: rgba(56,189,248,0.2); color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: 700; transition: all 0.2s;">🔄
                             Refresh List</button>
@@ -2122,12 +2125,12 @@
                         </button>
 
                         <button class="btn btn-success btn-sm" onclick="exportToExcel()"
-                            title="Download Trades as Excel (.xlsx) [VIP PRO Feature]">
-                            <span>📊</span> Download Excel <span class="badge-pro-tag" style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span>
+                            title="Download Trades as Excel (.xlsx)">
+                            <span>📊</span> Download Excel <span class="badge-pro-tag" style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒 PRO</span>
                         </button>
                         <button class="btn btn-primary btn-sm" onclick="exportToPDF()"
-                            title="Download Trades as PDF Report [VIP PRO Feature]">
-                            <span>📄</span> Download PDF <span class="badge-pro-tag" style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span>
+                            title="Download Trades as PDF Report">
+                            <span>📄</span> Download PDF <span class="badge-pro-tag" style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒 PRO</span>
                         </button>
                         <button class="btn btn-secondary btn-sm" id="btnPrivacyToggle" onclick="togglePrivacyMode()">
                             <span id="privacyIcon">👁️</span> <span id="privacyText">Hide Values</span>
@@ -2683,9 +2686,9 @@
                             <button class="btn btn-secondary btn-sm" onclick="refreshApp()"
                                 title="Refresh Data (Alt + R)"><span class="refresh-icon">🔄</span> Refresh</button>
                             <button class="btn btn-success btn-sm" onclick="exportToExcel()"
-                                title="Download Trades as Excel (.xlsx)">📊 Download Excel (.xlsx) <span class="badge-pro-tag" style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span></button>
+                                title="Download Trades as Excel (.xlsx)">📊 Download Excel (.xlsx) <span class="badge-pro-tag" style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒 PRO</span></button>
                             <button class="btn btn-primary btn-sm" onclick="exportToPDF()"
-                                title="Download Trades as PDF Report">📄 Download PDF Report <span class="badge-pro-tag" style="font-size: 9px; background: rgba(0,0,0,0.3); color: #fde047; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">👑 PRO</span></button>
+                                title="Download Trades as PDF Report">📄 Download PDF Report <span class="badge-pro-tag" style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒 PRO</span></button>
                             <button class="btn btn-danger btn-sm" onclick="clearHistory()">Clear History</button>
                         </div>
                     </div>
@@ -3007,10 +3010,22 @@
                                 <div class="card-subtitle">Upgrade, renew, or view VIP Plans & UPI payment details
                                     (₹1,999 to ₹9,500)</div>
                             </div>
-                            <button class="btn btn-sm" onclick="openVipPaywallModal()"
-                                style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; font-weight: 800; border: none; padding: 8px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);">
-                                <span>💳</span> <span>View VIP Plans & UPI Payment</span>
-                            </button>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                                <button class="btn btn-sm" onclick="relockAppForTesting()"
+                                    style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-weight: 700; padding: 6px 12px; border-radius: 8px; cursor: pointer;"
+                                    title="Simulate Expired Trial Mode to verify 9 PRO Features are locked">
+                                    ⚡ Test Expired Trial (Lock 9 PRO Features)
+                                </button>
+                                <button class="btn btn-sm" onclick="resetTrialForTesting()"
+                                    style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700; padding: 6px 12px; border-radius: 8px; cursor: pointer;"
+                                    title="Reset to 7-Day Free Trial Mode (All features unlocked)">
+                                    🎁 Test 7-Day Free Trial (Unlock All)
+                                </button>
+                                <button class="btn btn-sm" onclick="openVipPaywallModal()"
+                                    style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; font-weight: 800; border: none; padding: 8px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);">
+                                    <span>💳</span> <span>View VIP Plans & UPI Payment</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -7711,6 +7726,15 @@
         }
 
         function getTrialStatusInfo() {
+            if (localStorage.getItem('test_force_expired_mode') === 'true') {
+                return {
+                    isExpired: true,
+                    remainingMs: 0,
+                    daysRemaining: 0,
+                    hoursRemaining: 0,
+                    trialStart: Date.now() - (8 * 24 * 60 * 60 * 1000)
+                };
+            }
             const trialStart = initTrialStartTime();
             const now = Date.now();
             const elapsed = now - trialStart;
@@ -7730,6 +7754,11 @@
         }
 
         function autoUnlockMasterAdminAccess() {
+            if (localStorage.getItem('test_force_expired_mode') === 'true') {
+                localStorage.removeItem('is_user_admin');
+                localStorage.removeItem('app_vip_unlocked');
+                return;
+            }
             const profileMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
             const profileEmail = (localStorage.getItem('app_user_email') || '').toLowerCase().trim();
 
@@ -7824,6 +7853,9 @@
         }
 
         function isProUnlocked() {
+            if (localStorage.getItem('test_force_expired_mode') === 'true') {
+                return false;
+            }
             autoUnlockMasterAdminAccess();
             syncUserVipStatusFromLog();
             const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
@@ -8327,9 +8359,14 @@
             }
 
             document.querySelectorAll('.badge-pro-tag').forEach(tag => {
-                tag.innerText = unlocked ? '👑 PRO' : '🔒 PRO';
-                tag.style.background = unlocked ? 'rgba(0,0,0,0.3)' : 'rgba(239, 68, 68, 0.35)';
-                tag.style.color = unlocked ? '#fde047' : '#fca5a5';
+                if (unlocked) {
+                    tag.style.display = 'none';
+                } else {
+                    tag.style.display = 'inline-block';
+                    tag.innerText = '👑 PRO';
+                    tag.style.background = 'rgba(239, 68, 68, 0.35)';
+                    tag.style.color = '#fca5a5';
+                }
             });
         }
 
@@ -8762,6 +8799,17 @@
                     (u.email && u.email.toLowerCase().includes(query)) ||
                     (u.active_key && u.active_key.toLowerCase().includes(query))
                 );
+            }
+
+            const countBadge = document.getElementById('registeredTradersCountBadge');
+            if (countBadge) {
+                const totalCount = log ? log.length : 0;
+                const filteredCount = filteredLog ? filteredLog.length : 0;
+                if (query) {
+                    countBadge.innerText = `(${filteredCount} of ${totalCount} Traders)`;
+                } else {
+                    countBadge.innerText = `(${totalCount} Trader${totalCount === 1 ? '' : 's'} Connected)`;
+                }
             }
 
             if (isManualRefresh) {
@@ -9359,11 +9407,22 @@
         }
 
         function relockAppForTesting() {
+            localStorage.setItem('test_force_expired_mode', 'true');
             localStorage.removeItem('app_vip_unlocked');
             localStorage.removeItem('is_user_admin');
             localStorage.removeItem('app_active_key');
             checkVipAccessStatus();
-            showToast("🔒 App Relocked for Testing!", "⚠️");
+            showToast("🔴 Expired Trial Mode Active! 9 PRO Features are now LOCKED.", "⚠️");
+        }
+
+        function resetTrialForTesting() {
+            localStorage.removeItem('test_force_expired_mode');
+            localStorage.removeItem('app_vip_unlocked');
+            localStorage.removeItem('is_user_admin');
+            localStorage.removeItem('app_active_key');
+            localStorage.setItem('app_trial_start_time', Date.now().toString());
+            checkVipAccessStatus();
+            showToast("🎁 7-Day Free Trial Reset! All features UNLOCKED.", "✅");
         }
 
         // ============================================================
@@ -9578,8 +9637,17 @@
         }
 
         function renderAdSenseBanner() {
+            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
             const container = document.getElementById('googleAdContainer');
             if (!container) return;
+
+            if (isVipUnlocked || isUserAdmin) {
+                container.style.display = 'none';
+                return;
+            } else {
+                container.style.display = 'block';
+            }
 
             const pubId = localStorage.getItem('adsense_pub_id') || 'ca-pub-1815684098843825';
             const slotId = localStorage.getItem('adsense_slot_id') || '1350192334';
@@ -9717,17 +9785,14 @@
                 // 👑 VIP / ADMIN USERS GET 100% AD-FREE EXPERIENCE
                 if (isVipUnlocked || isUserAdmin) {
                     if (container) {
-                        container.innerHTML = `
-                            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: #34d399; font-weight: 800; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <span style="font-size: 16px;">👑</span>
-                                    <span>VIP PRO UNLOCKED: Ad-Free Premium Experience Active!</span>
-                                </div>
-                                <span style="background: rgba(16, 185, 129, 0.25); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 10px; border-radius: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;">🚫 NO ADS</span>
-                            </div>
-                        `;
+                        container.style.display = 'none';
+                        container.innerHTML = '';
                     }
                     return;
+                } else {
+                    if (container) {
+                        container.style.display = 'block';
+                    }
                 }
 
                 // 📺 FREE / 7-DAY TRIAL USERS: RENDER GOOGLE ADSENSE ADS
