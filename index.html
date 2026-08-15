@@ -85,7 +85,6 @@
         (function () {
             try {
                 localStorage.removeItem('hidden_dashboard_widgets');
-                localStorage.setItem('app_vip_unlocked', 'true');
                 var savedTheme = localStorage.getItem('app_theme') || 'dark';
                 var effectiveTheme = savedTheme;
                 if (savedTheme === 'system') {
@@ -9372,7 +9371,7 @@
 
         // --- SHARE APP LINK FUNCTIONS ---
         function shareTradingTrackerLink() {
-            const link = "https://trading-tracker-2026.vercel.app";
+            const link = "https://thetradingtracker.com";
             if (navigator.share) {
                 navigator.share({
                     title: 'Trading Tracker 2026',
@@ -9387,7 +9386,7 @@
         }
 
         function copyShareAppLink() {
-            const link = "https://trading-tracker-2026.vercel.app";
+            const link = "https://thetradingtracker.com";
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(link).then(() => {
                     showToast("📋 Live Web App Link copied to clipboard!", "✅");
@@ -9409,8 +9408,8 @@
         }
 
         function shareOnWhatsApp() {
-            const link = "https://trading-tracker-2026.vercel.app";
-            const text = encodeURIComponent(`📈 *Trading Tracker 2026 - Desktop Web Edition*\nTrack your trades, P&L, and equity curve graphs smoothly!\n\n🔗 Open Web App: ${link}`);
+            const link = "https://thetradingtracker.com";
+            const text = encodeURIComponent(`📈 *Trading Tracker 2026 - Official Web Journal*\nTrack your trades, P&L, and equity curve graphs smoothly!\n\n🔗 Open Web App: ${link}`);
             window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
         }
 

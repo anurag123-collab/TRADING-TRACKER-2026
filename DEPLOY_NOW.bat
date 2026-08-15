@@ -12,7 +12,7 @@ cd /d "d:\TRADING TRAKER 2026"
 npx vercel --prod --yes
 echo.
 echo ============================================
-echo   DONE! Check trading-tracker2026.vercel.app
+echo   DONE! Check https://thetradingtracker.com
 echo ============================================
 echo.
 pause
