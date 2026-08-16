@@ -9815,10 +9815,9 @@
             }
 
             container.innerHTML = `
-                <div style="background: rgba(15, 23, 42, 0.5); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 14px; text-align: center; overflow: hidden; min-height: 90px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <div style="font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; justify-content: center; flex-wrap: wrap;">
-                        <span>📢 SPONSORED GOOGLE ADSENSE BANNER</span>
-                        <span style="font-size: 8.5px; background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 1px 6px; border-radius: 4px; font-family: monospace;">${pubId}</span>
+                <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 10px 14px; text-align: center; overflow: hidden; min-height: 90px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative;">
+                    <div style="font-size: 9.5px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; justify-content: center;">
+                        <span>📢 ADVERTISEMENT</span>
                     </div>
                     <ins class="adsbygoogle"
                         style="display:block; width:100%; min-height:90px;"
@@ -9979,8 +9978,8 @@
                             : `<span style="color: #ef4444; font-size: 9.5px; font-weight: 700; background: rgba(239, 68, 68, 0.15); padding: 2px 8px; border-radius: 8px;">⏰ Trial Expired (Upgrade for No Ads)</span>`;
 
                         container.innerHTML = `
-                            <div style="font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-                                <span>📢 SPONSORED GOOGLE ADSENSE BANNER</span>
+                            <div style="font-size: 9.5px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                                <span>📢 ADVERTISEMENT</span>
                                 ${trialBadge}
                             </div>
                             <ins class="adsbygoogle"
@@ -9989,7 +9988,6 @@
                                  ${slotAttr}
                                  data-ad-format="auto"
                                  data-full-width-responsive="true"></ins>
-                            ${isLocal ? `<div style="margin-top: 6px; font-size: 11px; color: #fbbf24; background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.3); padding: 6px 10px; border-radius: 6px;">ℹ️ <b>Preview Mode (Localhost/Offline):</b> Google AdSense Active (\x3Ccode>${pubId}\x3C/code>). Live ads will display when served on your registered web domain.</div>` : ''}
                         `;
 
                         try {
