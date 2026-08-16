@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Trading Tracker 2026 | Founded by Anurag Patel</title>
+    <meta name="description"
+        content="Learn about Trading Tracker 2026, our mission to empower retail traders through disciplined journaling, analytics, and founder Anurag Patel's vision.">
+    <meta name="author" content="Anurag Patel">
+    <link rel="canonical" href="https://thetradingtracker.com/about.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/profile.jpg">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #111827;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #38bdf8;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(ellipse at top, #1e1b4b 0%, #090d16 70%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .nav-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #fff !important;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .main-container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .card h2 {
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #cbd5e1;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .founder-box {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            background: rgba(79, 70, 229, 0.08);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            border-radius: 14px;
+            padding: 24px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .founder-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .founder-info h3 {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .founder-info span {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .feature-box .icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .feature-box h4 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .feature-box p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        footer {
+            background: #0a0e17;
+            border-top: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 24px 18px;
+            }
+            .founder-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <img src="/profile.jpg" alt="Trading Tracker Logo" onerror="this.src='/favicon.ico';">
+                <span>Trading Tracker 2026</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/blog.html">Trading Guides</a></li>
+                <li><a href="/about.html" class="active">About Us</a></li>
+                <li><a href="/contact.html">Contact Us</a></li>
+                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="/terms.html">Terms</a></li>
+                <li><a href="/disclaimer.html">Disclaimer</a></li>
+                <li><a href="/" class="btn-launch">Launch App 🚀</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        <header class="page-header">
+            <span class="badge-pill">Our Story & Mission</span>
+            <h1>About Trading Tracker 2026</h1>
+            <p>Empowering retail traders with military-grade discipline, mathematical clarity, and automated edge analytics.</p>
+        </header>
+
+        <section class="card">
+            <h2>🎯 Our Mission</h2>
+            <p>
+                In today's fast-moving financial markets, over 90% of retail traders struggle not because of a lack of technical indicators, but due to a <b>lack of discipline, poor risk management, and absent trade journaling</b>.
+            </p>
+            <p>
+                <b>Trading Tracker 2026</b> was conceived with a single clear purpose: to bridge the gap between amateur emotion-driven trading and institutional-grade rule-based discipline. By systematically tracking every entry, stop-loss, risk-to-reward ratio, setup tag, and psychological mistake, traders can objectively diagnose their weaknesses and scale their profitability.
+            </p>
+
+            <div class="founder-box">
+                <img src="/profile.jpg" alt="Anurag Patel" class="founder-avatar" onerror="this.src='/favicon.ico';">
+                <div class="founder-info">
+                    <h3>Anurag Patel</h3>
+                    <span>Founder, Lead Architect & Active Trader</span>
+                    <p style="margin-top: 6px; font-size: 13px; color: #cbd5e1;">
+                        "As an active trader, I built Trading Tracker 2026 to solve the exact pain points I faced: slow spreadsheets, clunky interfaces, and zero actionable feedback. Our goal is to make every retail trader confident, structured, and profitable through verifiable data."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>⚡ What Makes Us Different?</h2>
+            <div class="grid-3">
+                <div class="feature-box">
+                    <span class="icon">📊</span>
+                    <h4>Interactive Equity Curve</h4>
+                    <p>Real-time visual compounding curve that illustrates your growth trajectory and drawdown periods instantly.</p>
+                </div>
+                <div class="feature-box">
+                    <span class="icon">🤖</span>
+                    <h4>AI Discipline Coach</h4>
+                    <p>Smart algorithmic analysis that flags revenge trading, overleveraging, and poor risk-to-reward habits.</p>
+                </div>
+                <div class="feature-box">
+                    <span class="icon">📅</span>
+                    <h4>Calendar P&L Heatmap</h4>
+                    <p>Color-coded daily, monthly, and yearly profitability breakdown for crystal-clear performance tracking.</p>
+                </div>
+                <div class="feature-box">
+                    <span class="icon">🔒</span>
+                    <h4>Privacy First Engine</h4>
+                    <p>Your financial logs remain private with built-in client-side encryption, masking modes, and one-click JSON backups.</p>
+                </div>
+                <div class="feature-box">
+                    <span class="icon">📱</span>
+                    <h4>Multi-Platform Sync</h4>
+                    <p>Seamlessly available on Desktop Web, Progressive Web App (PWA), and native Android APK.</p>
+                </div>
+                <div class="feature-box">
+                    <span class="icon">📈</span>
+                    <h4>Live TradingView Charts</h4>
+                    <p>Direct integration with real-time Indian & Global market charts (NIFTY, BANKNIFTY, SENSEX, Crypto).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>🏢 Platform Architecture & Transparency</h2>
+            <p>
+                Built on modern web technologies including Vanilla HTML5/CSS3, optimized JavaScript engines, Chart.js visualization, and secure serverless microservices hosted on Vercel's global edge network.
+            </p>
+            <p>
+                We believe in 100% transparency. Our platform does not sell trading tips, manage third-party funds, or make unrealistic get-rich-quick claims. We provide honest, professional software to help serious market participants succeed.
+            </p>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/blog.html">Trading Guides</a>
+            <a href="/about.html">About Us</a>
+            <a href="/contact.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms & Conditions</a>
+            <a href="/disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

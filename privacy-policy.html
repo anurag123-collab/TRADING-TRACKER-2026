@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Trading Tracker 2026</title>
+    <meta name="description"
+        content="Official Privacy Policy for Trading Tracker 2026. Learn how we handle your trading data, cookies, analytics, and adhere to Google AdSense privacy policies.">
+    <meta name="author" content="Anurag Patel">
+    <link rel="canonical" href="https://thetradingtracker.com/privacy-policy.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/profile.jpg">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #111827;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #38bdf8;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(ellipse at top, #1e1b4b 0%, #090d16 70%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .nav-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #fff !important;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .legal-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .legal-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .legal-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .legal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .legal-card h2 {
+            font-size: 20px;
+            color: #fff;
+            margin: 28px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legal-card h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .legal-card p {
+            color: #cbd5e1;
+            font-size: 15px;
+            margin-bottom: 14px;
+            line-height: 1.8;
+        }
+
+        .legal-card ul {
+            margin: 12px 0 20px 24px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .legal-card li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: rgba(79, 70, 229, 0.12);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #e0e7ff;
+        }
+
+        footer {
+            background: #0a0e17;
+            border-top: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .legal-card {
+                padding: 24px 18px;
+            }
+            .legal-header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <img src="/profile.jpg" alt="Trading Tracker Logo" onerror="this.src='/favicon.ico';">
+                <span>Trading Tracker 2026</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/blog.html">Trading Guides</a></li>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/contact.html">Contact Us</a></li>
+                <li><a href="/privacy-policy.html" class="active">Privacy Policy</a></li>
+                <li><a href="/terms.html">Terms</a></li>
+                <li><a href="/disclaimer.html">Disclaimer</a></li>
+                <li><a href="/" class="btn-launch">Launch App 🚀</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="main-container">
+        <header class="legal-header">
+            <span class="badge-pill">Transparency & Security</span>
+            <h1>Privacy Policy</h1>
+            <p>Last Updated: August 16, 2026 | Effective Date: January 1, 2026</p>
+        </header>
+
+        <article class="legal-card">
+            <div class="highlight-box">
+                🛡️ <b>Our Privacy Commitment:</b> At <b>Trading Tracker 2026</b> (accessible via <a href="https://thetradingtracker.com" style="color: #38bdf8;">https://thetradingtracker.com</a>), founded and maintained by <b>Anurag Patel</b>, we prioritize your personal and financial data privacy above all. This Privacy Policy details the types of information collected, logged, and how it is used.
+            </div>
+
+            <h2>1. Information We Collect</h2>
+            <p>We respect the confidentiality of your financial journaling. The data we collect depends on how you interact with our platform:</p>
+            <ul>
+                <li><b>Client-Side Journal Records:</b> All trade entries, setup rules, notes, P&L numbers, and screenshots entered inside the journal are primarily stored locally within your browser's encrypted LocalStorage or IndexedDB sandbox.</li>
+                <li><b>Account & Profile Information:</b> When you register, verify via OTP, or upgrade to VIP Pro, we collect basic contact credentials including your Name, Mobile Number, and Email Address.</li>
+                <li><b>Transaction & Billing Identifiers:</b> Payment verifications are handled through certified third-party payment gateways (Razorpay/UPI). We never store sensitive banking credentials, card CVVs, or bank PINs on our servers.</li>
+                <li><b>Technical & Log Data:</b> Like most web platforms, our servers automatically log standard web requests, including IP address, browser type, referring/exit pages, date/time stamps, and operating system.</li>
+            </ul>
+
+            <h2>2. How We Use Your Information</h2>
+            <p>We use the data collected strictly for legitimate platform purposes:</p>
+            <ul>
+                <li>To render your customized trading analytics, win rates, and interactive equity curves.</li>
+                <li>To enable cloud sync between your desktop browser and Android mobile app.</li>
+                <li>To authenticate authorized VIP Pro access and process verification OTPs.</li>
+                <li>To protect our community against unauthorized intrusions, bot attacks, and fraudulent activities.</li>
+                <li>To improve platform speed, UI responsiveness, and fix software bugs.</li>
+            </ul>
+
+            <h2>3. Google AdSense & Third-Party Advertising Policy</h2>
+            <p>Our website utilizes <b>Google AdSense</b> (Publisher ID: <code>ca-pub-1815684098843825</code>) to display contextual advertisements:</p>
+            <ul>
+                <li>Google, as a third-party vendor, uses cookies (such as the DoubleClick DART cookie) to serve ads to users based on their visits to this and other websites across the internet.</li>
+                <li>Users may opt out of personalized advertising by visiting Google's <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8;">Google Ads Settings</a> or the <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8;">Network Advertising Initiative opt-out page</a>.</li>
+                <li>Third-party ad servers or networks may also use cookies, JavaScript, or Web Beacons to measure the effectiveness of their advertisements and personalize the advertising content you see. Trading Tracker 2026 has no access to or control over these cookies used by third-party advertisers.</li>
+            </ul>
+
+            <h2>4. Cookies and Web Beacons</h2>
+            <p>Trading Tracker 2026 uses standard cookies to store information about visitors' preferences, theme selection (Dark/Light mode), and session state. You can choose to disable cookies through your individual browser options. Detailed information about cookie management with specific web browsers can be found at the browsers' respective websites.</p>
+
+            <h2>5. Data Security & Encryption</h2>
+            <p>We implement industry-standard 256-bit SSL/TLS encryption for all data transmissions between your browser and our cloud servers. Your local data remains under your absolute control and can be exported as an encrypted JSON backup file or wiped at any time using the in-app controls.</p>
+
+            <h2>6. GDPR & CCPA Compliance (User Rights)</h2>
+            <p>Under international privacy regulations including GDPR and CCPA, you are entitled to the following rights:</p>
+            <ul>
+                <li><b>Right to Access:</b> You have the right to request copies of your stored personal data.</li>
+                <li><b>Right to Rectification:</b> You have the right to request corrections of any inaccurate information.</li>
+                <li><b>Right to Erasure:</b> You have the right to request the complete deletion of your account and synced logs.</li>
+                <li><b>Right to Data Portability:</b> You can export all your trading logs and capital history to Excel (.xlsx) or JSON anytime.</li>
+            </ul>
+
+            <h2>7. Children's Information Protection</h2>
+            <p>Trading Tracker 2026 is designed for adult financial market participants. We do not knowingly collect any Personal Identifiable Information from children under the age of 18. If you believe your child has provided such information on our website, please contact us immediately for swift removal.</p>
+
+            <h2>8. Contact Our Privacy Officer</h2>
+            <p>If you have any questions, suggestions, or data requests regarding this Privacy Policy, feel free to contact us:</p>
+            <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 14px; color: #cbd5e1;">
+                📧 <b>Official Email:</b> <a href="mailto:support@thetradingtracker.com" style="color: #38bdf8;">support@thetradingtracker.com</a> / <a href="mailto:anuragpateltrader@gmail.com" style="color: #38bdf8;">anuragpateltrader@gmail.com</a><br>
+                🌐 <b>Website:</b> <a href="https://thetradingtracker.com" style="color: #38bdf8;">https://thetradingtracker.com</a><br>
+                👤 <b>Founder & Data Controller:</b> Anurag Patel
+            </div>
+        </article>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/blog.html">Trading Guides</a>
+            <a href="/about.html">About Us</a>
+            <a href="/contact.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms & Conditions</a>
+            <a href="/disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

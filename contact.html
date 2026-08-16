@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Trading Tracker 2026</title>
+    <meta name="description"
+        content="Get in touch with the Trading Tracker 2026 support team. Inquiries, VIP activation assistance, technical feedback, or partnership queries.">
+    <meta name="author" content="Anurag Patel">
+    <link rel="canonical" href="https://thetradingtracker.com/contact.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/profile.jpg">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #111827;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --input-bg: #0b0f19;
+            --input-border: rgba(255, 255, 255, 0.12);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #38bdf8;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(ellipse at top, #1e1b4b 0%, #090d16 70%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .nav-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #fff !important;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 28px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 22px;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(79, 70, 229, 0.15);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .info-text h4 {
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .info-text p, .info-text a {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .info-text a:hover {
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.92;
+        }
+
+        .form-status {
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .form-status.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: #34d399;
+        }
+
+        footer {
+            background: #0a0e17;
+            border-top: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 840px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 24px 18px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <img src="/profile.jpg" alt="Trading Tracker Logo" onerror="this.src='/favicon.ico';">
+                <span>Trading Tracker 2026</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/blog.html">Trading Guides</a></li>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/contact.html" class="active">Contact Us</a></li>
+                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="/terms.html">Terms</a></li>
+                <li><a href="/disclaimer.html">Disclaimer</a></li>
+                <li><a href="/" class="btn-launch">Launch App 🚀</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        <header class="page-header">
+            <span class="badge-pill">We are here to help</span>
+            <h1>Contact Us & Support</h1>
+            <p>Have questions about VIP licensing, cloud sync, trade formulas, or feature suggestions? Send us a message!</p>
+        </header>
+
+        <div class="contact-grid">
+            <!-- CONTACT INFO PANEL -->
+            <div class="card">
+                <h2>📬 Get in Touch</h2>
+                <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 24px;">
+                    Our dedicated support team responds to all trader inquiries within <b>2 to 12 business hours</b>.
+                </p>
+
+                <div class="info-item">
+                    <div class="info-icon">📧</div>
+                    <div class="info-text">
+                        <h4>Official Support Email</h4>
+                        <a href="mailto:support@thetradingtracker.com">support@thetradingtracker.com</a><br>
+                        <a href="mailto:anuragpateltrader@gmail.com">anuragpateltrader@gmail.com</a>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">👤</div>
+                    <div class="info-text">
+                        <h4>Founder & Technical Lead</h4>
+                        <p>Anurag Patel</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">⏰</div>
+                    <div class="info-text">
+                        <h4>Operating Hours</h4>
+                        <p>Monday – Saturday: 9:00 AM – 9:00 PM IST</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">🌐</div>
+                    <div class="info-text">
+                        <h4>Official Website</h4>
+                        <a href="https://thetradingtracker.com" target="_blank">https://thetradingtracker.com</a>
+                    </div>
+                </div>
+
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 14px; margin-top: 10px;">
+                    <div style="font-size: 13px; font-weight: 700; color: #34d399; margin-bottom: 4px;">⚡ Instant VIP Pro Inquiries:</div>
+                    <div style="font-size: 12px; color: #cbd5e1;">Need fast activation after UPI transfer? Include your 12-digit UTR Number in your message.</div>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM PANEL -->
+            <div class="card">
+                <h2>✍️ Send Us a Message</h2>
+                <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Your Full Name *</label>
+                        <input type="text" id="name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Your Email Address *</label>
+                        <input type="email" id="email" class="form-control" placeholder="e.g. trader@gmail.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject / Inquiry Type *</label>
+                        <select id="subject" class="form-control" required>
+                            <option value="General Support">General Support & Question</option>
+                            <option value="VIP Pro Activation">VIP Pro License Activation / UPI Payment</option>
+                            <option value="Bug Report">Bug Report / Technical Issue</option>
+                            <option value="Feature Suggestion">Feature Suggestion & Feedback</option>
+                            <option value="Partnership">Broker Partnership / Commercial Inquiry</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message Details *</label>
+                        <textarea id="message" class="form-control" placeholder="Please describe your query in detail..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="btnSubmit">
+                        <span>🚀</span> Send Message
+                    </button>
+
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/blog.html">Trading Guides</a>
+            <a href="/about.html">About Us</a>
+            <a href="/contact.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms & Conditions</a>
+            <a href="/disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            const statusBox = document.getElementById('formStatus');
+            const submitBtn = document.getElementById('btnSubmit');
+
+            if (!name || !email || !message) {
+                alert("Please complete all required fields.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "<span>⏳</span> Submitting...";
+
+            setTimeout(() => {
+                statusBox.className = "form-status success";
+                statusBox.innerHTML = `✅ <b>Thank you, ${name}!</b> Your message regarding "<b>${subject}</b>" has been received. Our team will contact you at <b>${email}</b> within a few hours.`;
+                document.getElementById('contactForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = "<span>🚀</span> Send Message";
+            }, 800);
+        }
+    </script>
+
+</body>
+
+</html>

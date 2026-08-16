@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Guides & Educational Articles - Trading Tracker 2026</title>
+    <meta name="description"
+        content="Free high-value trading guides, risk management strategies, trading psychology rules, and trade journaling masterclasses for retail stock & options traders.">
+    <meta name="author" content="Anurag Patel">
+    <link rel="canonical" href="https://thetradingtracker.com/blog.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/profile.jpg">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #111827;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #38bdf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(ellipse at top, #1e1b4b 0%, #090d16 70%);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .nav-brand img {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: #fff !important;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .article-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 36px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(79, 70, 229, 0.15);
+            color: #a5b4fc;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 11px;
+            border: 1px solid rgba(79, 70, 229, 0.3);
+        }
+
+        .article-card h2 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 16px;
+            line-height: 1.35;
+        }
+
+        .article-card h3 {
+            font-size: 18px;
+            color: var(--accent);
+            margin: 20px 0 8px;
+        }
+
+        .article-card p {
+            color: #cbd5e1;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+
+        .article-card ul, .article-card ol {
+            margin: 12px 0 18px 24px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .article-card li {
+            margin-bottom: 8px;
+        }
+
+        .callout-quote {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 14px 18px;
+            margin: 18px 0;
+            font-style: italic;
+            color: #e0f2fe;
+            border-radius: 0 8px 8px 0;
+        }
+
+        footer {
+            background: #0a0e17;
+            border-top: 1px solid var(--card-border);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .article-card {
+                padding: 24px 18px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <img src="/profile.jpg" alt="Trading Tracker Logo" onerror="this.src='/favicon.ico';">
+                <span>Trading Tracker 2026</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/blog.html" class="active">Trading Guides</a></li>
+                <li><a href="/about.html">About Us</a></li>
+                <li><a href="/contact.html">Contact Us</a></li>
+                <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="/terms.html">Terms</a></li>
+                <li><a href="/disclaimer.html">Disclaimer</a></li>
+                <li><a href="/" class="btn-launch">Launch App 🚀</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        <header class="page-header">
+            <span class="badge-pill">Knowledge & Edge Hub</span>
+            <h1>Trading Guides & Psychology Articles</h1>
+            <p>Practical, mathematical, and psychology-backed tutorials to elevate your trading edge and master consistency in financial markets.</p>
+        </header>
+
+        <!-- ARTICLE 1: WHY JOURNALING IS MANDATORY -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="tag">Trading Discipline</span>
+                <span>📅 Published: August 2026</span>
+                <span>⏱️ 5 Min Read</span>
+                <span>✍️ By Anurag Patel</span>
+            </div>
+            <h2>Why 90% of Retail Traders Fail and How Journaling Solves It</h2>
+            <p>
+                Every aspiring trader enters the market expecting fast compounding profits. Yet, official SEBI studies and international regulatory reports confirm that over 90% of individual traders lose capital over the long run. The critical difference between the top 5% consistently profitable traders and the struggling majority is not secret chart indicators—it is <b>meticulous record-keeping and emotional accountability</b>.
+            </p>
+            <div class="callout-quote">
+                "What gets measured gets improved. If you cannot look back at your last 50 trades with precise entries, risk-to-reward metrics, and setup categories, you are gambling, not running a trading business."
+            </div>
+            <h3>1. The Trap of Selective Memory</h3>
+            <p>
+                The human brain is wired to remember big winning trades with pride and suppress painful losses. Without a structured journal like <b>Trading Tracker 2026</b>, traders deceive themselves about their true win rate and average loss size. Journaling forces objective mathematical truth onto your screen every single day.
+            </p>
+            <h3>2. Diagnosing Strategy Leaks</h3>
+            <p>
+                When you tag each trade with setup tags (such as <i>Breakout</i>, <i>Pullback</i>, <i>Reversal</i>, or <i>CPR Rejection</i>), you can filter your cumulative performance. Often, a trader discovers that 80% of their net profits come from just one setup, while another setup is draining their capital. Journaling allows you to eliminate the losing patterns and scale what works.
+            </p>
+        </article>
+
+        <!-- ARTICLE 2: RISK MANAGEMENT 1% RULE -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="tag">Risk Management</span>
+                <span>📅 Published: August 2026</span>
+                <span>⏱️ 6 Min Read</span>
+                <span>✍️ By Anurag Patel</span>
+            </div>
+            <h2>The 1% Rule: The Mathematical Secret to Never Blowing Up a Trading Account</h2>
+            <p>
+                The primary objective of any trader is not to get rich quickly; it is <b>capital preservation</b>. Once your capital drops by 50%, you need a 100% return just to break even. This asymmetric mathematical penalty destroys under-disciplined traders.
+            </p>
+            <h3>1. Understanding Fixed Fractional Risk</h3>
+            <p>
+                The 1% Risk Rule states that you should never risk losing more than 1% of your total trading capital on any single trade idea. If your account capital is ₹1,00,000, your maximum allowable loss per trade must be strictly capped at ₹1,000.
+            </p>
+            <div class="callout-quote">
+                <b>Position Sizing Formula:</b><br>
+                <code>Quantity = Maximum Risk Amount / (Entry Price - Stop Loss Price)</code>
+            </div>
+            <p>
+                Never decide your quantity based on how confident you feel about the market. Let the mathematical distance between your entry price and your technical invalidation level (stop loss) dictate the exact number of shares or lots you buy.
+            </p>
+            <h3>2. Asymmetry of Drawdowns</h3>
+            <ul>
+                <li>A 10% loss requires an 11% gain to recover.</li>
+                <li>A 25% loss requires a 33% gain to recover.</li>
+                <li>A 50% loss requires a 100% gain to recover.</li>
+                <li>A 75% loss requires a 300% gain to recover.</li>
+            </ul>
+        </article>
+
+        <!-- ARTICLE 3: EMOTIONAL OVERTRADING & REVENGE TRADING -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="tag">Trading Psychology</span>
+                <span>📅 Published: August 2026</span>
+                <span>⏱️ 5 Min Read</span>
+                <span>✍️ By Anurag Patel</span>
+            </div>
+            <h2>How to Stop Revenge Trading & Overtrading in Intraday Markets</h2>
+            <p>
+                Revenge trading occurs when a trader experiences a loss, feels offended by the market, and impulsively enters new low-probability trades with oversized volume in a desperate attempt to recover the loss before market close.
+            </p>
+            <h3>1. Set Hard Daily Stop-Loss Limits</h3>
+            <p>
+                Decide in advance the maximum number of consecutive losses or maximum daily dollar drawdown you will tolerate (e.g. 2 losing trades or 2% capital). Once hit, close your trading terminal and walk away. Trading Tracker 2026 includes built-in AI prompts that alert you when excessive trades are logged in a single day.
+            </p>
+            <h3>2. Separate Self-Worth from P&L</h3>
+            <p>
+                A losing trade does not mean you are a bad trader. Even a strategy with a 65% win rate will inevitably experience 4 or 5 consecutive losing trades over a series of 100 executions due to the normal distribution of outcomes. Focus on executing your rules flawlessly, not on winning every trade.
+            </p>
+        </article>
+
+        <!-- ARTICLE 4: RISK-TO-REWARD RATIO (R:R) -->
+        <article class="article-card">
+            <div class="article-meta">
+                <span class="tag">Strategy Edge</span>
+                <span>📅 Published: August 2026</span>
+                <span>⏱️ 4 Min Read</span>
+                <span>✍️ By Anurag Patel</span>
+            </div>
+            <h2>Mastering Risk-to-Reward (R:R) and Win Rate Dynamics</h2>
+            <p>
+                Many novice traders believe they need an 80% or 90% win rate to be profitable. In reality, some of the world's most successful trend followers and institutional funds operate with win rates between 40% and 50%.
+            </p>
+            <h3>1. The R:R Breakeven Table</h3>
+            <ul>
+                <li><b>1:1 Risk-to-Reward:</b> Requires a 50.0% win rate to break even.</li>
+                <li><b>1:1.5 Risk-to-Reward:</b> Requires a 40.0% win rate to break even.</li>
+                <li><b>1:2 Risk-to-Reward:</b> Requires a 33.3% win rate to break even.</li>
+                <li><b>1:3 Risk-to-Reward:</b> Requires only a 25.0% win rate to break even!</li>
+            </ul>
+            <p>
+                By maintaining a strict minimum 1:2 Risk-to-Reward profile, you can be wrong on 6 out of 10 trades and still walk away comfortably in the green. Trading Tracker calculates your average win and average loss automatically so you always know your exact expectancy.
+            </p>
+        </article>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/blog.html">Trading Guides</a>
+            <a href="/about.html">About Us</a>
+            <a href="/contact.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms & Conditions</a>
+            <a href="/disclaimer.html">Disclaimer</a>
+        </div>
+        <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>
