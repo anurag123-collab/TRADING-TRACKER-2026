@@ -805,6 +805,126 @@
             background-color: rgba(239, 68, 68, 0.1);
         }
 
+        /* SEARCHABLE DROPDOWN COMPONENTS */
+        .custom-searchable-box {
+            position: relative;
+        }
+        .custom-searchable-trigger {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 9px 14px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            user-select: none;
+            min-height: 40px;
+            box-sizing: border-box;
+        }
+        .custom-searchable-trigger:hover {
+            border-color: #6366f1;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+            background: rgba(15, 23, 42, 0.95);
+        }
+        .custom-search-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            border-radius: 14px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+            z-index: 99999;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .custom-search-header {
+            padding: 8px 10px;
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .custom-search-header input {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 8px;
+            padding: 7px 28px 7px 10px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .custom-search-header input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+        .custom-search-clear {
+            position: absolute;
+            right: 18px;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .custom-options-scroll {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 6px;
+            scrollbar-width: thin;
+        }
+        .custom-optgroup-title {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 8px 4px 8px;
+            border-top: 1px dashed rgba(255,255,255,0.06);
+            margin-top: 4px;
+        }
+        .custom-optgroup-title:first-child {
+            border-top: none;
+            margin-top: 0;
+        }
+        .custom-opt-row {
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            box-sizing: border-box;
+            transition: all 0.15s;
+        }
+        .custom-opt-row span:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .custom-opt-row:hover, .custom-opt-row.selected {
+            background: rgba(99, 102, 241, 0.25);
+            color: #fff;
+        }
+        .custom-opt-row.selected {
+            border-left: 3px solid #6366f1;
+            font-weight: 800;
+        }
+
         /* MAIN CONTENT AREA */
         .main-wrapper {
             flex: 1;
@@ -2374,9 +2494,14 @@
                                 <label>Date</label>
                                 <input type="date" id="tradeDate" class="form-control">
                             </div>
-                            <div class="form-group">
+                            <!-- INDEX / ASSET SEARCHABLE COMBOBOX -->
+                            <div class="form-group custom-searchable-box">
                                 <label>Index / Asset</label>
-                                <select id="indexName" class="form-control" onchange="onIndexChange()">
+                                <div id="indexSelectTrigger" class="custom-searchable-trigger" onclick="toggleSearchableDropdown('index', event)" title="Click to search or select Index / Asset">
+                                    <span id="indexSelectDisplay" style="font-weight: 700;">Nifty 50 (65 Qty)</span>
+                                    <span style="font-size: 11px; color: #818cf8;">🔍 ▼</span>
+                                </div>
+                                <select id="indexName" class="form-control" style="display: none;" onchange="onIndexChange()">
                                     <optgroup label="🇮🇳 Indian Equity Indices">
                                         <option value="Nifty">Nifty 50 (65 Qty)</option>
                                         <option value="Sensex">Sensex (20 Qty)</option>
@@ -2407,11 +2532,23 @@
                                         <option value="Stocks">📈 Stocks / Shares / Equity</option>
                                     </optgroup>
                                 </select>
+                                <div id="indexSearchDropdownMenu" class="custom-search-dropdown-menu" style="display: none;">
+                                    <div class="custom-search-header">
+                                        <input type="text" id="indexSearchInput" placeholder="🔍 Type to search Index / Asset (Nifty, Gold, BTC)..." oninput="filterCustomDropdown('index', this.value)" autocomplete="off">
+                                        <span class="custom-search-clear" onclick="clearCustomDropdownSearch('index')">✕</span>
+                                    </div>
+                                    <div id="indexOptionsContainer" class="custom-options-scroll"></div>
+                                </div>
                             </div>
-                            <div class="form-group">
+
+                            <!-- BROKER SEARCHABLE COMBOBOX -->
+                            <div class="form-group custom-searchable-box">
                                 <label style="color: #38bdf8;">🏦 Trading Broker / Exchange / Platform</label>
-                                <select id="brokerSelect" class="form-control" onchange="onBrokerChange()"
-                                    style="border: 1px solid #38bdf8;">
+                                <div id="brokerSelectTrigger" class="custom-searchable-trigger" onclick="toggleSearchableDropdown('broker', event)" style="border-color: rgba(56, 189, 248, 0.4);" title="Click to search or select Trading Broker / Exchange">
+                                    <span id="brokerSelectDisplay" style="font-weight: 700; color: #38bdf8;">🏦 Dhan (₹40 Flat)</span>
+                                    <span style="font-size: 11px; color: #38bdf8;">🔍 ▼</span>
+                                </div>
+                                <select id="brokerSelect" class="form-control" style="display: none;" onchange="onBrokerChange()">
                                     <optgroup label="🏦 Stock & Options Brokers (India)">
                                         <option value="Dhan">🏦 Dhan (₹40 Flat)</option>
                                         <option value="Zerodha">⚡ Zerodha / Kite (₹40 Flat)</option>
@@ -2439,6 +2576,7 @@
                                         <option value="Vantage">🛡️ Vantage Markets (Commodities & Forex)</option>
                                     </optgroup>
                                     <optgroup label="🪙 Crypto Exchanges (India & Global)">
+                                        <option value="CosmicTrade">🌌 Cosmic Trade (Crypto F&O / 0.045% Fee)</option>
                                         <option value="DeltaExchange">⚡ Delta Exchange India (Crypto F&O)</option>
                                         <option value="Binance">🟡 Binance (Global Crypto)</option>
                                         <option value="CoinDCX">🪙 CoinDCX (Indian Crypto)</option>
@@ -2454,6 +2592,13 @@
                                         <option value="Custom">⚙️ Custom Rate (Apna Rate Dalein)</option>
                                     </optgroup>
                                 </select>
+                                <div id="brokerSearchDropdownMenu" class="custom-search-dropdown-menu" style="display: none;">
+                                    <div class="custom-search-header">
+                                        <input type="text" id="brokerSearchInput" placeholder="🔍 Type to search Broker (Cosmic, Dhan, Zerodha)..." oninput="filterCustomDropdown('broker', this.value)" autocomplete="off">
+                                        <span class="custom-search-clear" onclick="clearCustomDropdownSearch('broker')">✕</span>
+                                    </div>
+                                    <div id="brokerOptionsContainer" class="custom-options-scroll"></div>
+                                </div>
                                 <input type="number" id="tradeFormCustomBrokerage" class="form-control"
                                     placeholder="Apna Brokerage Amt (₹) (e.g. 20, 30)"
                                     style="display: none; margin-top: 6px; border: 1px solid #818cf8; font-weight: 700; color: #818cf8;"
@@ -3001,6 +3146,7 @@
                                 <option value="5Paisa">🖐️ 5Paisa (₹40 Flat)</option>
                                 <option value="KotakNeo">💎 Kotak Neo (₹40 Flat)</option>
                                 <option value="INDmoney">📊 INDmoney (₹40 Flat)</option>
+                                <option value="CosmicTrade">🌌 Cosmic Trade (0.045% Crypto F&O)</option>
                                 <option value="Custom">⚙️ Custom Rate</option>
                             </select>
                         </div>
@@ -3478,6 +3624,34 @@
                         </a>
                     </div>
 
+                    <!-- CARD 7: COSMIC TRADE (CRYPTO F&O & DERIVATIVES) -->
+                    <div class="card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 16px; padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);">
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;">🌌 CRYPTO F&O</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 44px; height: 44px; background: rgba(139, 92, 246, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; border: 1px solid rgba(139, 92, 246, 0.4);">🌌</div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #fff;">Cosmic Trade</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Indian Rupee (INR) Crypto F&O & Derivatives</span>
+                                </div>
+                            </div>
+                            <ul style="margin: 0 0 14px 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px;">
+                                <li><b>0.045%</b> Taker Fee / <b>0.02%</b> Maker Fee</li>
+                                <li><b>₹0 Fee</b> on INR UPI / IMPS Deposits & Withdrawals</li>
+                                <li><b>FIU-IND Compliant</b> (REID: VA00054447)</li>
+                                <li>Trade BTC, ETH & Top Coins directly in INR</li>
+                            </ul>
+                            <div style="margin-bottom: 14px;">
+                                <button onclick="openCosmicTradeRulesModal()" class="btn btn-sm" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer; width: 100%; text-align: center;">
+                                    📖 View Cosmic Trade Tax & Fee Rules ↗
+                                </button>
+                            </div>
+                        </div>
+                        <a id="brokerLinkCosmicTrade" href="https://cosmic.trade/" target="_blank" class="btn" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; text-align: center; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 12px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);">
+                            🌌 Open Free Cosmic Trade Account ↗
+                        </a>
+                    </div>
+
                 </div>
 
                 <!-- AFFILIATE LINK MANAGER FOR ANURAG (ADMIN/OWNER TOOL - RESTRICTED TO ADMIN) -->
@@ -3507,6 +3681,10 @@
                         <div>
                             <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">👼 Angel One Referral URL:</label>
                             <input type="text" id="affiliateUrlAngelOne" placeholder="https://angelone.in/...referral_code=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🌌 Cosmic Trade Referral URL:</label>
+                            <input type="text" id="affiliateUrlCosmicTrade" value="https://cosmic.trade/" placeholder="https://cosmic.trade/?ref=YOUR_CODE" style="width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; color: #fff; font-size: 11px;">
                         </div>
                         <div>
                             <label style="display: block; font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 4px;">🪙 Delta Crypto Referral URL:</label>
@@ -4177,6 +4355,7 @@
             else if (val === 'Pepperstone') { label = "🌶️ Pepperstone (Gold & Forex)"; color = "#ec4899"; }
             else if (val === 'FBS') { label = "🚀 FBS Broker (Gold & Forex)"; color = "#10b981"; }
             else if (val === 'Vantage') { label = "🛡️ Vantage (Commodities & Forex)"; color = "#6366f1"; }
+            else if (val === 'CosmicTrade') { label = "🌌 Cosmic Trade (0.045% Fee)"; color = "#8b5cf6"; }
             else if (val === 'DeltaExchange') { label = "⚡ Delta Exchange (Crypto F&O)"; color = "#a855f7"; }
             else if (val === 'Binance') { label = "🟡 Binance (Crypto)"; color = "#eab308"; }
             else if (val === 'CoinDCX') { label = "🪙 CoinDCX (Crypto)"; color = "#3b82f6"; }
@@ -4202,6 +4381,7 @@
             badge.innerText = label;
             badge.style.color = color;
             badge.style.backgroundColor = color + "22";
+            if (typeof updateCustomSelectDisplays === 'function') updateCustomSelectDisplays();
         }
 
         function updateDefaultBrokerSetting(val) {
@@ -4229,6 +4409,7 @@
             const qtyInput = document.getElementById('qtyPerLot');
             const strikeInput = document.getElementById('strikePrice');
 
+            if (typeof updateCustomSelectDisplays === 'function') updateCustomSelectDisplays();
             if (!indexElem || !qtyInput || !strikeInput) return;
 
             const index = indexElem.value;
@@ -4288,6 +4469,177 @@
                 strikeInput.value = 100;
             }
         }
+
+        // ============================================================
+        // 🔍 SEARCHABLE COMBOBOX DROPDOWN ENGINE (INDEX & BROKER)
+        // ============================================================
+        function initCustomSearchableDropdowns() {
+            populateCustomDropdown('index');
+            populateCustomDropdown('broker');
+            updateCustomSelectDisplays();
+        }
+
+        function populateCustomDropdown(type) {
+            const selectId = (type === 'index') ? 'indexName' : 'brokerSelect';
+            const containerId = (type === 'index') ? 'indexOptionsContainer' : 'brokerOptionsContainer';
+            const select = document.getElementById(selectId);
+            const container = document.getElementById(containerId);
+            if (!select || !container) return;
+
+            let html = '';
+            const optgroups = select.getElementsByTagName('optgroup');
+            const currentVal = select.value;
+
+            if (optgroups.length > 0) {
+                for (let og of optgroups) {
+                    html += `<div class="custom-optgroup-title">${og.label}</div>`;
+                    const options = og.getElementsByTagName('option');
+                    for (let opt of options) {
+                        const isSelected = (opt.value === currentVal);
+                        html += `
+                            <div class="custom-opt-row ${isSelected ? 'selected' : ''}" 
+                                 data-value="${opt.value}" 
+                                 data-text="${opt.text.replace(/"/g, '&quot;')}"
+                                 onclick="selectCustomOption('${type}', '${opt.value}', this)">
+                                <span>${opt.text}</span>
+                                ${isSelected ? '<span style="color: #6366f1; font-weight: 800;">✓</span>' : ''}
+                            </div>
+                        `;
+                    }
+                }
+            } else {
+                const options = select.getElementsByTagName('option');
+                for (let opt of options) {
+                    const isSelected = (opt.value === currentVal);
+                    html += `
+                        <div class="custom-opt-row ${isSelected ? 'selected' : ''}" 
+                             data-value="${opt.value}" 
+                             data-text="${opt.text.replace(/"/g, '&quot;')}"
+                             onclick="selectCustomOption('${type}', '${opt.value}', this)">
+                            <span>${opt.text}</span>
+                            ${isSelected ? '<span style="color: #6366f1; font-weight: 800;">✓</span>' : ''}
+                        </div>
+                    `;
+                }
+            }
+
+            container.innerHTML = html;
+        }
+
+        function updateCustomSelectDisplays() {
+            const indexSelect = document.getElementById('indexName');
+            const indexDisp = document.getElementById('indexSelectDisplay');
+            if (indexSelect && indexDisp) {
+                const selectedOpt = indexSelect.options[indexSelect.selectedIndex];
+                if (selectedOpt) indexDisp.innerText = selectedOpt.text;
+            }
+
+            const brokerSelect = document.getElementById('brokerSelect');
+            const brokerDisp = document.getElementById('brokerSelectDisplay');
+            if (brokerSelect && brokerDisp) {
+                const selectedOpt = brokerSelect.options[brokerSelect.selectedIndex];
+                if (selectedOpt) brokerDisp.innerText = selectedOpt.text;
+            }
+        }
+
+        function toggleSearchableDropdown(type, event) {
+            if (event) event.stopPropagation();
+            const menuId = (type === 'index') ? 'indexSearchDropdownMenu' : 'brokerSearchDropdownMenu';
+            const otherMenuId = (type === 'index') ? 'brokerSearchDropdownMenu' : 'indexSearchDropdownMenu';
+            const inputId = (type === 'index') ? 'indexSearchInput' : 'brokerSearchInput';
+            
+            const menu = document.getElementById(menuId);
+            const otherMenu = document.getElementById(otherMenuId);
+            if (otherMenu) otherMenu.style.display = 'none';
+
+            if (!menu) return;
+
+            const isOpening = (menu.style.display === 'none' || !menu.style.display);
+            if (isOpening) {
+                populateCustomDropdown(type);
+                menu.style.display = 'block';
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.value = '';
+                    setTimeout(() => input.focus(), 50);
+                }
+                filterCustomDropdown(type, '');
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+
+        function filterCustomDropdown(type, query) {
+            const containerId = (type === 'index') ? 'indexOptionsContainer' : 'brokerOptionsContainer';
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const q = (query || '').toLowerCase().trim();
+            const rows = container.querySelectorAll('.custom-opt-row');
+            const titles = container.querySelectorAll('.custom-optgroup-title');
+
+            let visibleCount = 0;
+            rows.forEach(row => {
+                const text = (row.getAttribute('data-text') || '').toLowerCase();
+                const val = (row.getAttribute('data-value') || '').toLowerCase();
+                const match = !q || text.includes(q) || val.includes(q);
+                row.style.display = match ? 'flex' : 'none';
+                if (match) visibleCount++;
+            });
+
+            // Adjust optgroup titles visibility
+            titles.forEach(title => {
+                let nextEl = title.nextElementSibling;
+                let hasVisible = false;
+                while (nextEl && !nextEl.classList.contains('custom-optgroup-title')) {
+                    if (nextEl.style.display !== 'none') {
+                        hasVisible = true;
+                        break;
+                    }
+                    nextEl = nextEl.nextElementSibling;
+                }
+                title.style.display = hasVisible ? 'block' : 'none';
+            });
+        }
+
+        function clearCustomDropdownSearch(type) {
+            const inputId = (type === 'index') ? 'indexSearchInput' : 'brokerSearchInput';
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            filterCustomDropdown(type, '');
+        }
+
+        function selectCustomOption(type, value, element) {
+            const selectId = (type === 'index') ? 'indexName' : 'brokerSelect';
+            const menuId = (type === 'index') ? 'indexSearchDropdownMenu' : 'brokerSearchDropdownMenu';
+            const select = document.getElementById(selectId);
+            const menu = document.getElementById(menuId);
+
+            if (select) {
+                select.value = value;
+                if (type === 'index') {
+                    onIndexChange();
+                } else {
+                    onBrokerChange();
+                }
+            }
+
+            updateCustomSelectDisplays();
+            if (menu) menu.style.display = 'none';
+        }
+
+        // Close searchable dropdowns when clicking anywhere outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.custom-searchable-box')) {
+                const indexMenu = document.getElementById('indexSearchDropdownMenu');
+                const brokerMenu = document.getElementById('brokerSearchDropdownMenu');
+                if (indexMenu) indexMenu.style.display = 'none';
+                if (brokerMenu) brokerMenu.style.display = 'none';
+            }
+        });
 
         function getStartOfWeekMonday(dateVal) {
             const d = new Date(dateVal);
@@ -5968,9 +6320,17 @@
 
             const selectedBroker = document.getElementById('brokerSelect') ? document.getElementById('brokerSelect').value : (localStorage.getItem('default_broker_name') || 'Dhan');
 
+            const totalQty = lots * qtyPerLot;
+            const buyTurnover = buy * totalQty;
+            const sellTurnover = sell * totalQty;
+            const totalTurnover = buyTurnover + sellTurnover;
+
             let brokerage = 40;
             if (selectedBroker === 'Shoonya' || selectedBroker === 'Sahi') {
                 brokerage = 0; // Zero Brokerage for Shoonya & Sahi Broking!
+            } else if (selectedBroker === 'CosmicTrade') {
+                // Cosmic Trade: 0.045% Taker Fee on total turnover
+                brokerage = Math.max(1, (0.045 / 100) * totalTurnover);
             } else if (selectedBroker === 'Custom') {
                 const formCustomAmt = parseFloat(document.getElementById('tradeFormCustomBrokerage')?.value);
                 brokerage = !isNaN(formCustomAmt) ? formCustomAmt : (parseFloat(localStorage.getItem('custom_brokerage_rate')) || 40);
@@ -5978,21 +6338,31 @@
                 brokerage = 40; // Flat ₹20 buy + ₹20 sell = ₹40 for Dhan, Zerodha, Angel One, Upstox, Groww, Fyers, 5Paisa, Kotak Neo, INDmoney
             }
 
-            const totalQty = lots * qtyPerLot;
-            const buyTurnover = buy * totalQty;
-            const sellTurnover = sell * totalQty;
-            const totalTurnover = buyTurnover + sellTurnover;
+            let govtCharges = 0;
+            if (selectedBroker === 'CosmicTrade') {
+                // Cosmic Trade & Indian Crypto F&O Tax Engine:
+                // 1. GST: 18% on Brokerage
+                const gstOnBrok = 0.18 * brokerage;
+                // 2. TDS: 1% Section 194S on sell turnover
+                const cryptoTds = 0.01 * sellTurnover;
+                govtCharges = gstOnBrok + cryptoTds;
+            } else if (selectedBroker === 'DeltaExchange' || selectedBroker === 'Binance' || selectedBroker === 'CoinDCX' || selectedBroker === 'WazirX' || selectedBroker === 'Bybit' || selectedBroker === 'KuCoin' || selectedBroker === 'Mudrex' || selectedBroker === 'SunCrypto' || selectedBroker === 'CoinDhan' || selectedBroker === 'CoindcxPro' || (index && index.startsWith('Crypto'))) {
+                const gstOnBrok = 0.18 * brokerage;
+                const cryptoTds = 0.01 * sellTurnover;
+                govtCharges = gstOnBrok + cryptoTds;
+            } else {
+                // Standard Indian Stock & Option Tax Engine (SEBI, STT, Stamp Duty, GST)
+                const isBSE = (index === 'Sensex');
+                const txnRate = isBSE ? 0.000325 : 0.000355299;
+                const exchangeCharges = txnRate * totalTurnover;
+                const stt = Math.round(0.001 * sellTurnover); // 0.1% STT on option sell turnover
+                const sebiFees = 0.000001 * totalTurnover;
+                const stampDuty = Math.round(0.00003 * buyTurnover); // 0.003% Stamp Duty on buy
+                const ipft = 0.000000001 * totalTurnover;
+                const gst = 0.18 * (brokerage + exchangeCharges + sebiFees + ipft);
+                govtCharges = exchangeCharges + stt + sebiFees + stampDuty + ipft + gst;
+            }
 
-            const isBSE = (index === 'Sensex');
-            const txnRate = isBSE ? 0.000325 : 0.000355299;
-            const exchangeCharges = txnRate * totalTurnover;
-            const stt = Math.round(0.001 * sellTurnover); // 0.1% STT on option sell turnover
-            const sebiFees = 0.000001 * totalTurnover;
-            const stampDuty = Math.round(0.00003 * buyTurnover); // 0.003% Stamp Duty on buy
-            const ipft = 0.000000001 * totalTurnover;
-            const gst = 0.18 * (brokerage + exchangeCharges + sebiFees + ipft);
-
-            const govtCharges = exchangeCharges + stt + sebiFees + stampDuty + ipft + gst;
             const totalCharges = brokerage + govtCharges;
             const grossPnL = sellTurnover - buyTurnover;
             const netPnL = grossPnL - totalCharges;
@@ -9919,6 +10289,7 @@
                     dhan: 'https://join.dhan.co/?invite=AEBNU60113',
                     upstox: 'https://upstox.onelink.me/0H1s/3BAQK9',
                     angelone: 'https://angelone.in/open-demat-account?referral_code=ANURAGPATEL',
+                    cosmictrade: 'https://cosmic.trade/',
                     delta: 'https://www.delta.exchange/?code=PVIGBH',
                     groww: 'https://groww.in/open-demat-account?referral_code=ANURAGPATEL'
                 };
@@ -9929,6 +10300,7 @@
                     dhan: { btn: 'brokerLinkDhan', inp: 'affiliateUrlDhan' },
                     upstox: { btn: 'brokerLinkUpstox', inp: 'affiliateUrlUpstox' },
                     angelone: { btn: 'brokerLinkAngelOne', inp: 'affiliateUrlAngelOne' },
+                    cosmictrade: { btn: 'brokerLinkCosmicTrade', inp: 'affiliateUrlCosmicTrade' },
                     delta: { btn: 'brokerLinkDelta', inp: 'affiliateUrlDelta' },
                     groww: { btn: 'brokerLinkGroww', inp: 'affiliateUrlGroww' }
                 };
@@ -9950,6 +10322,7 @@
                     dhan: document.getElementById('affiliateUrlDhan')?.value.trim() || '',
                     upstox: document.getElementById('affiliateUrlUpstox')?.value.trim() || '',
                     angelone: document.getElementById('affiliateUrlAngelOne')?.value.trim() || '',
+                    cosmictrade: document.getElementById('affiliateUrlCosmicTrade')?.value.trim() || '',
                     delta: document.getElementById('affiliateUrlDelta')?.value.trim() || '',
                     groww: document.getElementById('affiliateUrlGroww')?.value.trim() || ''
                 };
@@ -9957,6 +10330,80 @@
                 loadCustomBrokerLinks();
                 showToast("✅ Admin Broker Referral Links saved successfully!", "🔗");
             } catch (e) { }
+        }
+
+        // ============================================================
+        // 🌌 COSMIC TRADE TAXES, FEES & REGULATORY RULES MODAL
+        // ============================================================
+        function openCosmicTradeRulesModal() {
+            const existing = document.getElementById('cosmicTradeRulesModal');
+            if (existing) existing.remove();
+
+            const modalHtml = `
+                <div id="cosmicTradeRulesModal" class="modal-overlay" style="display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 99999; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box;" onclick="this.remove()">
+                    <div class="modal-content" onclick="event.stopPropagation()" style="background: #0f172a; border: 1px solid #8b5cf6; border-radius: 20px; width: 100%; max-width: 620px; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.8); color: #fff; padding: 24px; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        
+                        <!-- HEADER -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(139, 92, 246, 0.3); padding-bottom: 14px; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 26px;">🌌</span>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #c4b5fd;">Cosmic Trade: Fees, Taxes & Indian Crypto Rules</h3>
+                                    <span style="font-size: 11px; color: #94a3b8;">Official Indian Rupee (INR) Crypto F&O & Derivatives Guide</span>
+                                </div>
+                            </div>
+                            <button onclick="document.getElementById('cosmicTradeRulesModal').remove()" style="background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 18px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+                        </div>
+
+                        <!-- 1. BROKERAGE / TRADING FEES -->
+                        <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                            <h4 style="margin: 0 0 8px 0; color: #a78bfa; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                                <span>⚡</span> 1. Brokerage & Trading Fees (कितना Brokerage कटता है?)
+                            </h4>
+                            <ul style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                                <li><b>Taker Fee (Market Order):</b> <b>0.045%</b> of trade turnover. (जब आप तुरंत मार्केट प्राइस पर खरीदते/बेचते हैं)।</li>
+                                <li><b>Maker Fee (Limit Order):</b> <b>0.02%</b> of trade turnover. (जब आप लिमिट आर्डर लगाकर लिक्विडिटी देते हैं)।</li>
+                                <li><b>INR Deposit & Withdrawal Fee:</b> <b>₹0 (Zero Fees)</b> via UPI / IMPS.</li>
+                            </ul>
+                        </div>
+
+                        <!-- 2. INDIAN CRYPTO TAX LAWS (TDS & INCOME TAX) -->
+                        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 14px;">
+                            <h4 style="margin: 0 0 8px 0; color: #fca5a5; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                                <span>🏛️</span> 2. Govt Taxes & TDS Rules (कब और कितना Tax कटता है?)
+                            </h4>
+                            <div style="font-size: 12px; color: #e2e8f0; line-height: 1.6;">
+                                <p style="margin: 0 0 8px 0;"><b>1️⃣ 1% TDS (Section 194S):</b> हर सेल (Sell) ट्रांजैक्शन पर 1% TDS काटा जाता है। यह टैक्स सरकार को जमा होता है जिसे आप अपना Income Tax Return (ITR) भरते समय क्लेम कर सकते हैं।</p>
+                                <p style="margin: 0 0 8px 0;"><b>2️⃣ 18% GST:</b> ब्रोकरेज फीस पर 18% GST लागू होता है।</p>
+                                <p style="margin: 0 0 8px 0;"><b>3️⃣ 30% Flat Income Tax (Section 115BBH):</b> वित्तीय वर्ष के अंत में आपके कुल नेट क्रिप्टो प्रॉफिट पर फ्लैट 30% (+4% सेस = 31.2%) टैक्स लगता है।</p>
+                                <p style="margin: 0; color: #fca5a5; font-size: 11px;">⚠️ <i>नोट: भारतीय कानून के तहत एक क्रिप्टो कॉइन के लॉस को दूसरे कॉइन के प्रॉफिट के साथ सेट-ऑफ (Set-off) नहीं किया जा सकता।</i></p>
+                            </div>
+                        </div>
+
+                        <!-- 3. COMPLIANCE & LEGAL STATUS -->
+                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+                            <h4 style="margin: 0 0 8px 0; color: #6ee7b7; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                                <span>🛡️</span> 3. Legal Status & Registration (सुरक्षा व नियम)
+                            </h4>
+                            <ul style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                                <li><b>FIU-IND Compliant:</b> Eclipton Technologies Pvt Ltd द्वारा संचालित, भारत सरकार की Financial Intelligence Unit (FIU-IND) में पंजीकृत (REID: <code>VA00054447</code>)।</li>
+                                <li><b>No SEBI Regulation:</b> क्रिप्टो डेरिवेटिव्स SEBI के अंतर्गत नहीं आते हैं, यह भारत के VDA नियमों के तहत ऑपरेट होता है।</li>
+                            </ul>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <a href="https://cosmic.trade/" target="_blank" class="btn" style="flex: 1; text-align: center; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; text-decoration: none; font-weight: 800; padding: 10px; border-radius: 10px; font-size: 13px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);">
+                                🚀 Go to Cosmic.trade ↗
+                            </a>
+                            <button onclick="document.getElementById('cosmicTradeRulesModal').remove()" class="btn btn-secondary" style="padding: 10px 20px; font-weight: 700;">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
         }
 
         function loadAdSenseConfig() {
@@ -10883,6 +11330,7 @@
             syncProfileAvatar();
             
             // Immediate Critical First Paint
+            try { initCustomSearchableDropdowns(); } catch (e) { console.error(e); }
             try { loadTrades(); } catch (e) { console.error(e); }
             try { updateSummaryCards(); } catch (e) { console.error(e); }
             try { setDynamicTitles(); } catch (e) { console.error(e); }
