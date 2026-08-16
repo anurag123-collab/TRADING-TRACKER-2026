@@ -4640,7 +4640,8 @@
                 
                 // UNIFIED FIXED DEFAULT PASSWORDS PER ACCOUNT
                 const savedAppPass = localStorage.getItem('app_user_pass') || '12345';
-                const autoPass = customSavedPass || defaultPasswords[inputDigits] || savedAppPass;
+                const customSavedPass = localStorage.getItem('app_user_pass_' + (inputDigits || inputRaw));
+                const autoPass = customSavedPass || savedAppPass;
 
                 const newAcc = {
                     name: autoName,
@@ -4875,6 +4876,11 @@
                         <div id="forgotStep2" style="display: none; text-align: center; margin-top: 10px;">
                             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Enter 4-digit OTP code sent to <span id="forgotTargetText" style="color:#34d399; font-weight:700;"></span></p>
                             
+                            <div style="background: rgba(16, 185, 129, 0.12); border: 1px dashed #34d399; border-radius: 10px; padding: 8px 12px; margin: 10px 0; font-size: 13px; font-weight: 800; color: #34d399; display: flex; align-items: center; justify-content: space-between;">
+                                <span>🔑 Demo / Security OTP: <b id="forgotOtpDisplay" style="letter-spacing: 2px; font-size: 16px;"></b></span>
+                                <button type="button" onclick="autoFillForgotOtp()" style="background: #10b981; color: #fff; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer;">⚡ Auto Fill</button>
+                            </div>
+
                             <div style="display: flex; gap: 8px; justify-content: center; margin: 14px 0;">
                                 <input type="text" id="forgotOtp1" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp2').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
                                 <input type="text" id="forgotOtp2" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp3').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
@@ -4938,7 +4944,12 @@
             const isTenDigitMobile = cleanDigits.length === 10;
             const inputVal = isTenDigitMobile ? cleanDigits : rawVal;
 
-            let account = getUserAccount(inputVal);
+            let account = null;
+            try {
+                account = getUserAccount(inputVal);
+            } catch (e) {
+                console.warn("getUserAccount fallback:", e);
+            }
 
             if (!account) {
                 account = {
@@ -4972,7 +4983,11 @@
 
             const targetMob = sanitizeMobile(account.mobile || inputVal);
             const targetEmail = account.email || (inputVal.includes('@') ? inputVal : '');
-            dispatchRealOTPMessage(targetEmail, targetMob, generatedOtp);
+            try {
+                dispatchRealOTPMessage(targetEmail, targetMob, generatedOtp);
+            } catch (e) {
+                console.error("dispatchRealOTPMessage error:", e);
+            }
 
             showToast(`📩 Recovery OTP sent to ${targetText} — Check your SMS & Email!`, "🔑");
         }
