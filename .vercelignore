@@ -1,0 +1,9 @@
+android/
+node_modules/
+.git/
+.gradle/
+.gemini/
+*.zip
+*.log
+server.js
+!Trading_Tracker_2026.apk

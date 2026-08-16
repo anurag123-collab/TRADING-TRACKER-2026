@@ -1,0 +1,10 @@
+node_modules
+android
+.git
+.idea
+.netlify
+.vercel
+Build
+*.gradle
+*.java
+*.bat

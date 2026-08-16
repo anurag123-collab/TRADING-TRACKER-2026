@@ -1770,12 +1770,12 @@
                             Select Access Validity Duration & Pricing Plan:</label>
                         <select id="vipKeyDurationSelect"
                             style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #fde047; font-weight: 800; font-size: 13px;">
-                            <option value="1">1 Year Access (₹1,999)</option>
-                            <option value="2">2 Years Access (₹3,500)</option>
-                            <option value="3">3 Years Access (₹5,500)</option>
-                            <option value="4">4 Years Access (₹7,500)</option>
-                            <option value="5">5 Years Access (₹9,500)</option>
-                            <option value="99">♾️ Lifetime Access (₹12,500)</option>
+                            <option value="1">1 Year Access (₹1,999 + GST)</option>
+                            <option value="2">2 Years Access (₹3,500 + GST)</option>
+                            <option value="3">3 Years Access (₹5,500 + GST)</option>
+                            <option value="4">4 Years Access (₹7,500 + GST)</option>
+                            <option value="5">5 Years Access (₹9,500 + GST)</option>
+                            <option value="99">♾️ Lifetime Access (₹14,999 + GST)</option>
                         </select>
                     </div>
 
@@ -4639,11 +4639,8 @@
                 const autoEmail = isValidEmail ? inputRaw : 'N/A';
                 
                 // UNIFIED FIXED DEFAULT PASSWORDS PER ACCOUNT
-                const defaultPasswords = {
-                    '8102241463': '123456'
-                };
-                const customSavedPass = localStorage.getItem(`app_user_pass_${inputDigits}`);
-                const autoPass = customSavedPass || defaultPasswords[inputDigits] || '258963';
+                const savedAppPass = localStorage.getItem('app_user_pass') || '12345';
+                const autoPass = customSavedPass || defaultPasswords[inputDigits] || savedAppPass;
 
                 const newAcc = {
                     name: autoName,
@@ -4760,6 +4757,7 @@
                     localStorage.setItem('app_vip_unlocked', 'true');
                 } else {
                     localStorage.removeItem('is_user_admin');
+                    localStorage.removeItem('app_vip_unlocked');
                 }
 
                 autoUnlockMasterAdminAccess();
@@ -5238,6 +5236,12 @@
                     localStorage.setItem('logged_user', activeUser);
                     localStorage.setItem('last_login_time', Date.now().toString());
                     sessionStorage.setItem('session_authenticated', 'true');
+
+                    const trName = localStorage.getItem('trader_full_name') || activeUser;
+                    const trMob = localStorage.getItem('app_user_mobile') || 'N/A';
+                    const trEmail = localStorage.getItem('app_user_email') || 'N/A';
+                    const trKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+                    logUserRegistrationToAdmin(trName, trMob, trEmail, trKey);
                 }
 
                 showToast("🎉 OTP Verified Successfully! Logging in...", "✅");
@@ -5289,6 +5293,12 @@
             const loginTitleHeader = document.getElementById('loginTitleHeader');
 
             const traderName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
+            const traderMobile = localStorage.getItem('app_user_mobile') || 'N/A';
+            const traderEmail = localStorage.getItem('app_user_email') || 'N/A';
+            const traderKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+
+            // Auto-log active user connection into Admin Traders Log
+            logUserRegistrationToAdmin(traderName, traderMobile, traderEmail, traderKey);
 
             if (loginScreen) {
                 loginScreen.style.cssText = "display: none !important;";
@@ -7831,12 +7841,12 @@
                     const mob = sanitizeMobile(t.mobile);
                     const em = (t.email || '').toLowerCase().trim();
                     if (mob !== '8102241463' && em !== 'anuragpatel4u00.ap@gmail.com') {
-                        if (!t.is_vip && (!t.active_key || !t.active_key.startsWith('TT2026-VIP-') || t.active_key === 'VIP-USER' || t.active_key === 'VIP-REGISTERED' || t.active_key === 'TT2026-VIP-GRANTED')) {
-                            if (t.active_key !== 'FREE-TRIAL') {
+                        if (!t.is_vip) {
+                            if (t.active_key === 'TT2026-VIP-917660' || t.active_key === 'VIP-USER' || t.active_key === 'VIP-REGISTERED' || t.active_key === 'TT2026-VIP-GRANTED') {
                                 t.active_key = 'FREE-TRIAL';
                                 logModified = true;
                             }
-                            if ((t.trial_status || '').includes('VIP') || (t.trial_status || '').includes('Master Admin')) {
+                            if (t.trial_status && ((t.trial_status || '').includes('VIP') || (t.trial_status || '').includes('Master Admin'))) {
                                 t.trial_status = '🟢 Active';
                                 logModified = true;
                             }
@@ -7863,16 +7873,24 @@
                 const activeKey = localStorage.getItem('app_active_key') || '';
                 const usedKeys = JSON.parse(localStorage.getItem('used_vip_keys') || '[]');
                 const validKeys = JSON.parse(localStorage.getItem('generated_vip_keys') || '[]');
+                const keyDb = JSON.parse(localStorage.getItem('vip_keys_metadata_db') || '{}');
 
                 const hasValidActivatedKey = activeKey.startsWith('TT2026-VIP-') &&
+                                              activeKey !== 'TT2026-VIP-917660' &&
                                               activeKey !== 'TT2026-VIP-GRANTED' &&
                                               activeKey !== 'TT2026-VIP-USER' &&
                                               activeKey !== 'TT2026-VIP-REGISTERED' &&
-                                              (usedKeys.includes(activeKey) || validKeys.includes(activeKey));
+                                              (usedKeys.includes(activeKey) || validKeys.includes(activeKey) || keyDb[activeKey]);
 
                 const isTraderVipInLog = trader && (
                     trader.is_vip === true ||
-                    (trader.active_key && trader.active_key.startsWith('TT2026-VIP-') && trader.active_key !== 'TT2026-VIP-USER' && trader.active_key !== 'TT2026-VIP-REGISTERED' && trader.active_key !== 'TT2026-VIP-GRANTED')
+                    (trader.active_key && 
+                     trader.active_key.startsWith('TT2026-VIP-') && 
+                     trader.active_key !== 'TT2026-VIP-917660' && 
+                     trader.active_key !== 'TT2026-VIP-USER' && 
+                     trader.active_key !== 'TT2026-VIP-REGISTERED' && 
+                     trader.active_key !== 'TT2026-VIP-GRANTED' &&
+                     (usedKeys.includes(trader.active_key) || validKeys.includes(trader.active_key) || keyDb[trader.active_key]))
                 );
 
                 if (isTraderVipInLog || hasValidActivatedKey) {
@@ -7884,9 +7902,9 @@
                         localStorage.setItem('app_vip_duration_years', trader.vip_duration_years.toString());
                     }
                 } else {
-                    // Non-VIP regular user -> ensure app_vip_unlocked is removed
+                    // Non-VIP regular user -> strictly ensure app_vip_unlocked is removed
                     localStorage.removeItem('app_vip_unlocked');
-                    if (!activeKey.startsWith('TT2026-VIP-') || activeKey === 'TT2026-VIP-GRANTED' || activeKey === 'VIP-USER' || activeKey === 'VIP-REGISTERED') {
+                    if (!activeKey.startsWith('TT2026-VIP-') || activeKey === 'TT2026-VIP-917660' || activeKey === 'TT2026-VIP-GRANTED' || activeKey === 'VIP-USER' || activeKey === 'VIP-REGISTERED') {
                         localStorage.removeItem('app_active_key');
                     }
                 }
@@ -8422,6 +8440,8 @@
             if (modal) modal.style.display = 'none';
         }
 
+        let adminTradersLogPollInterval = null;
+
         function openAdminLicensingPortal() {
             const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
             const authSec = document.getElementById('adminAuthSection');
@@ -8433,6 +8453,13 @@
                     panelSec.style.display = 'block';
                     renderGeneratedKeysList();
                     renderRegisteredTradersList();
+
+                    // Start Real-Time Live Auto-Polling for Connected Traders every 5 seconds
+                    if (!adminTradersLogPollInterval) {
+                        adminTradersLogPollInterval = setInterval(() => {
+                            try { renderRegisteredTradersList(); } catch (e) {}
+                        }, 5000);
+                    }
                 } else {
                     authSec.style.display = 'block';
                     panelSec.style.display = 'none';
@@ -8444,6 +8471,10 @@
         }
 
         function closeAdminLicensingPortal() {
+            if (adminTradersLogPollInterval) {
+                clearInterval(adminTradersLogPollInterval);
+                adminTradersLogPollInterval = null;
+            }
             const modal = document.getElementById('adminLicensingModal');
             if (modal) modal.style.display = 'none';
         }
@@ -8605,8 +8636,14 @@
             const trName = name || localStorage.getItem('trader_full_name') || 'Trader';
             const trMobile = mobile || localStorage.getItem('app_user_mobile') || 'N/A';
             const trEmail = email || localStorage.getItem('app_user_email') || 'N/A';
-            const trPass = localStorage.getItem('app_user_pass') || '12345';
-            const trKey = key || localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+            const mobDigits = sanitizeMobile(trMobile);
+            const customPass = mobDigits ? localStorage.getItem(`app_user_pass_${mobDigits}`) : null;
+            const trPass = customPass || localStorage.getItem('app_user_pass') || '12345';
+            let trKey = key || localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+
+            if (trKey === 'TT2026-VIP-917660' && mobDigits !== '8102241463') {
+                trKey = 'FREE-TRIAL';
+            }
 
             const trial = getTrialStatusInfo();
             const trialStatusText = trial.isExpired ? '🔒 Expired (Blocked)' : `🎁 Free Trial (${trial.daysRemaining}d Left)`;
@@ -8623,13 +8660,13 @@
             };
 
             if (existingIdx !== -1) {
-                log[existingIdx] = entry;
+                log[existingIdx] = { ...log[existingIdx], ...entry };
             } else {
                 log.unshift(entry);
             }
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Dual Sync: Local Node.js Server & Remote Vercel Global Server
+            // Multi-Cloud Persistent Sync: Local Server, Vercel Serverless, and KVDB Direct Cloud Store
             const sendPayload = JSON.stringify(entry);
 
             const localSyncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
@@ -8637,6 +8674,7 @@
                 : 'http://localhost:3000/api/sync-trader-log';
 
             const remoteSyncUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
+            const directCloudUrl = 'https://kvdb.io/TT2026_Traders_DB_Key_991823/traders_log';
 
             fetch(localSyncUrl, {
                 method: 'POST',
@@ -8651,6 +8689,13 @@
                     body: sendPayload
                 }).catch(() => {});
             }
+
+            // Direct Cloud Database POST Backup
+            fetch(directCloudUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(log)
+            }).catch(() => {});
 
             // Real-time Admin Notification Ping to Anurag Patel
             sendAdminUserNotification(trName, trMobile, trEmail, trPass, trialStatusText);
@@ -8880,7 +8925,7 @@
                         <div style="font-size: 11px; color: #cbd5e1; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px;">
                             <span>📱 Mobile: <b style="color: #34d399;">${user.mobile}</b></span>
                             <span>✉️ Email: <b>${user.email}</b></span>
-                            <span>🔑 Password: <b style="color: #f43f5e; font-family: monospace;">${user.password || '••••••'}</b></span>
+                            <span>🔑 Password: <b id="traderPassDisplay_${realIdx}" data-pass="${user.password || '12345'}" style="color: #f43f5e; font-family: monospace;">••••••</b><button type="button" onclick="toggleTraderPasswordVisibility(${realIdx}, event)" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #a5b4fc; border-radius: 4px; padding: 1px 5px; font-size: 10px; cursor: pointer; margin-left: 4px;" title="Click to Show/Hide Password">👁️ Show</button></span>
                             <span>🏷️ Key: <b style="color: #a5b4fc; font-family: monospace;">${user.active_key}</b></span>
                         </div>
                         <div style="font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; margin-top: 6px;">
@@ -8903,6 +8948,9 @@
                             <button onclick="grantFreeAccessToTrader(${realIdx})" style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; border: none; padding: 4px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: 800;">
                                 ⚡ Grant VIP
                             </button>
+                            <button onclick="editTraderPassword(${realIdx})" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid #6366f1; padding: 4px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: 700;">
+                                ✏️ Edit Pass
+                            </button>
                             <button onclick="toggleLockTrader(${realIdx})" style="${isLocked ? 'background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981;' : 'background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444;'} padding: 4px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: 700; margin-left: auto;">
                                 ${isLocked ? '🔓 Unlock Access' : '🔒 Lock Access'}
                             </button>
@@ -8913,6 +8961,53 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        function toggleTraderPasswordVisibility(idx, evt) {
+            const displayElem = document.getElementById(`traderPassDisplay_${idx}`);
+            const btnElem = evt ? evt.currentTarget : null;
+            if (!displayElem) return;
+            const realPass = displayElem.getAttribute('data-pass') || '12345';
+            if (displayElem.innerText === '••••••') {
+                displayElem.innerText = realPass;
+                displayElem.style.color = '#34d399';
+                if (btnElem) btnElem.innerText = '🙈 Hide';
+            } else {
+                displayElem.innerText = '••••••';
+                displayElem.style.color = '#f43f5e';
+                if (btnElem) btnElem.innerText = '👁️ Show';
+            }
+        }
+
+        function editTraderPassword(idx) {
+            let log = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+            if (idx < 0 || idx >= log.length) return;
+            const user = log[idx];
+            const newPass = prompt(`🔑 Set New Password for Trader "${user.name}" (${user.mobile || user.email}):`, user.password || '12345');
+            if (newPass !== null) {
+                const trimmed = newPass.trim();
+                if (!trimmed) {
+                    alert("⚠️ Password cannot be empty!");
+                    return;
+                }
+                user.password = trimmed;
+                log[idx] = user;
+                localStorage.setItem('registered_traders_log', JSON.stringify(log));
+
+                const mobDigits = sanitizeMobile(user.mobile);
+                if (mobDigits) {
+                    localStorage.setItem(`app_user_pass_${mobDigits}`, trimmed);
+                }
+
+                const currentMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+                if (mobDigits && mobDigits === currentMobile) {
+                    localStorage.setItem('app_user_pass', trimmed);
+                }
+
+                logUserRegistrationToAdmin(user.name, user.mobile, user.email, user.active_key);
+                showToast(`🔑 Password updated for "${user.name}" to: ${trimmed}`, "✅");
+                renderRegisteredTradersList();
+            }
         }
 
         function renderRegisteredTradersList(isManualRefresh = false) {
@@ -8956,21 +9051,30 @@
             // Immediate render of local list
             drawTradersListUI(log, isManualRefresh);
 
-            // Fetch and merge remote traders from both local node server and Vercel cloud server
+            // Multi-tier Remote Sync: Local Server, Vercel Cloud Server, and KVDB Cloud Database
             const localApiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
                 ? `${window.location.origin}/api/sync-trader-log` 
                 : 'http://localhost:3000/api/sync-trader-log';
 
             const remoteApiUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
+            const directCloudUrl = 'https://kvdb.io/TT2026_Traders_DB_Key_991823/traders_log';
 
             const processRemoteResponse = (remoteData) => {
-                if (remoteData && remoteData.traders && Array.isArray(remoteData.traders) && remoteData.traders.length > 0) {
+                const tradersArray = Array.isArray(remoteData) ? remoteData : (remoteData && remoteData.traders ? remoteData.traders : null);
+                if (tradersArray && Array.isArray(tradersArray) && tradersArray.length > 0) {
                     let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
                     let updated = false;
-                    remoteData.traders.forEach(remoteItem => {
+
+                    tradersArray.forEach(remoteItem => {
+                        if (!remoteItem) return;
                         const trMob = remoteItem.mobile || 'N/A';
                         const trName = remoteItem.name || 'Trader';
                         const trEm = remoteItem.email || 'N/A';
+
+                        let rKey = remoteItem.active_key || 'FREE-TRIAL';
+                        if (rKey === 'TT2026-VIP-917660' && sanitizeMobile(trMob) !== '8102241463') {
+                            rKey = 'FREE-TRIAL';
+                        }
 
                         const idx = currentLocal.findIndex(l => 
                             (l.mobile && l.mobile !== 'N/A' && trMob !== 'N/A' && l.mobile === trMob) ||
@@ -8979,19 +9083,30 @@
                         );
 
                         if (idx === -1) {
+                            remoteItem.active_key = rKey;
                             currentLocal.unshift(remoteItem);
                             updated = true;
                         } else {
-                            if (remoteItem.password && remoteItem.password !== '******' && remoteItem.password !== currentLocal[idx].password) {
-                                currentLocal[idx].password = remoteItem.password;
+                            const cur = currentLocal[idx];
+                            if (remoteItem.password && remoteItem.password !== '******' && remoteItem.password !== '258963' && remoteItem.password !== cur.password) {
+                                cur.password = remoteItem.password;
                                 updated = true;
                             }
-                            if (remoteItem.last_login && remoteItem.last_login !== currentLocal[idx].last_login) {
-                                currentLocal[idx].last_login = remoteItem.last_login;
+                            if (remoteItem.last_login && remoteItem.last_login !== cur.last_login) {
+                                cur.last_login = remoteItem.last_login;
+                                updated = true;
+                            }
+                            if (rKey && rKey !== cur.active_key && (rKey !== 'FREE-TRIAL' || cur.active_key === 'TT2026-VIP-917660')) {
+                                cur.active_key = rKey;
+                                updated = true;
+                            }
+                            if (remoteItem.trial_status && remoteItem.trial_status !== cur.trial_status) {
+                                cur.trial_status = remoteItem.trial_status;
                                 updated = true;
                             }
                         }
                     });
+
                     if (updated) {
                         localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
                         drawTradersListUI(currentLocal, false);
@@ -9003,6 +9118,7 @@
             if (!localApiUrl.includes('trading-tracker-2026.vercel.app')) {
                 fetch(remoteApiUrl).then(r => r.json()).then(processRemoteResponse).catch(() => {});
             }
+            fetch(directCloudUrl).then(r => r.json()).then(processRemoteResponse).catch(() => {});
         }
 
         let currentGeneratedKey = "";
@@ -9049,7 +9165,7 @@
 
         function shareGeneratedKeyWhatsApp() {
             if (!currentGeneratedKey) return;
-            const priceMap = { 1: "Rs.1,999", 2: "Rs.3,500", 3: "Rs.5,500", 4: "Rs.7,500", 5: "Rs.9,500", 99: "Rs.14,999" };
+            const priceMap = { 1: "Rs.1,999 + GST", 2: "Rs.3,500 + GST", 3: "Rs.5,500 + GST", 4: "Rs.7,500 + GST", 5: "Rs.9,500 + GST", 99: "Rs.14,999 + GST" };
             const priceText = priceMap[currentGeneratedDuration] || "Rs.1,999";
             const durationText = currentGeneratedDuration === 99 ? 'Lifetime Access' : `${currentGeneratedDuration} Year(s) Access`;
             const text = encodeURIComponent(`Hello! Here is your Trading Tracker 2026 VIP Pro License Key:\n\n🔑 Key: ${currentGeneratedKey}\n⏱️ Validity Duration: ${durationText}\n💰 Plan Price: ${priceText}\n\nThank you for choosing Trading Tracker 2026 by Anurag Patel!`);

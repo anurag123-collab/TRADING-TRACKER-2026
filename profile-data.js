@@ -1,0 +1,1 @@
+window.PROFILE_AVATAR_BASE64 = "./profile.jpg";

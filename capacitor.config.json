@@ -1,0 +1,9 @@
+{
+  "appId": "com.anurag.tradingtracker",
+  "appName": "Trading Tracker 2026",
+  "webDir": "www",
+  "server": {
+    "url": "https://trading-tracker-2026.vercel.app",
+    "cleartext": true
+  }
+}
