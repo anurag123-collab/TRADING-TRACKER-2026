@@ -3992,7 +3992,7 @@
                 <span style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">All Rights Reserved</span>
             </div>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">
-                Support: <a href="mailto:support@thetradingtracker.com" style="color: #38bdf8; text-decoration: none;">support@thetradingtracker.com</a> • 
+                Support: <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; text-decoration: underline; font-weight: 700; cursor: pointer;">support@thetradingtracker.com</a> • 
                 Direct Line: <a href="tel:+918102241463" style="color: #38bdf8; text-decoration: none;">+91 8102241463</a> • 
                 WhatsApp: <a href="https://wa.me/918825255625" target="_blank" style="color: #25d366; text-decoration: none;">+91 8825255625</a>
             </p>
@@ -4322,6 +4322,17 @@
             const yTitle = document.getElementById('yearlyTitle');
             if (mTitle) mTitle.innerText = `${monthName} P&L`;
             if (yTitle) yTitle.innerText = `${yearNum} P&L`;
+        }
+
+        function openSupportEmail(email = 'support@thetradingtracker.com') {
+            const subject = encodeURIComponent('Trading Tracker 2026 Support Inquiry');
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+            const mailtoUrl = `mailto:${email}?subject=${subject}`;
+
+            const win = window.open(gmailUrl, '_blank');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
         }
 
         function onBrokerChange() {

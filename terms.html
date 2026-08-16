@@ -304,7 +304,7 @@
 
             <h2>4. Refund & Cancellation Policy</h2>
             <p>Because Trading Tracker 2026 provides a fully functional <b>7-Day Free Trial</b> prior to purchase, all VIP digital license activations and subscriptions are considered <b>final and non-refundable</b> once activated.</p>
-            <p>If you experience any technical defect or duplicate payment deduction, please email our support team at <a href="mailto:support@thetradingtracker.com" style="color: #38bdf8;">support@thetradingtracker.com</a> with your transaction ID within 48 hours for immediate resolution or credit correction.</p>
+            <p>If you experience any technical defect or duplicate payment deduction, please email our support team at <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; text-decoration: underline; font-weight: 700; cursor: pointer;">support@thetradingtracker.com</a> with your transaction ID within 48 hours for immediate resolution or credit correction.</p>
 
             <h2>5. Intellectual Property Rights</h2>
             <p>All intellectual property rights, algorithms, source code, logos, visual designs, UI graphics, and software documentation related to <b>Trading Tracker 2026</b> remain the exclusive property of <b>Anurag Patel</b>. You are granted a personal, non-transferable, non-exclusive license to use the service for individual personal trading tracking.</p>
@@ -322,7 +322,7 @@
             <h2>9. Contact Information</h2>
             <p>For inquiries regarding our terms, licensing, or commercial partnerships:</p>
             <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 14px; color: #cbd5e1;">
-                📧 <b>Legal & Support:</b> <a href="mailto:support@thetradingtracker.com" style="color: #38bdf8;">support@thetradingtracker.com</a><br>
+                📧 <b>Legal & Support:</b> <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; text-decoration: underline; font-weight: 700; cursor: pointer;">support@thetradingtracker.com</a><br>
                 👤 <b>Software Owner:</b> Anurag Patel<br>
                 📍 <b>Portal:</b> <a href="https://thetradingtracker.com" style="color: #38bdf8;">https://thetradingtracker.com</a>
             </div>
@@ -343,6 +343,18 @@
         <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        function openSupportEmail(email = 'support@thetradingtracker.com') {
+            const subject = encodeURIComponent('Trading Tracker 2026 Terms & Legal Inquiry');
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+            const mailtoUrl = `mailto:${email}?subject=${subject}`;
+
+            const win = window.open(gmailUrl, '_blank');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
+        }
+    </script>
 </body>
 
 </html>

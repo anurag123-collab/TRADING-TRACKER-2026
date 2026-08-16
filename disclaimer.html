@@ -318,7 +318,7 @@
             <h2>6. Contact Us</h2>
             <p>If you have any questions regarding this disclaimer, please reach out to our team:</p>
             <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 14px; color: #cbd5e1;">
-                📧 <b>Official Email:</b> <a href="mailto:support@thetradingtracker.com" style="color: #38bdf8;">support@thetradingtracker.com</a><br>
+                📧 <b>Official Email:</b> <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; text-decoration: underline; font-weight: 700; cursor: pointer;">support@thetradingtracker.com</a><br>
                 👤 <b>Founder:</b> Anurag Patel<br>
                 🌐 <b>Domain:</b> <a href="https://thetradingtracker.com" style="color: #38bdf8;">https://thetradingtracker.com</a>
             </div>
@@ -339,6 +339,18 @@
         <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        function openSupportEmail(email = 'support@thetradingtracker.com') {
+            const subject = encodeURIComponent('Trading Tracker 2026 Disclaimer Inquiry');
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+            const mailtoUrl = `mailto:${email}?subject=${subject}`;
+
+            const win = window.open(gmailUrl, '_blank');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
+        }
+    </script>
 </body>
 
 </html>

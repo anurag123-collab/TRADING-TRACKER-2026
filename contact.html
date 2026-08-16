@@ -395,12 +395,35 @@
                     </div>
                 </div>
 
-                <div class="info-item">
-                    <div class="info-icon">📧</div>
-                    <div class="info-text">
-                        <h4>Official Support Email</h4>
-                        <a href="mailto:support@thetradingtracker.com">support@thetradingtracker.com</a><br>
-                        <a href="mailto:anuragpateltrader@gmail.com">anuragpateltrader@gmail.com</a>
+                <div class="info-item" style="flex-direction: column; gap: 8px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 12px; padding: 14px;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="info-icon" style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4);">📧</div>
+                        <div class="info-text">
+                            <h4>Official Support Email</h4>
+                            <span style="font-size: 11px; color: #94a3b8;">Click below to send email or copy address</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Domain support email -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 12px; margin-top: 4px; width: 100%; box-sizing: border-box; flex-wrap: wrap; gap: 6px;">
+                        <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px;" title="Click to send email">
+                            <span>✉️ support@thetradingtracker.com</span>
+                        </a>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" onclick="openSupportEmail('support@thetradingtracker.com')" style="background: #4f46e5; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">🚀 Send Email</button>
+                            <button type="button" onclick="copySupportEmail('support@thetradingtracker.com', this)" style="background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <!-- Gmail backup email -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 12px; width: 100%; box-sizing: border-box; flex-wrap: wrap; gap: 6px;">
+                        <a href="javascript:void(0)" onclick="openSupportEmail('anuragpateltrader@gmail.com')" style="color: #a5b4fc; font-weight: 600; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px;" title="Click to send email">
+                            <span>✉️ anuragpateltrader@gmail.com</span>
+                        </a>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" onclick="openSupportEmail('anuragpateltrader@gmail.com')" style="background: #4f46e5; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">🚀 Send Email</button>
+                            <button type="button" onclick="copySupportEmail('anuragpateltrader@gmail.com', this)" style="background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.15); padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer;">📋 Copy</button>
+                        </div>
                     </div>
                 </div>
 
@@ -489,6 +512,36 @@
     </footer>
 
     <script>
+        function openSupportEmail(email = 'support@thetradingtracker.com') {
+            const subject = encodeURIComponent('Trading Tracker 2026 Support Inquiry');
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+            const mailtoUrl = `mailto:${email}?subject=${subject}`;
+
+            // 1. Try opening web Gmail composer first in new tab (guaranteed to work across all desktop & mobile browsers without needing desktop Outlook configured)
+            const win = window.open(gmailUrl, '_blank');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
+        }
+
+        function copySupportEmail(email, btnElem) {
+            navigator.clipboard.writeText(email).then(() => {
+                if (btnElem) {
+                    const oldText = btnElem.innerHTML;
+                    btnElem.innerHTML = "✓ Copied!";
+                    btnElem.style.background = "#10b981";
+                    btnElem.style.color = "#fff";
+                    setTimeout(() => {
+                        btnElem.innerHTML = oldText;
+                        btnElem.style.background = "";
+                        btnElem.style.color = "";
+                    }, 2000);
+                }
+            }).catch(() => {
+                prompt("Copy this support email:", email);
+            });
+        }
+
         function handleContactSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('name').value.trim();
@@ -512,6 +565,11 @@
                 document.getElementById('contactForm').reset();
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = "<span>🚀</span> Send Message";
+
+                // Also trigger email composer with prefilled message
+                const mailSubject = encodeURIComponent(`[${subject}] Inquiry from ${name}`);
+                const mailBody = encodeURIComponent(`Hello Support,\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n--- Sent from Contact Form`);
+                window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=support@thetradingtracker.com&su=${mailSubject}&body=${mailBody}`, '_blank');
             }, 800);
         }
     </script>

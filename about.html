@@ -344,10 +344,10 @@
                     <p style="margin-top: 6px; font-size: 13px; color: #cbd5e1;">
                         "As an active trader, I built Trading Tracker 2026 to solve the exact pain points I faced: slow spreadsheets, clunky interfaces, and zero actionable feedback. Our goal is to make every retail trader confident, structured, and profitable through verifiable data."
                     </p>
-                    <div style="margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px;">
+                    <div style="margin-top: 10px; display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; align-items: center;">
                         <span>📞 <b>Direct Line:</b> <a href="tel:+918102241463" style="color: #38bdf8; text-decoration: none;">+91 8102241463</a></span>
                         <span>📲 <b>WhatsApp:</b> <a href="https://wa.me/918825255625" target="_blank" style="color: #25d366; text-decoration: none;">+91 8825255625</a></span>
-                        <span>📧 <b>Email:</b> <a href="mailto:support@thetradingtracker.com" style="color: #cbd5e1; text-decoration: none;">support@thetradingtracker.com</a></span>
+                        <span>📧 <b>Email:</b> <a href="javascript:void(0)" onclick="openSupportEmail('support@thetradingtracker.com')" style="color: #38bdf8; text-decoration: underline; font-weight: 700; cursor: pointer;" title="Click to send email">support@thetradingtracker.com</a></span>
                     </div>
                 </div>
             </div>
@@ -414,6 +414,18 @@
         <p>© 2026 Trading Tracker 2026 by Anurag Patel. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        function openSupportEmail(email = 'support@thetradingtracker.com') {
+            const subject = encodeURIComponent('Trading Tracker 2026 Support Inquiry');
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
+            const mailtoUrl = `mailto:${email}?subject=${subject}`;
+
+            const win = window.open(gmailUrl, '_blank');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = mailtoUrl;
+            }
+        }
+    </script>
 </body>
 
 </html>
