@@ -1988,9 +1988,6 @@
                     <button type="button" onclick="cancelOtpVerification()" style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
                         ⬅️ Back to Login
                     </button>
-                    <button type="button" onclick="sendWhatsappOtp()" style="background: rgba(37,211,102,0.15); border: 1px solid #25d366; color: #25d366; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
-                        💬 WhatsApp OTP
-                    </button>
                     <button type="button" onclick="window.open('https://mail.google.com','_blank')" style="background: rgba(234,67,53,0.15); border: 1px solid #ea4335; color: #ea4335; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
                         📬 Open Gmail
                     </button>
@@ -4379,7 +4376,7 @@
             const emailjsTemplate = localStorage.getItem('emailjs_template_id');
 
             if (targetEmail && targetEmail.includes('@')) {
-                showToast(`⚡ Google/Gmail OTP: ${otpCode} (Auto-Copied to Clipboard!)`, "✉️");
+                showToast(`⚡ OTP sent to your registered Mobile & Email!`, "✉️");
             }
 
             if (window.emailjs && emailjsKey && emailjsService && emailjsTemplate && targetEmail) {
@@ -4812,23 +4809,11 @@
         }
 
         function autoFillForgotOtp() {
-            const code = document.getElementById('forgotOtpDisplay') ? document.getElementById('forgotOtpDisplay').innerText.trim() : '';
-            if (code && code.length === 4) {
-                if (document.getElementById('forgotOtp1')) document.getElementById('forgotOtp1').value = code[0];
-                if (document.getElementById('forgotOtp2')) document.getElementById('forgotOtp2').value = code[1];
-                if (document.getElementById('forgotOtp3')) document.getElementById('forgotOtp3').value = code[2];
-                if (document.getElementById('forgotOtp4')) document.getElementById('forgotOtp4').value = code[3];
-                showToast("⚡ Recovery OTP Auto-Filled!", "✅");
-                setTimeout(verifyForgotOTP, 250);
-            }
+            // Removed on-screen OTP auto-fill for mobile security
         }
 
         function sendWhatsappForgotOtp() {
-            const code = sessionStorage.getItem('forgot_otp_code') || (document.getElementById('forgotOtpDisplay') ? document.getElementById('forgotOtpDisplay').innerText.trim() : '');
-            const mob = (currentForgotAccount ? currentForgotAccount.mobile : '') || localStorage.getItem('app_user_mobile') || '';
-            const text = encodeURIComponent(`🔑 Your Trading Tracker 2026 Password Recovery OTP is: *${code}*`);
-            window.open(`https://api.whatsapp.com/send?phone=91${mob}&text=${text}`, '_blank');
-            showToast("💬 Opening WhatsApp for Recovery OTP...", "📲");
+            // WhatsApp OTP option removed - OTP sent strictly via SMS
         }
 
         function resendForgotPasswordOTP() {
@@ -4847,7 +4832,7 @@
             const email = currentForgotAccount ? (currentForgotAccount.email || inputVal) : inputVal;
             dispatchRealOTPMessage(email.includes('@') ? email : '', sanitizeMobile(mob), newOtp);
 
-            showToast(`🔄 New Recovery OTP sent via SMS & Email. Check your inbox!`, "📲");
+            showToast(`🔄 New Recovery OTP sent to your Mobile!`, "📲");
         }
 
         function forgotPassword() {
@@ -4875,17 +4860,12 @@
 
                         <div id="forgotStep2" style="display: none; text-align: center; margin-top: 10px;">
                             <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Enter 4-digit OTP code sent to <span id="forgotTargetText" style="color:#34d399; font-weight:700;"></span></p>
-                            
-                            <div style="background: rgba(16, 185, 129, 0.12); border: 1px dashed #34d399; border-radius: 10px; padding: 8px 12px; margin: 10px 0; font-size: 13px; font-weight: 800; color: #34d399; display: flex; align-items: center; justify-content: space-between;">
-                                <span>🔑 Demo / Security OTP: <b id="forgotOtpDisplay" style="letter-spacing: 2px; font-size: 16px;"></b></span>
-                                <button type="button" onclick="autoFillForgotOtp()" style="background: #10b981; color: #fff; border: none; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; cursor: pointer;">⚡ Auto Fill</button>
-                            </div>
 
-                            <div style="display: flex; gap: 8px; justify-content: center; margin: 14px 0;">
-                                <input type="text" id="forgotOtp1" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp2').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                                <input type="text" id="forgotOtp2" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp3').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                                <input type="text" id="forgotOtp3" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp4').focus()" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                                <input type="text" id="forgotOtp4" maxlength="1" style="width: 45px; height: 50px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                            <div style="display: flex; gap: 8px; justify-content: center; margin: 18px 0 14px 0;">
+                                <input type="text" id="forgotOtp1" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp2').focus()" style="width: 48px; height: 52px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                                <input type="text" id="forgotOtp2" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp3').focus()" style="width: 48px; height: 52px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                                <input type="text" id="forgotOtp3" maxlength="1" oninput="if(this.value) document.getElementById('forgotOtp4').focus()" style="width: 48px; height: 52px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                                <input type="text" id="forgotOtp4" maxlength="1" style="width: 48px; height: 52px; font-size: 22px; font-weight: 800; text-align: center; border-radius: 10px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
                             </div>
 
                             <button onclick="verifyForgotOTP()" class="btn btn-primary btn-block" style="padding: 12px; font-weight: 800; border-radius: 12px; width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff;">
@@ -4895,9 +4875,6 @@
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 11px;">
                                 <button type="button" onclick="document.getElementById('forgotStep2').style.display='none'; document.getElementById('forgotStep1').style.display='block';" style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
                                     ⬅️ Change Input
-                                </button>
-                                <button type="button" onclick="sendWhatsappForgotOtp()" style="background: rgba(37,211,102,0.15); border: 1px solid #25d366; color: #25d366; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
-                                    💬 WhatsApp OTP
                                 </button>
                                 <button type="button" id="forgotResendBtn" onclick="resendForgotPasswordOTP()" style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
                                     🔄 Resend OTP (<span id="forgotTimerCount">30</span>s)
@@ -4989,7 +4966,7 @@
                 console.error("dispatchRealOTPMessage error:", e);
             }
 
-            showToast(`📩 Recovery OTP sent to ${targetText} — Check your SMS & Email!`, "🔑");
+            showToast(`📩 Recovery OTP sent to ${targetText} — Check your Mobile SMS!`, "🔑");
         }
 
         function verifyForgotOTP() {
@@ -5024,7 +5001,7 @@
                 showToast("✅ OTP Verified! Password Recovered.", "🔑");
             } else {
                 if (errDiv) {
-                    errDiv.innerText = "❌ Incorrect OTP Code! Please check the code shown in green or sent via SMS/Email.";
+                    errDiv.innerText = "❌ Incorrect OTP Code! Please check the 4-digit OTP sent to your Mobile Number.";
                     errDiv.style.display = 'block';
                 }
             }
@@ -5128,7 +5105,7 @@
 
             dispatchRealOTPMessage(email, mobile, generatedOtp);
 
-            showToast(`📩 Account Verification OTP: ${generatedOtp}`, "📝");
+            showToast(`📩 Account Verification OTP sent to your Mobile!`, "📝");
         }
 
         function moveOtpFocus(boxNum, event) {
@@ -5202,7 +5179,7 @@
 
             dispatchRealOTPMessage(targetUser.includes('@') ? targetUser : savedEmail, targetUser, generatedOtp);
 
-            showToast(`🔄 New OTP Dispatched: ${generatedOtp}`, "📩");
+            showToast(`🔄 New OTP sent to your Mobile!`, "📩");
         }
 
         function resendAuthOTP() {
@@ -9399,11 +9376,7 @@
         }
 
         function sendWhatsappOtp() {
-            const code = document.getElementById('otpCodeDisplay') ? document.getElementById('otpCodeDisplay').innerText.trim() : '';
-            const mob = localStorage.getItem('app_user_mobile') || '';
-            const text = encodeURIComponent(`🔑 Your Trading Tracker 2026 Verification OTP is: *${code}*`);
-            window.open(`https://api.whatsapp.com/send?phone=91${mob}&text=${text}`, '_blank');
-            showToast("💬 Opening WhatsApp for Text OTP...", "📲");
+            // WhatsApp OTP option removed - OTP sent strictly via SMS
         }
 
         function triggerOtpDelivery(userInput, userDigits, generatedOtp) {
