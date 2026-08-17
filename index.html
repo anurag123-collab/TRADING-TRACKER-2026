@@ -2542,7 +2542,7 @@
                         <span class="nav-icon">🛡️</span> <span>Privacy & Legal</span>
                     </a>
                 </li>
-                <li id="sidebarAdminNavItem" style="display: block;">
+                <li id="sidebarAdminNavItem" style="display: none;">
                     <a class="nav-item" href="javascript:void(0)" data-tooltip="Admin Licensing Portal"
                         onclick="openAdminLicensingPortal()"
                         style="color: #fbbf24; font-weight: 800; cursor: pointer; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.25) 100%); border: 1.5px solid #f59e0b; border-radius: 10px; margin-top: 6px; box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);">
@@ -2627,50 +2627,66 @@
                         </div>
                     </div>
                     <div class="dashboard-toolbar-actions">
-                        <button class="btn btn-sm" onclick="openAdminLicensingPortal()"
-                            style="background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); color: #fff; font-weight: 900; border: 1px solid #fbbf24; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 12px rgba(245,158,11,0.5);"
+                        <button id="adminPortalBtn" class="btn btn-sm" onclick="openAdminLicensingPortal()"
+                            style="display: none; background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); color: #fff; font-weight: 900; border: 1px solid #fbbf24; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 12px rgba(245,158,11,0.5);"
                             title="Open Master Admin Licensing Portal (View Users & Generate VIP Keys)">
                             <span>👑</span> Admin Portal
                         </button>
                         <button class="btn btn-sm" onclick="openDhanImportModal()"
                             style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 800; border: 1px solid #34d399; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 10px rgba(16,185,129,0.4);"
                             title="1-Click Auto Import Trades from Dhan, Zerodha, Upstox, Angel One, Groww, Cosmic Trade, Exness & 28+ Platforms">
-                            <span>⚡</span> Import Broker Trades
+                            <span>⚡</span> Import Broker Trades <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openConstitutionModal()"
                             style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; font-weight: 800; border: 1px solid #f472b6; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 10px rgba(236,72,153,0.4);"
                             title="Set your personal trading rules (Max trades, risk %, cut-off time)">
-                            <span>🎯</span> Constitution
+                            <span>🎯</span> Constitution <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openReplayDayModal()"
                             style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff; font-weight: 800; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 10px rgba(14,165,233,0.4);"
                             title="Interactive step-by-step timeline replay of your trading day">
-                            <span>🧪</span> Replay Day
+                            <span>🧪</span> Replay Day <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openDataVaultModal()"
                             style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #34d399; font-weight: 800; padding: 6px 12px; border-radius: 8px; cursor: pointer;"
                             title="1-Click Encrypted Data Vault & Account Disaster Recovery Archive">
-                            <span>🛡️</span> Data Vault
+                            <span>🛡️</span> Data Vault <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openTaxAuditReportModal()"
                             style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; font-weight: 800; border: 1px solid #818cf8; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 10px rgba(99,102,241,0.4);"
                             title="1-Click CA & Income Tax Audit Statement for F&O (Sec 44AD / ICAI)">
-                            <span>📑</span> CA Tax Report
+                            <span>📑</span> CA Tax Report <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openBrokerReconciliationModal()"
                             style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #fbbf24; font-weight: 800; padding: 6px 12px; border-radius: 8px; cursor: pointer;"
                             title="Reconcile P&L and charges with official Broker Contract Note">
-                            <span>🧾</span> Reconcile
+                            <span>🧾</span> Reconcile <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="openTradingPassportModal()"
                             style="background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: #fff; font-weight: 800; border: 1px solid #c084fc; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 10px rgba(168,85,247,0.4);"
                             title="1-Click Verified Personal Trading Passport Certificate">
-                            <span>📜</span> Passport
+                            <span>📜</span> Passport <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-sm" onclick="sendWhatsAppDailyReport()"
                             style="background: #25d366; color: #fff; font-weight: 800; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px rgba(37,211,102,0.4);"
                             title="Share Today's P&L Report on WhatsApp">
-                            <span>📲</span> Share WhatsApp
+                            <span>📲</span> Share WhatsApp <span class="badge-pro-tag"
+                                style="display: none; font-size: 9px; background: rgba(239,68,68,0.35); color: #fca5a5; padding: 1px 5px; border-radius: 6px; margin-left: 3px;">🔒
+                                PRO</span>
                         </button>
                         <button class="btn btn-secondary btn-sm" onclick="refreshApp()"
                             title="Refresh All Dashboard Data & Charts (Alt + R)">
@@ -5501,13 +5517,12 @@
         function switchTab(tabId, el) {
             if (!tabId) return;
 
-            const proTabs = ['aiCoachTab', 'tradingViewTab', 'leaderboardTab', 'brokersTab'];
+            const proTabs = ['aiCoachTab', 'tradingViewTab', 'leaderboardTab'];
             if (proTabs.includes(tabId) && typeof isProUnlocked === 'function' && !isProUnlocked()) {
                 const tabNames = {
                     'aiCoachTab': 'AI Coach',
                     'tradingViewTab': 'Live Charts',
-                    'leaderboardTab': 'Leaderboard',
-                    'brokersTab': 'Broker Deals'
+                    'leaderboardTab': 'Leaderboard'
                 };
                 showToast(`🔒 ${tabNames[tabId] || 'This feature'} is a VIP PRO feature! Upgrade to VIP Pro to unlock.`, "👑");
                 if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
@@ -7643,6 +7658,16 @@
             checkVipAccessStatus();
             try { renderVipBadgeAndInfo(); } catch (e) { }
 
+            // Show/hide Admin-only UI elements
+            const adminPortalBtn = document.getElementById('adminPortalBtn');
+            if (adminPortalBtn) {
+                adminPortalBtn.style.display = isMasterAdminAccount ? 'inline-flex' : 'none';
+            }
+            const adminSidebarItem = document.getElementById('sidebarAdminNavItem');
+            if (adminSidebarItem) {
+                adminSidebarItem.style.display = isMasterAdminAccount ? 'block' : 'none';
+            }
+
             setTimeout(() => {
                 try { initCurrentTradeDate(false); } catch (e) { console.error(e); }
                 try { loadTrades(); } catch (e) { console.error(e); }
@@ -9328,6 +9353,11 @@
         }
 
         function openTaxAuditReportModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 CA Tax Audit Report is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const existing = document.getElementById('taxAuditModal');
             if (existing) existing.remove();
 
@@ -9440,6 +9470,11 @@
         // 🧾 BROKER RECONCILIATION ENGINE
         // ============================================================
         function openBrokerReconciliationModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Broker Reconciliation is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const existing = document.getElementById('brokerReconcileModal');
             if (existing) existing.remove();
 
@@ -9545,6 +9580,11 @@
         }
 
         function openConstitutionModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Personal Trading Constitution is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const existing = document.getElementById('constitutionModal');
             if (existing) existing.remove();
 
@@ -9611,6 +9651,11 @@
         // 🧪 "REPLAY MY TRADING DAY" INTERACTIVE TIMELINE
         // ============================================================
         function openReplayDayModal(selectedDate) {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Replay Day is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const existing = document.getElementById('replayDayModal');
             if (existing) existing.remove();
 
@@ -9714,6 +9759,11 @@
         // 🛡️ INDEPENDENT ENCRYPTED DATA VAULT ENGINE
         // ============================================================
         function openDataVaultModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Data Vault & Cloud Backup is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const existing = document.getElementById('dataVaultModal');
             if (existing) existing.remove();
 
@@ -12236,7 +12286,7 @@
 
             const adminNavItem = document.getElementById('sidebarAdminNavItem');
             if (adminNavItem) {
-                adminNavItem.style.display = 'block';
+                adminNavItem.style.display = isAdmin ? 'block' : 'none';
             }
             const adminAffiliateCard = document.getElementById('adminAffiliateConfigCard');
             if (adminAffiliateCard) {
@@ -12331,7 +12381,7 @@
                     bannerBox.style.display = 'flex';
                 } else {
                     if (bannerTitle) bannerTitle.innerText = "⚡ FREE MODE ACTIVE (7-Day Trial Expired)";
-                    if (bannerSub) bannerSub.innerText = "Website is free to use! Upgrade to VIP Pro to unlock AI Coach, Live Charts, Leaderboard, Excel/PDF Exports, Hide Values, Widget Visibility & WhatsApp Sharing.";
+                    if (bannerSub) bannerSub.innerText = "Website is free to use! Upgrade to VIP Pro to unlock AI Coach, Live Charts, Leaderboard, Broker Imports, Constitution, Replay Day, Data Vault, CA Tax Report, Reconcile, Passport, Excel/PDF Exports & WhatsApp Sharing.";
                     bannerBox.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)';
                     bannerBox.style.borderColor = 'rgba(239, 68, 68, 0.4)';
                     bannerBox.style.display = 'flex';
@@ -12369,8 +12419,8 @@
                 navBadgeLeaderboard.style.background = unlocked ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
             }
             if (navBadgeBrokers) {
-                navBadgeBrokers.innerText = unlocked ? 'EARN' : '🔒 PRO';
-                navBadgeBrokers.style.background = unlocked ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                navBadgeBrokers.innerText = 'EARN';
+                navBadgeBrokers.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
             }
 
             document.querySelectorAll('.badge-pro-tag').forEach(tag => {
@@ -13476,6 +13526,11 @@
         };
 
         function openDhanImportModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Import Broker Trades is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const todayStr = new Date().toISOString().slice(0, 10);
             const dateInput = document.getElementById('brokerApiDate');
             if (dateInput && !dateInput.value) dateInput.value = todayStr;
@@ -13848,6 +13903,11 @@
 
         // 2. CONSTITUTION MODAL
         function openConstitutionModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Personal Trading Constitution is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const maxLoss = localStorage.getItem('constitution_max_loss') || '2000';
             const maxTrades = localStorage.getItem('constitution_max_trades') || '3';
             const cutoff = localStorage.getItem('constitution_cutoff_time') || '14:30';
@@ -13881,6 +13941,11 @@
 
         // 3. REPLAY DAY MODAL
         function openReplayDayModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Replay Day is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const today = new Date().toISOString().slice(0, 10);
             const dateInput = document.getElementById('replayDateSelect');
             if (dateInput && !dateInput.value) dateInput.value = today;
@@ -13928,6 +13993,11 @@
 
         // 4. DATA VAULT MODAL
         function openDataVaultModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Data Vault & Cloud Backup is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const m = document.getElementById('dataVaultModal');
             if (m) m.style.display = 'flex';
         }
@@ -13935,6 +14005,11 @@
 
         // 5. CA TAX AUDIT REPORT MODAL
         function openTaxAuditReportModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 CA Tax Audit Report is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const box = document.getElementById('taxReportDetailsBox');
             if (box) {
                 const trades = getLoggedTrades();
@@ -13985,6 +14060,11 @@
 
         // 6. BROKER RECONCILIATION MODAL
         function openBrokerReconciliationModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Broker Reconciliation is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const m = document.getElementById('brokerReconciliationModal');
             if (m) m.style.display = 'flex';
         }
@@ -14026,6 +14106,11 @@
 
         // 7. TRADING PASSPORT MODAL
         function openTradingPassportModal() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Verified Trading Passport is a VIP PRO feature! Upgrade to VIP Pro to unlock.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
             const box = document.getElementById('passportCardContent');
             if (box) {
                 const name = localStorage.getItem('trader_full_name') || 'Anurag Patel';
