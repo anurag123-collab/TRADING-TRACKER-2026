@@ -39,17 +39,17 @@
     <script>
         (function () {
             try {
+                var isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true';
                 var isExplicitLoggedOut = localStorage.getItem('user_explicit_logged_out') === 'true';
-                if (isExplicitLoggedOut) {
-                    document.documentElement.classList.add('auth-locked');
-                    document.documentElement.classList.remove('auth-unlocked');
-                } else {
-                    sessionStorage.setItem('session_authenticated', 'true');
+                if (isSessionAuth && !isExplicitLoggedOut) {
                     document.documentElement.classList.add('auth-unlocked');
                     document.documentElement.classList.remove('auth-locked');
+                } else {
+                    document.documentElement.classList.add('auth-locked');
+                    document.documentElement.classList.remove('auth-unlocked');
                 }
             } catch (e) {
-                document.documentElement.classList.add('auth-unlocked');
+                document.documentElement.classList.add('auth-locked');
             }
         })();
     </script>
@@ -5488,7 +5488,7 @@
         // Init Storage Keys
         if (!localStorage.getItem('app_user_id') || localStorage.getItem('app_user_id') === 'Anurag') localStorage.setItem('app_user_id', "Anurag Patel");
         if (!localStorage.getItem('trader_full_name') || localStorage.getItem('trader_full_name') === 'Anurag') localStorage.setItem('trader_full_name', "Anurag Patel");
-        if (!localStorage.getItem('pass_frequency')) localStorage.setItem('pass_frequency', "monday");
+        if (!localStorage.getItem('pass_frequency')) localStorage.setItem('pass_frequency', "always");
         if (!localStorage.getItem('initial_capital')) localStorage.setItem('initial_capital', "50000");
         if (!localStorage.getItem('total_added_capital')) localStorage.setItem('total_added_capital', "0");
         if (!localStorage.getItem('total_withdrawn')) localStorage.setItem('total_withdrawn', "0");
@@ -6508,7 +6508,7 @@
             }
 
             const isUserRegistered = localStorage.getItem('user_registered') === 'true' || !!localStorage.getItem('app_user_id');
-            const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
+            const activeUser = localStorage.getItem('app_user_id') || 'Anurag Patel';
             const activeMobile = localStorage.getItem('app_user_mobile') || '';
             const activeEmail = localStorage.getItem('app_user_email') || '';
             const uInput = document.getElementById('loginUser');
@@ -6526,25 +6526,29 @@
                 }
             } else {
                 switchAuthTab('login');
-                if (notice && lockStatus) {
-                    if (lockStatus.reason === 'user_logged_out') {
+                if (notice) {
+                    if (lockStatus && lockStatus.reason === 'user_logged_out') {
                         notice.innerHTML = '🚪 <b>Logged Out Successfully</b><br><span style="font-size:10px; opacity:0.9;">Enter your password or Mobile OTP to unlock dashboard.</span>';
-                        notice.style.display = 'block';
-                    } else if (lockStatus.reason === 'not_logged_in') {
+                    } else if (lockStatus && lockStatus.reason === 'not_logged_in') {
                         notice.innerHTML = '🔒 <b>Trader Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your 10-digit Mobile Number or Email ID to access your dashboard.</span>';
-                        notice.style.display = 'block';
-                    } else if (lockStatus.reason === 'always_required') {
-                        notice.innerHTML = '🚪 <b>Trader Session Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your password or use Mobile OTP to unlock dashboard.</span>';
-                        notice.style.display = 'block';
-                    } else if (lockStatus.reason === 'monday_expired') {
+                    } else if (lockStatus && lockStatus.reason === 'always_required') {
+                        notice.innerHTML = '🔑 <b>Trader Authentication Required</b><br><span style="font-size:10px; opacity:0.9;">Enter your password or use Mobile OTP to unlock dashboard.</span>';
+                    } else if (lockStatus && lockStatus.reason === 'monday_expired') {
                         notice.innerHTML = '🗓️ <b>Monday Trading Week Verification</b><br><span style="font-size:10px; opacity:0.9;">A new trading week started! Verify your Mobile or password to continue.</span>';
-                        notice.style.display = 'block';
                     } else {
-                        notice.innerHTML = '🔒 <b>Trader Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter Mobile Number or password to unlock dashboard.</span>';
-                        notice.style.display = 'block';
+                        notice.innerHTML = '🔑 <b>Trader Authentication Portal</b><br><span style="font-size:10px; opacity:0.9;">Enter Mobile Number or password to unlock dashboard.</span>';
                     }
+                    notice.style.display = 'block';
                 }
             }
+
+            setTimeout(() => {
+                if (uInput && !uInput.value) {
+                    uInput.focus();
+                } else if (pInput) {
+                    pInput.focus();
+                }
+            }, 150);
         }
 
         let otpTimerInterval = null;
@@ -15665,12 +15669,20 @@
             try { initSidebarState(); } catch (e) { }
 
             let isExplicitLoggedOut = false;
+            let isSessionAuth = false;
             try { isExplicitLoggedOut = localStorage.getItem('user_explicit_logged_out') === 'true'; } catch (e) { }
+            try { isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true'; } catch (e) { }
 
-            if (isExplicitLoggedOut) {
-                showLoginScreen({ requiresPassword: true, reason: 'user_logged_out' });
+            let lockStatus = { requiresPassword: true, reason: 'always_required' };
+            try {
+                if (typeof checkPasswordLockStatus === 'function') {
+                    lockStatus = checkPasswordLockStatus();
+                }
+            } catch (e) { }
+
+            if (!isSessionAuth || isExplicitLoggedOut || lockStatus.requiresPassword) {
+                showLoginScreen(lockStatus);
             } else {
-                sessionStorage.setItem('session_authenticated', 'true');
                 openDashboardScreen();
             }
 
