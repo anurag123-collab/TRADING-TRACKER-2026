@@ -1,5 +1,5 @@
-// Service Worker for Trading Tracker 2026 - Offline PWA Support
-const CACHE_NAME = 'trading-tracker-v1.0.0';
+// Service Worker for Trading Tracker 2026 - Ultra-Fast PWA & Instant Updates
+const CACHE_NAME = 'trading-tracker-v2.9.9-' + Date.now();
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -10,24 +10,26 @@ const ASSETS_TO_CACHE = [
     './version.json'
 ];
 
-// Install Event - Pre-cache core app shell
+// Install Event - Pre-cache core app shell & skip waiting immediately
 self.addEventListener('install', (event) => {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('[ServiceWorker] Caching App Shell');
             return cache.addAll(ASSETS_TO_CACHE);
-        }).then(() => self.skipWaiting())
+        }).catch((err) => {
+            console.warn('[ServiceWorker] Cache install warning:', err);
+        })
     );
 });
 
-// Activate Event - Clean up old caches
+// Activate Event - Immediately purge all old cache versions
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keyList) => {
             return Promise.all(
                 keyList.map((key) => {
                     if (key !== CACHE_NAME) {
-                        console.log('[ServiceWorker] Removing old cache', key);
+                        console.log('[ServiceWorker] Purging old cache version:', key);
                         return caches.delete(key);
                     }
                 })
@@ -36,12 +38,26 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch Event - Stale-while-revalidate strategy for maximum speed & offline reliability
+// Fetch Event - Network First for HTML, fast cache for static assets
 self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
 
-    // Ignore API network requests to allow live sync
     if (event.request.url.includes('/api/')) {
+        return;
+    }
+
+    const isHtml = event.request.mode === 'navigate' || (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html'));
+
+    if (isHtml) {
+        event.respondWith(
+            fetch(event.request).then((networkResponse) => {
+                if (networkResponse && networkResponse.status === 200) {
+                    const responseClone = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+                }
+                return networkResponse;
+            }).catch(() => caches.match(event.request))
+        );
         return;
     }
 
@@ -55,10 +71,7 @@ self.addEventListener('fetch', (event) => {
                     });
                 }
                 return networkResponse;
-            }).catch(() => {
-                // If offline and request fails, return cached response
-                return cachedResponse;
-            });
+            }).catch(() => cachedResponse);
 
             return cachedResponse || fetchPromise;
         })

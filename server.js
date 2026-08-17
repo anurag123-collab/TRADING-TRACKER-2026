@@ -240,6 +240,137 @@ const server = http.createServer((req, res) => {
         }
     }
 
+    // ============================================================
+    // API ROUTE: /api/sync-user-trades (GET & POST) — High-Scale Cloud Trade Sync
+    // ============================================================
+    if (cleanUrl === '/api/sync-user-trades') {
+        const USER_TRADES_DIR = path.join(PUBLIC_DIR, 'user_data');
+        if (!fs.existsSync(USER_TRADES_DIR)) {
+            try { fs.mkdirSync(USER_TRADES_DIR, { recursive: true }); } catch (e) {}
+        }
+
+        const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+        const rawUserId = urlObj.searchParams.get('user_id') || urlObj.searchParams.get('mobile') || urlObj.searchParams.get('email');
+
+        if (req.method === 'GET') {
+            if (!rawUserId) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: false, error: 'user_id parameter is required' }));
+            }
+            const cleanId = String(rawUserId).replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
+            const userFile = path.join(USER_TRADES_DIR, `trades_${cleanId}.json`);
+
+            if (fs.existsSync(userFile)) {
+                try {
+                    const data = JSON.parse(fs.readFileSync(userFile, 'utf-8'));
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ success: true, exists: true, ...data }));
+                } catch (e) {}
+            }
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ success: true, exists: false, tradesHtml: '', tradesCount: 0 }));
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk.toString(); });
+            req.on('end', () => {
+                try {
+                    const payload = JSON.parse(body || '{}');
+                    const targetUser = payload.userId || payload.mobile || payload.email || rawUserId;
+                    if (!targetUser) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ success: false, error: 'userId is required' }));
+                    }
+
+                    const cleanId = String(targetUser).replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
+                    const userFile = path.join(USER_TRADES_DIR, `trades_${cleanId}.json`);
+
+                    const tradeRecord = {
+                        userId: cleanId,
+                        tradesHtml: payload.tradesHtml || '',
+                        tradesCount: payload.tradesCount || 0,
+                        capital: payload.capital || null,
+                        updatedAt: new Date().toISOString()
+                    };
+
+                    fs.writeFileSync(userFile, JSON.stringify(tradeRecord, null, 2), 'utf-8');
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ success: true, message: 'Trades safely synced', ...tradeRecord }));
+                } catch (e) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload' }));
+                }
+            });
+            return;
+        }
+    }
+
+    // ============================================================
+    // API ROUTE: /api/dhan-sync (POST) — DhanHQ 1-Click Trade Auto-Import
+    // ============================================================
+    if (cleanUrl === '/api/dhan-sync' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try {
+                const payload = JSON.parse(body || '{}');
+                const clientId = payload.clientId || req.headers['client-id'];
+                const accessToken = payload.accessToken || req.headers['access-token'];
+                const targetDate = payload.date || new Date().toISOString().slice(0, 10);
+
+                if (!clientId || !accessToken) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ success: false, error: 'Dhan Client ID and Access Token required' }));
+                }
+
+                const dhanReq = https.request({
+                    hostname: 'api.dhan.co',
+                    path: '/v2/trades',
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'access-token': accessToken,
+                        'client-id': clientId
+                    },
+                    timeout: 8000
+                }, (dhanRes) => {
+                    let dData = '';
+                    dhanRes.on('data', chunk => { dData += chunk; });
+                    dhanRes.on('end', () => {
+                        try {
+                            const parsed = JSON.parse(dData || '[]');
+                            res.writeHead(200, { 'Content-Type': 'application/json' });
+                            return res.end(JSON.stringify({ success: true, trades: Array.isArray(parsed) ? parsed : [], date: targetDate }));
+                        } catch (e) {
+                            res.writeHead(200, { 'Content-Type': 'application/json' });
+                            return res.end(JSON.stringify({ success: true, trades: [], raw: dData }));
+                        }
+                    });
+                });
+
+                dhanReq.on('error', (e) => {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: false, error: e.message }));
+                });
+
+                dhanReq.on('timeout', () => {
+                    dhanReq.destroy();
+                    res.writeHead(504, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: false, error: 'Dhan API request timed out' }));
+                });
+
+                dhanReq.end();
+            } catch (err) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload' }));
+            }
+        });
+        return;
+    }
+
     if (cleanUrl === '/') cleanUrl = '/index.html';
 
     // Direct match for APK download requests
