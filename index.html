@@ -34,6 +34,25 @@
     <meta name="twitter:image" content="https://thetradingtracker.com/profile.jpg">
     <meta name="google-site-verification" content="google0bf3624461f65d7b" />
 
+    <!-- Immediate Zero-Flash Auth Shield: Completely Prevents Dashboard Flashing on Load -->
+    <script>
+        (function() {
+            try {
+                var isRegistered = localStorage.getItem('user_registered') === 'true' || !!localStorage.getItem('app_user_id');
+                var isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true';
+                if (!isRegistered || !isSessionAuth) {
+                    document.documentElement.classList.add('auth-locked');
+                    document.documentElement.classList.remove('auth-unlocked');
+                } else {
+                    document.documentElement.classList.add('auth-unlocked');
+                    document.documentElement.classList.remove('auth-locked');
+                }
+            } catch (e) {
+                document.documentElement.classList.add('auth-locked');
+            }
+        })();
+    </script>
+
     <!-- Google Structured Data / Schema.org for Founder Anurag Patel -->
     <script type="application/ld+json">
     {
@@ -313,6 +332,20 @@
             overflow-x: hidden;
         }
 
+        /* --- ZERO-FLASH AUTH SECURITY SHIELD --- */
+        html.auth-locked #appContainer {
+            display: none !important;
+        }
+        html.auth-locked #loginScreen {
+            display: flex !important;
+        }
+        html.auth-unlocked #loginScreen {
+            display: none !important;
+        }
+        html.auth-unlocked #appContainer {
+            display: flex !important;
+        }
+
         /* --- LOGIN SCREEN --- */
         #loginScreen {
             display: flex;
@@ -539,17 +572,20 @@
         .sidebar-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding-bottom: 16px;
+            gap: 8px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--card-border);
             margin-bottom: 14px;
             transition: all 0.3s ease;
             flex-shrink: 0;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
         }
 
         .brand-avatar {
-            width: 42px;
-            height: 42px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             padding: 2px;
             background: linear-gradient(135deg, var(--primary), #818cf8);
@@ -565,26 +601,60 @@
             display: block;
         }
 
+        .brand-info {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
         .brand-info h3 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             line-height: 1.2;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
         }
 
         .brand-info span {
             font-size: 11px;
             color: var(--text-muted);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        #sidebarVipBadge {
+            margin-top: 3px;
+            font-size: 9.5px;
+            font-weight: 800;
+            color: #fde047;
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid #eab308;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            box-shadow: 0 0 8px rgba(234,179,8,0.25);
         }
 
         .sidebar-toggle-btn {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--card-border);
             color: var(--text-main);
             border-radius: 8px;
             width: 32px;
             height: 32px;
+            min-width: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -593,13 +663,14 @@
             margin-left: auto;
             flex-shrink: 0;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .sidebar-toggle-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         .sidebar-quick-actions {
@@ -2021,7 +2092,7 @@
     </div>
 
     <!-- 1. AUTHENTICATION & LOGIN SCREEN OVERLAY -->
-    <div id="loginScreen" style="display: none;">
+    <div id="loginScreen">
         <div
             style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; align-items: center; z-index: 100;">
             <!-- 2Factor SMS Gateway button removed -->
@@ -2183,7 +2254,7 @@
     </div>
 
     <!-- 2. MAIN APP CONTAINER -->
-    <div id="appContainer" style="display: flex;">
+    <div id="appContainer">
         <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="sidebar-brand">
@@ -4761,11 +4832,18 @@
         }
 
         function showLoginScreen(lockStatus) {
+            document.documentElement.classList.add('auth-locked');
+            document.documentElement.classList.remove('auth-unlocked');
             const appCont = document.getElementById('appContainer');
             const loginScr = document.getElementById('loginScreen');
-            if (appCont) appCont.style.display = 'none';
-            if (loginScr) loginScr.style.display = 'flex';
+            if (appCont) appCont.style.cssText = "display: none !important;";
+            if (loginScr) loginScr.style.cssText = "display: flex !important;";
 
+            if (!lockStatus && typeof checkPasswordLockStatus === 'function') {
+                try { lockStatus = checkPasswordLockStatus(); } catch (e) { }
+            }
+
+            const isUserRegistered = localStorage.getItem('user_registered') === 'true' || !!localStorage.getItem('app_user_id');
             const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
             const activeMobile = localStorage.getItem('app_user_mobile') || '';
             const activeEmail = localStorage.getItem('app_user_email') || '';
@@ -4776,7 +4854,7 @@
 
             const notice = document.getElementById('loginSecurityNotice');
 
-            if (lockStatus && lockStatus.reason === 'new_device_signup') {
+            if (!isUserRegistered || (lockStatus && lockStatus.reason === 'new_device_signup')) {
                 switchAuthTab('signup');
                 if (notice) {
                     notice.innerHTML = '✨ <b>Welcome to Trading Tracker 2026!</b><br><span style="font-size:10px; opacity:0.9;">Create your trader account below to start tracking your trades safely.</span>';
@@ -4905,35 +4983,8 @@
         }
 
         function dispatchRealOTPMessage(email, mobile, otpCode) {
-            // 1. Auto-copy OTP code to Clipboard for 1-click paste
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(otpCode);
-                }
-            } catch (e) { }
-
-            // 2. Mobile Push Notification Banner
-            if ("Notification" in window) {
-                if (Notification.permission === "granted") {
-                    try {
-                        new Notification("📩 Trading Tracker OTP", {
-                            body: `Your Login OTP is: ${otpCode} (Trading Tracker 2026)`,
-                            icon: "profile.jpg"
-                        });
-                    } catch (e) { }
-                } else if (Notification.permission !== "denied") {
-                    try {
-                        Notification.requestPermission().then(permission => {
-                            if (permission === "granted") {
-                                new Notification("📩 Trading Tracker OTP", {
-                                    body: `Your Login OTP is: ${otpCode} (Trading Tracker 2026)`,
-                                    icon: "profile.jpg"
-                                });
-                            }
-                        });
-                    } catch (e) { }
-                }
-            }
+            // Note: On-screen Chrome popup & clipboard copy disabled as requested by user.
+            // OTP is sent strictly and securely to the registered Mobile number via SMS & Email.
 
             // 3. Real Email Sending via EmailJS & Google Mail Notification
             const targetEmail = email || localStorage.getItem('app_user_email') || '';
@@ -5858,6 +5909,9 @@
             // Auto-log active user connection into Admin Traders Log
             logUserRegistrationToAdmin(traderName, traderMobile, traderEmail, traderKey);
 
+            document.documentElement.classList.remove('auth-locked');
+            document.documentElement.classList.add('auth-unlocked');
+
             if (loginScreen) {
                 loginScreen.style.cssText = "display: none !important;";
             }
@@ -5889,17 +5943,6 @@
                 try { loadCustomBrokerLinks(); } catch (e) { console.error(e); }
                 try { loadAdSenseConfig(); } catch (e) { console.error(e); }
             }, 30);
-        }
-
-        function showLoginScreen(options) {
-            const loginScreen = document.getElementById('loginScreen');
-            const appContainer = document.getElementById('appContainer');
-            if (loginScreen) {
-                loginScreen.style.cssText = "display: flex !important;";
-            }
-            if (appContainer) {
-                appContainer.style.cssText = "display: none !important;";
-            }
         }
 
         function handleLogout() {
@@ -5954,20 +5997,13 @@
 
                 let isUserRegistered = false;
                 let isSessionAuth = false;
-                try { isUserRegistered = localStorage.getItem('user_registered') === 'true'; } catch (e) { }
+                try { isUserRegistered = localStorage.getItem('user_registered') === 'true' || !!localStorage.getItem('app_user_id'); } catch (e) { }
                 try { isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true'; } catch (e) { }
 
-                // STEP 1: IF NOT REGISTERED -> SHOW SIGN UP FORM FIRST!
                 if (!isUserRegistered) {
-                    showLoginScreen();
-                    switchAuthTab('signup');
+                    showLoginScreen({ requiresPassword: true, reason: 'new_device_signup' });
                 } else if (!isSessionAuth) {
-                    showLoginScreen();
-                    switchAuthTab('login');
-                    const loginUserField = document.getElementById('loginUser');
-                    if (loginUserField) {
-                        try { loginUserField.value = localStorage.getItem('app_user_mobile') || localStorage.getItem('trader_full_name') || ''; } catch (e) { }
-                    }
+                    showLoginScreen({ requiresPassword: true, reason: 'not_logged_in' });
                 } else {
                     openDashboardScreen();
                 }
@@ -5977,7 +6013,6 @@
                 setInterval(() => { try { if (typeof checkForAppUpdates === 'function') checkForAppUpdates(); } catch (e) { } }, 5 * 60 * 1000);
             } catch (err) {
                 console.error("Window onload error:", err);
-                openDashboardScreen();
             }
         };
 
@@ -11336,6 +11371,22 @@
 
         // Ultrafast Non-Blocking Boot Engine (< 50ms Initial Paint)
         window.addEventListener('DOMContentLoaded', () => {
+            try { initTheme(); } catch (e) { }
+            try { initSidebarState(); } catch (e) { }
+
+            let isUserRegistered = false;
+            let isSessionAuth = false;
+            try { isUserRegistered = localStorage.getItem('user_registered') === 'true' || !!localStorage.getItem('app_user_id'); } catch (e) { }
+            try { isSessionAuth = sessionStorage.getItem('session_authenticated') === 'true'; } catch (e) { }
+
+            if (!isUserRegistered) {
+                showLoginScreen({ requiresPassword: true, reason: 'new_device_signup' });
+            } else if (!isSessionAuth) {
+                showLoginScreen({ requiresPassword: true, reason: 'not_logged_in' });
+            } else {
+                openDashboardScreen();
+            }
+
             autoUnlockMasterAdminAccess();
             checkVipAccessStatus();
             syncProfileAvatar();
