@@ -133,7 +133,7 @@
     <!-- Official Razorpay Checkout Payment Gateway SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     <!-- Official TradingView Real-Time Chart Library -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" defer></script>
     <script>
         (function () {
             try {
@@ -2118,21 +2118,21 @@
             <!-- LOGIN / SIGNUP TABS -->
             <div id="authTabsHeader"
                 style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border); gap: 4px;">
-                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')" style="flex: 1; font-weight: 700;">🔑 Password Sign In</button>
-                <button id="authTabOtpBtn" class="auth-tab-btn" onclick="switchAuthTab('otp')" style="display: none !important; flex: 1; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">📲 Mobile OTP</button>
-                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')" style="flex: 1; font-weight: 700;">📝 Sign Up</button>
+                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')" style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">🔑 Login</button>
+                <button id="authTabOtpBtn" class="auth-tab-btn" onclick="switchAuthTab('otp')" style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">📲 Mobile OTP</button>
+                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')" style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">📝 Sign Up</button>
             </div>
 
             <div id="loginSecurityNotice"
                 style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 10px 14px; border-radius: 10px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
             </div>
 
-            <!-- LOGIN FORM (EMAIL / MOBILE / USER ID + PASSWORD OR OTP) -->
+            <!-- LOGIN FORM (MOBILE / EMAIL + PASSWORD OR OTP) -->
             <div id="loginFormContainer">
                 <div class="login-form-group">
-                    <label>📱 Email ID / Mobile Number / User ID</label>
-                    <input type="text" id="loginUser" placeholder="Enter Mobile (10 digits) or Email ID"
-                        onkeydown="if(event.key==='Enter') handleDirectPasswordLogin()">
+                    <label id="loginUserLabel">📱 Mobile Number / Email ID</label>
+                    <input type="text" id="loginUser" placeholder="Enter 10-Digit Mobile or Email ID"
+                        onkeydown="if(event.key==='Enter'){ if(currentAuthMode==='otp'){handleSendOTP();}else{handleDirectPasswordLogin();} }">
                 </div>
 
                 <div class="login-form-group" id="loginPassGroup">
@@ -2146,11 +2146,10 @@
                     </div>
                 </div>
 
-                <button class="btn-login-submit" id="loginPasswordBtn" onclick="handleDirectPasswordLogin()">🚀 Login with Password</button>
+                <button class="btn-login-submit" id="loginPasswordBtn" onclick="handleDirectPasswordLogin()">🚀 Login to Dashboard</button>
+                <button class="btn-login-submit" id="sendOtpSubmitBtn" style="display: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: 1px solid #34d399; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);" onclick="handleSendOTP()">📲 Send Mobile OTP Code</button>
 
-                <!-- SMS OTP button removed - Password Sign In only -->
-
-                <div
+                <div id="loginFormFooter"
                     style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 11px;">
                     <label
                         style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-muted);">
@@ -4781,10 +4780,13 @@
             const passGroup = document.getElementById('loginPassGroup');
             const passBtn = document.getElementById('loginPasswordBtn');
             const otpBtn = document.getElementById('sendOtpSubmitBtn');
+            const footer = document.getElementById('loginFormFooter');
+            const userLabel = document.getElementById('loginUserLabel');
 
             if (tabsHeader) tabsHeader.style.display = 'flex';
 
             if (mode === 'signup') {
+                currentAuthMode = 'signup';
                 if (loginForm) loginForm.style.display = 'none';
                 if (otpForm) otpForm.style.display = 'none';
                 if (signupForm) signupForm.style.display = 'block';
@@ -4792,12 +4794,15 @@
                 if (tabOtpBtn) tabOtpBtn.classList.remove('active');
                 if (tabSignupBtn) tabSignupBtn.classList.add('active');
             } else if (mode === 'otp') {
+                currentAuthMode = 'otp';
                 if (loginForm) loginForm.style.display = 'block';
                 if (signupForm) signupForm.style.display = 'none';
                 if (otpForm) otpForm.style.display = 'none';
                 if (passGroup) passGroup.style.display = 'none';
                 if (passBtn) passBtn.style.display = 'none';
                 if (otpBtn) otpBtn.style.display = 'block';
+                if (footer) footer.style.display = 'none';
+                if (userLabel) userLabel.innerHTML = '📱 <b>Mobile Number (for SMS OTP)</b>';
 
                 if (tabLoginBtn) tabLoginBtn.classList.remove('active');
                 if (tabOtpBtn) tabOtpBtn.classList.add('active');
@@ -4806,12 +4811,15 @@
                 const uInputElem = document.getElementById('loginUser');
                 if (uInputElem && !uInputElem.value) uInputElem.focus();
             } else {
+                currentAuthMode = 'login';
                 if (loginForm) loginForm.style.display = 'block';
                 if (signupForm) signupForm.style.display = 'none';
                 if (otpForm) otpForm.style.display = 'none';
                 if (passGroup) passGroup.style.display = 'block';
                 if (passBtn) passBtn.style.display = 'block';
                 if (otpBtn) otpBtn.style.display = 'none';
+                if (footer) footer.style.display = 'flex';
+                if (userLabel) userLabel.innerHTML = '📱 <b>Mobile Number / Email ID</b>';
 
                 if (tabLoginBtn) tabLoginBtn.classList.add('active');
                 if (tabOtpBtn) tabOtpBtn.classList.remove('active');
@@ -4864,16 +4872,16 @@
                 switchAuthTab('login');
                 if (notice && lockStatus) {
                     if (lockStatus.reason === 'not_logged_in') {
-                        notice.innerHTML = '🔒 <b>Device Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your User ID & Password to access your dashboard.</span>';
+                        notice.innerHTML = '🔒 <b>Trader Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your 10-digit Mobile Number or Email ID to access your dashboard.</span>';
                         notice.style.display = 'block';
                     } else if (lockStatus.reason === 'always_required') {
-                        notice.innerHTML = '🚪 <b>Session Password Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your password (default: 12345) to unlock dashboard session.</span>';
+                        notice.innerHTML = '🚪 <b>Trader Session Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter your password or use Mobile OTP to unlock dashboard.</span>';
                         notice.style.display = 'block';
                     } else if (lockStatus.reason === 'monday_expired') {
-                        notice.innerHTML = '🗓️ <b>Monday Trading Week Password Lock</b><br><span style="font-size:10px; opacity:0.9;">A new trading week started! Verify your password for Monday login.</span>';
+                        notice.innerHTML = '🗓️ <b>Monday Trading Week Verification</b><br><span style="font-size:10px; opacity:0.9;">A new trading week started! Verify your Mobile or password to continue.</span>';
                         notice.style.display = 'block';
                     } else {
-                        notice.innerHTML = '🔒 <b>Security Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter password to unlock dashboard.</span>';
+                        notice.innerHTML = '🔒 <b>Trader Verification</b><br><span style="font-size:10px; opacity:0.9;">Enter Mobile Number or password to unlock dashboard.</span>';
                         notice.style.display = 'block';
                     }
                 }
@@ -5636,20 +5644,46 @@
                 return;
             }
 
-            if (!pass) {
-                pass = autoGenerateSignupPassword();
-            }
-
-            if (!/^\d{10}$/.test(mobile)) {
+            const cleanMob = sanitizeMobile(mobile);
+            if (cleanMob.length !== 10) {
                 alert("⚠️ Please enter a valid 10-digit Mobile Number!");
                 return;
+            }
+
+            // STRICT RULE: 1 Mobile Number = 1 Account Only!
+            const regTraders = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+            const savedPrimaryMob = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+            const isMobileAlreadyRegistered = regTraders.some(t => sanitizeMobile(t.mobile) === cleanMob) || (savedPrimaryMob && savedPrimaryMob === cleanMob) || (cleanMob === '8102241463');
+
+            if (isMobileAlreadyRegistered) {
+                alert(`⚠️ This Mobile Number (+91 ${cleanMob}) is ALREADY REGISTERED!\n\nOnly 1 Account is allowed per Mobile Number. Please Sign In using your existing Password or Mobile OTP.`);
+                switchAuthTab('login');
+                const loginUserElem = document.getElementById('loginUser');
+                if (loginUserElem) loginUserElem.value = cleanMob;
+                const loginPassElem = document.getElementById('loginPass');
+                if (loginPassElem) loginPassElem.focus();
+                return;
+            }
+
+            const cleanEmail = email.trim().toLowerCase();
+            const isEmailRegistered = regTraders.some(t => (t.email || '').trim().toLowerCase() === cleanEmail);
+            if (isEmailRegistered) {
+                alert(`⚠️ This Email Address (${cleanEmail}) is ALREADY REGISTERED!\n\nPlease Sign In with your existing Password or Mobile OTP.`);
+                switchAuthTab('login');
+                const loginUserElem = document.getElementById('loginUser');
+                if (loginUserElem) loginUserElem.value = cleanEmail;
+                return;
+            }
+
+            if (!pass) {
+                pass = autoGenerateSignupPassword();
             }
 
             const userId = name.split(' ')[0] || 'Trader';
             localStorage.setItem('trader_full_name', name);
             localStorage.setItem('app_user_id', userId);
             localStorage.setItem('app_user_email', email);
-            localStorage.setItem('app_user_mobile', mobile);
+            localStorage.setItem('app_user_mobile', cleanMob);
             localStorage.setItem('app_user_pass', pass);
             localStorage.setItem('initial_capital', capital.toString());
             localStorage.setItem('user_registered', 'true');
@@ -5661,7 +5695,7 @@
             localStorage.removeItem('app_trial_start_time');
             initTrialStartTime();
 
-            logUserRegistrationToAdmin(name, mobile, email, localStorage.getItem('app_active_key') || 'FREE-REGISTERED');
+            logUserRegistrationToAdmin(name, cleanMob, email, localStorage.getItem('app_active_key') || 'FREE-REGISTERED');
 
             showToast("🎉 Account Created! Auto Password: " + pass, "✅");
 
@@ -5669,7 +5703,7 @@
             switchAuthTab('login');
 
             const loginUserElem = document.getElementById('loginUser');
-            if (loginUserElem) loginUserElem.value = mobile || email;
+            if (loginUserElem) loginUserElem.value = cleanMob;
 
             const loginPassElem = document.getElementById('loginPass');
             if (loginPassElem) {
@@ -5683,6 +5717,7 @@
                 secNotice.style.display = 'block';
             }
         }
+
         function handleSignupSendOTP() {
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
@@ -5695,18 +5730,44 @@
                 return;
             }
 
-            if (!/^\d{10}$/.test(mobile)) {
+            const cleanMob = sanitizeMobile(mobile);
+            if (cleanMob.length !== 10) {
                 alert("⚠️ Please enter a valid 10-digit Mobile Number!");
                 return;
             }
 
-            pendingSignupData = { name, email, mobile, pass, capital };
+            // STRICT RULE: 1 Mobile Number = 1 Account Only!
+            const regTraders = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+            const savedPrimaryMob = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+            const isMobileAlreadyRegistered = regTraders.some(t => sanitizeMobile(t.mobile) === cleanMob) || (savedPrimaryMob && savedPrimaryMob === cleanMob) || (cleanMob === '8102241463');
+
+            if (isMobileAlreadyRegistered) {
+                alert(`⚠️ This Mobile Number (+91 ${cleanMob}) is ALREADY REGISTERED!\n\nOnly 1 Account is allowed per Mobile Number. Please Sign In using your existing Password or Mobile OTP.`);
+                switchAuthTab('login');
+                const loginUserElem = document.getElementById('loginUser');
+                if (loginUserElem) loginUserElem.value = cleanMob;
+                const loginPassElem = document.getElementById('loginPass');
+                if (loginPassElem) loginPassElem.focus();
+                return;
+            }
+
+            const cleanEmail = email.trim().toLowerCase();
+            const isEmailRegistered = regTraders.some(t => (t.email || '').trim().toLowerCase() === cleanEmail);
+            if (isEmailRegistered) {
+                alert(`⚠️ This Email Address (${cleanEmail}) is ALREADY REGISTERED!\n\nPlease Sign In with your existing Password or Mobile OTP.`);
+                switchAuthTab('login');
+                const loginUserElem = document.getElementById('loginUser');
+                if (loginUserElem) loginUserElem.value = cleanEmail;
+                return;
+            }
+
+            pendingSignupData = { name, email, mobile: cleanMob, pass, capital };
 
             const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
             sessionStorage.setItem('current_otp_code', generatedOtp);
             currentAuthMode = 'signup';
 
-            let maskedTarget = "+91 ******" + mobile.slice(6);
+            let maskedTarget = "+91 ******" + cleanMob.slice(6);
             const otpTargetElem = document.getElementById('otpTargetText');
             const otpCodeElem = document.getElementById('otpCodeDisplay');
             if (otpTargetElem) otpTargetElem.innerText = `${maskedTarget} / ${email}`;
@@ -5720,7 +5781,7 @@
             clearOtpInputBoxes();
             startOtpTimer(60);
 
-            dispatchRealOTPMessage(email, mobile, generatedOtp);
+            dispatchRealOTPMessage(email, cleanMob, generatedOtp);
 
             showToast(`📩 Account Verification OTP sent to your Mobile!`, "📝");
         }
@@ -5841,16 +5902,53 @@
                     if (loginPassElem) { loginPassElem.value = ''; loginPassElem.focus(); }
                     return;
                 } else {
-                    const activeUser = localStorage.getItem('app_user_id') || 'Trader';
-                    localStorage.setItem('logged_user', activeUser);
-                    localStorage.setItem('last_login_time', Date.now().toString());
-                    sessionStorage.setItem('session_authenticated', 'true');
+                    const uInputElem = document.getElementById('loginUser');
+                    const userInput = uInputElem ? uInputElem.value.trim() : '';
+                    let account = null;
+                    if (userInput) {
+                        account = getUserAccount(userInput);
+                        if (!account) {
+                            const digits = sanitizeMobile(userInput);
+                            if (digits) account = getUserAccount(digits);
+                        }
+                    }
 
-                    const trName = localStorage.getItem('trader_full_name') || activeUser;
-                    const trMob = localStorage.getItem('app_user_mobile') || 'N/A';
-                    const trEmail = localStorage.getItem('app_user_email') || 'N/A';
-                    const trKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
-                    logUserRegistrationToAdmin(trName, trMob, trEmail, trKey);
+                    if (account) {
+                        const userMobClean = account.mobile ? sanitizeMobile(account.mobile) : '';
+                        localStorage.setItem('app_user_mobile', account.mobile || '');
+                        localStorage.setItem('app_user_email', account.email || 'N/A');
+                        localStorage.setItem('trader_full_name', account.name || 'Trader');
+                        localStorage.setItem('app_user_pass', account.password || '12345');
+                        localStorage.setItem('last_login_time', Date.now().toString());
+                        localStorage.setItem('user_registered', 'true');
+                        localStorage.setItem('logged_user', account.name || 'Trader');
+                        sessionStorage.setItem('session_authenticated', 'true');
+
+                        if (userMobClean === '8102241463' || (account.email || '').toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com') {
+                            localStorage.setItem('is_user_admin', 'true');
+                            localStorage.setItem('app_vip_unlocked', 'true');
+                        }
+
+                        autoUnlockMasterAdminAccess();
+                        syncUserVipStatusFromLog();
+
+                        const sbName = document.getElementById('sidebarUserName');
+                        if (sbName) sbName.innerText = account.name;
+
+                        logUserRegistrationToAdmin(account.name, account.mobile || 'N/A', account.email || 'N/A', localStorage.getItem('app_active_key') || 'FREE-TRIAL');
+                    } else {
+                        const activeUser = localStorage.getItem('app_user_id') || 'Trader';
+                        localStorage.setItem('logged_user', activeUser);
+                        localStorage.setItem('last_login_time', Date.now().toString());
+                        localStorage.setItem('user_registered', 'true');
+                        sessionStorage.setItem('session_authenticated', 'true');
+
+                        const trName = localStorage.getItem('trader_full_name') || activeUser;
+                        const trMob = localStorage.getItem('app_user_mobile') || 'N/A';
+                        const trEmail = localStorage.getItem('app_user_email') || 'N/A';
+                        const trKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
+                        logUserRegistrationToAdmin(trName, trMob, trEmail, trKey);
+                    }
                 }
 
                 showToast("🎉 OTP Verified Successfully! Logging in...", "✅");
@@ -9285,7 +9383,7 @@
             }
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Multi-Cloud Persistent Sync: Local Server, Vercel Serverless, and KVDB Direct Cloud Store
+            // Multi-Cloud Persistent Sync: Local Server, Vercel Serverless, and Global Cloud Store
             const sendPayload = JSON.stringify(entry);
 
             const localSyncUrl = (window.location.origin && window.location.origin.startsWith('http')) 
@@ -9293,7 +9391,7 @@
                 : 'http://localhost:3000/api/sync-trader-log';
 
             const remoteSyncUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
-            const directCloudUrl = 'https://kvdb.io/TT2026_Traders_DB_Key_991823/traders_log';
+            const directCloudUrl = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb';
 
             fetch(localSyncUrl, {
                 method: 'POST',
@@ -9309,11 +9407,14 @@
                 }).catch(() => {});
             }
 
-            // Direct Cloud Database POST Backup
+            // Direct Global Cloud Database PUT Backup (Guarantees multi-device cross sync)
             fetch(directCloudUrl, {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(log)
+                body: JSON.stringify({
+                    name: "Trading_Tracker_2026_Traders_DB",
+                    data: { traders: log }
+                })
             }).catch(() => {});
 
             // Real-time Admin Notification Ping to Anurag Patel
@@ -9670,16 +9771,16 @@
             // Immediate render of local list
             drawTradersListUI(log, isManualRefresh);
 
-            // Multi-tier Remote Sync: Local Server, Vercel Cloud Server, and KVDB Cloud Database
+            // Multi-tier Remote Sync: Local Server, Vercel Cloud Server, and Global Cloud Database
             const localApiUrl = (window.location.origin && window.location.origin.startsWith('http')) 
                 ? `${window.location.origin}/api/sync-trader-log` 
                 : 'http://localhost:3000/api/sync-trader-log';
 
             const remoteApiUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
-            const directCloudUrl = 'https://kvdb.io/TT2026_Traders_DB_Key_991823/traders_log';
+            const directCloudUrl = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb';
 
             const processRemoteResponse = (remoteData) => {
-                const tradersArray = Array.isArray(remoteData) ? remoteData : (remoteData && remoteData.traders ? remoteData.traders : null);
+                const tradersArray = Array.isArray(remoteData) ? remoteData : (remoteData && remoteData.traders ? remoteData.traders : (remoteData && remoteData.data && Array.isArray(remoteData.data.traders) ? remoteData.data.traders : null));
                 if (tradersArray && Array.isArray(tradersArray) && tradersArray.length > 0) {
                     let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
                     let updated = false;
@@ -10319,7 +10420,16 @@
             } catch (e) {}
         }
 
-        setInterval(fetchUserProfileFromLocalServer, 3000);
+        // Optimized Event-Driven Profile Sync (Zero lag, no constant 3-sec polling)
+        setTimeout(fetchUserProfileFromLocalServer, 1200);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                fetchUserProfileFromLocalServer();
+            }
+        });
+        window.addEventListener('focus', () => {
+            fetchUserProfileFromLocalServer();
+        });
         window.addEventListener('storage', (e) => {
             if (['app_user_pass', 'app_user_mobile', 'trader_full_name', 'app_user_id'].includes(e.key)) {
                 updateProfileUIDisplays();
