@@ -3167,11 +3167,6 @@
                             title="Institutional Data Trust Score: 99.8%. Click to inspect mathematical verification audit.">
                             <span>🛡️</span> <span id="dataTrustScoreText">Trust Score: 99.8%</span>
                         </div>
-                        <div id="disciplineHealthBadge" onclick="triggerOvertradingGuardModal('manual')"
-                            style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); font-size: 11px; font-weight: 800; color: #fca5a5; cursor: pointer; transition: all 0.2s;"
-                            title="AI Discipline Shield & Overtrading Guard Active. Click to review risk score.">
-                            <span>🛡️</span> <span>Discipline: <b id="disciplineHealthPercent" style="color: #34d399;">100%</b></span>
-                        </div>
                     </div>
                     <div class="dashboard-toolbar-actions" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                         <button class="btn btn-sm" onclick="openDhanImportModal()"
@@ -6543,43 +6538,6 @@
         </div>
     </div>
 
-    <!-- 🔒 OVERTRADING LOCKDOWN & MINDSET GUARDRAIL MODAL -->
-    <div id="disciplineLockdownModal" class="modal-overlay"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(16px); z-index: 9999999; align-items: center; justify-content: center; padding: 15px;">
-        <div class="modal-content" onclick="event.stopPropagation()"
-            style="background: #110c1f; border: 2px solid #ef4444; border-radius: 20px; padding: 26px; width: 100%; max-width: 540px; color: white; text-align: center; box-shadow: 0 25px 70px rgba(239,68,68,0.45);">
-            
-            <div style="font-size: 42px; margin-bottom: 8px;">🛡️🛑</div>
-            <h2 style="margin: 0; font-size: 20px; font-weight: 900; color: #f87171;">DISCIPLINE SHIELD ACTIVATED</h2>
-            <div style="font-size: 13px; color: #cbd5e1; margin-top: 6px;">
-                Daily Risk Limit Reached. Further trading is paused to protect your capital.
-            </div>
-
-            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 12px; padding: 14px; margin: 16px 0; text-align: left; font-size: 12px; color: #fca5a5;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span>Trigger Reason:</span>
-                    <b id="lockdownReasonText">Max Daily Loss Limit Reached</b>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Today's Total Loss:</span>
-                    <b id="lockdownLossAmount" style="color: #f87171;">-₹5,400.00</b>
-                </div>
-            </div>
-
-            <div style="background: rgba(15, 23, 42, 0.8); border-radius: 12px; padding: 14px; margin-bottom: 18px;">
-                <div style="font-size: 12px; font-weight: 800; color: #38bdf8; margin-bottom: 4px;">🧘 3-Minute Reset Breathing</div>
-                <div style="font-size: 11px; color: #94a3b8;">
-                    "The goal of a successful trader is to make the best trades. Money is secondary." — Alexander Elder
-                </div>
-            </div>
-
-            <button type="button" onclick="closeModal('disciplineLockdownModal')" class="btn"
-                style="background: #334155; color: #fff; font-weight: 800; padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer;">
-                I Understand & Will Protect My Capital
-            </button>
-        </div>
-    </div>
-
     <!-- 9. TRADING GUIDES & MASTERCLASS KNOWLEDGE HUB MODAL -->
     <div id="tradingGuidesModal" class="modal-overlay"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 999999; align-items: center; justify-content: center; padding: 20px;"
@@ -6884,88 +6842,6 @@
                 style="width: 100%; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">
                 Close
             </button>
-        </div>
-    </div>
-
-    <!-- 13. AI DISCIPLINE SHIELD & OVERTRADING GUARD MODAL -->
-    <div id="overtradingGuardModal" class="modal-overlay"
-        style="display: none; position: fixed; inset: 0; background: rgba(10, 3, 10, 0.92); backdrop-filter: blur(16px); z-index: 9999999; align-items: center; justify-content: center; padding: 20px;"
-        onclick="closeModal('overtradingGuardModal')">
-        <div class="modal-content" onclick="event.stopPropagation()"
-            style="background: linear-gradient(165deg, #180808 0%, #1e1124 50%, #090d16 100%); border: 2.5px solid #ef4444; border-radius: 24px; padding: 24px; width: 100%; max-width: 560px; color: white; text-align: left; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 80px rgba(239, 68, 68, 0.45); position: relative;">
-            
-            <!-- HEADER -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(239,68,68,0.3); padding-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 44px; height: 44px; background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; animation: livePulseGlow 1.5s infinite;">
-                        🚨
-                    </div>
-                    <div>
-                        <h3 style="margin: 0; font-size: 18px; font-weight: 900; color: #fca5a5; letter-spacing: -0.2px;">
-                            AI DISCIPLINE SHIELD ALERT
-                        </h3>
-                        <span style="font-size: 11px; color: #f87171; font-weight: 700;">
-                            Overtrading & Revenge Trading Risk Detected!
-                        </span>
-                    </div>
-                </div>
-                <button onclick="closeModal('overtradingGuardModal')"
-                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; font-size: 16px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">✖</button>
-            </div>
-
-            <!-- DIAGNOSTIC REASON BOX -->
-            <div id="overtradingReasonBox"
-                style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 14px; padding: 14px; margin-bottom: 16px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <span style="font-size: 11px; color: #fca5a5; font-weight: 800; text-transform: uppercase;">⚠️ Trigger Condition</span>
-                    <span id="overtradingTriggerTag" style="font-size: 10px; background: #ef4444; color: #fff; font-weight: 900; padding: 2px 6px; border-radius: 4px;">CONSECUTIVE LOSSES</span>
-                </div>
-                <div id="overtradingReasonText" style="font-size: 12.5px; color: #fff; font-weight: 700; line-height: 1.5;">
-                    You have experienced 3 consecutive losing trades today. Emotional FOMO / Revenge Trading probability is above 90%!
-                </div>
-            </div>
-
-            <!-- TODAY'S STATS SUMMARY -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px;">
-                <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px; text-align: center;">
-                    <div style="font-size: 10px; color: #94a3b8;">Today's Trades</div>
-                    <div id="guardTodayTradesCount" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;">4 Trades</div>
-                </div>
-                <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 10px; text-align: center;">
-                    <div style="font-size: 10px; color: #fca5a5;">Red Trades</div>
-                    <div id="guardTodayLossesCount" style="font-size: 16px; font-weight: 800; color: #ef4444; margin-top: 2px;">3 Losses</div>
-                </div>
-                <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 10px; text-align: center;">
-                    <div style="font-size: 10px; color: #fca5a5;">Today's P&L</div>
-                    <div id="guardTodayLossVal" style="font-size: 16px; font-weight: 800; color: #ef4444; margin-top: 2px;">-₹3,450.00</div>
-                </div>
-            </div>
-
-            <!-- 🧘 GUIDED 5-MINUTE COOLDOWN & BREATHING RING -->
-            <div style="text-align: center; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 18px; margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.06);">
-                <div class="cooldown-breathing-circle">
-                    <span id="cooldownTimerText" style="font-size: 24px; font-weight: 900; font-family: monospace; color: #fff;">05:00</span>
-                    <span style="font-size: 9.5px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Cooldown</span>
-                </div>
-                <div id="breathingPaceInstruction" style="font-size: 13px; font-weight: 800; color: #34d399; margin-bottom: 4px;">
-                    🧘 Inhale Slowly (4s) ... Hold (4s) ... Exhale (4s)
-                </div>
-                <p style="font-size: 11px; color: #94a3b8; margin: 0; max-width: 400px; margin: 0 auto; line-height: 1.5;">
-                    Step away from the screen for 5 minutes. Do not try to recover losses in a hurry. Protect your capital to trade another day!
-                </p>
-            </div>
-
-            <!-- ACTION BUTTONS -->
-            <div style="display: flex; gap: 10px;">
-                <button type="button" onclick="confirmStopTradingToday()" class="btn"
-                    style="flex: 1; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color: #fff; font-weight: 900; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px; box-shadow: 0 4px 15px rgba(239,68,68,0.4);">
-                    🛑 Lock Trading for Today & Save Capital
-                </button>
-                <button type="button" onclick="closeModal('overtradingGuardModal')" class="btn btn-secondary"
-                    style="padding: 12px 18px; border-radius: 10px; font-weight: 700; cursor: pointer;">
-                    Dismiss
-                </button>
-            </div>
         </div>
     </div>
 
@@ -19248,142 +19124,19 @@
         window.inspectTradeOnChart = inspectTradeOnChart;
 
         // ============================================================
-        // 🚨 MODULE 4: AI DISCIPLINE SHIELD & OVERTRADING GUARD ENGINE
+        // 🚨 MODULE 4: OVERTRADING GUARD ENGINE (DISABLED BY USER)
         // ============================================================
-        let cooldownTimerInterval = null;
-
-        function checkOvertradingRisk() {
-            const trades = getLoggedTrades();
-            const today = new Date().toISOString().slice(0, 10);
-            const todayTrades = trades.filter(t => (t.date || '').startsWith(today));
-
-            if (todayTrades.length === 0) {
-                updateDisciplineHealthMeter(100);
-                return;
-            }
-
-            let todayLosses = 0;
-            let consecutiveLosses = 0;
-            let todayPnl = 0;
-
-            todayTrades.forEach(t => {
-                const p = parseFloat(t.pnl) || 0;
-                todayPnl += p;
-                if (p < 0) {
-                    todayLosses++;
-                    consecutiveLosses++;
-                } else {
-                    consecutiveLosses = 0;
-                }
-            });
-
-            const maxLossRule = parseFloat(localStorage.getItem('constitution_max_loss') || 2000);
-            const maxTradesRule = parseInt(localStorage.getItem('constitution_max_trades') || 4);
-
-            let discScore = 100;
-            if (todayTrades.length > maxTradesRule) discScore -= 25;
-            if (todayPnl < -maxLossRule) discScore -= 35;
-            if (consecutiveLosses >= 3) discScore -= 30;
-            discScore = Math.max(10, discScore);
-
-            updateDisciplineHealthMeter(discScore);
-
-            if (consecutiveLosses >= 3) {
-                triggerOvertradingGuardModal('consecutive_loss', {
-                    todayTrades: todayTrades.length,
-                    todayLosses: todayLosses,
-                    todayPnl: todayPnl,
-                    reason: "🚨 3 Consecutive Red Trades detected! Stop trading now to prevent emotional capital damage."
-                });
-            } else if (todayPnl < -maxLossRule) {
-                triggerOvertradingGuardModal('max_loss', {
-                    todayTrades: todayTrades.length,
-                    todayLosses: todayLosses,
-                    todayPnl: todayPnl,
-                    reason: `⚠️ Daily Max Loss limit hit (-₹${Math.abs(todayPnl).toFixed(2)} exceeded your ₹${maxLossRule} threshold)!`
-                });
-            } else if (todayTrades.length >= maxTradesRule + 2) {
-                triggerOvertradingGuardModal('overtrading_count', {
-                    todayTrades: todayTrades.length,
-                    todayLosses: todayLosses,
-                    todayPnl: todayPnl,
-                    reason: `⚠️ Daily Max Trades limit breached (${todayTrades.length} trades executed today)!`
-                });
-            }
-        }
+        function checkOvertradingRisk() { return; }
         window.checkOvertradingRisk = checkOvertradingRisk;
 
-        function triggerOvertradingGuardModal(triggerType = 'manual', stats = {}) {
-            const modal = document.getElementById('overtradingGuardModal');
-            if (!modal) return;
-
-            const countEl = document.getElementById('guardTodayTradesCount');
-            const lossCountEl = document.getElementById('guardTodayLossesCount');
-            const lossValEl = document.getElementById('guardTodayLossVal');
-            const reasonTextEl = document.getElementById('overtradingReasonText');
-            const triggerTagEl = document.getElementById('overtradingTriggerTag');
-
-            if (countEl) countEl.innerText = `${stats.todayTrades || 3} Trades`;
-            if (lossCountEl) lossCountEl.innerText = `${stats.todayLosses || 2} Losses`;
-            if (lossValEl) lossValEl.innerText = `${(stats.todayPnl || -2400) >= 0 ? '+' : ''}₹${(stats.todayPnl || -2400).toFixed(2)}`;
-            if (reasonTextEl && stats.reason) reasonTextEl.innerText = stats.reason;
-
-            if (triggerTagEl) {
-                triggerTagEl.innerText = triggerType.toUpperCase().replace('_', ' ');
-            }
-
-            startCooldownTimer();
-            modal.style.display = 'flex';
-        }
+        function triggerOvertradingGuardModal() { return; }
         window.triggerOvertradingGuardModal = triggerOvertradingGuardModal;
 
-        function startCooldownTimer() {
-            if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
-            let remainingSeconds = 300;
-            const timerEl = document.getElementById('cooldownTimerText');
-            const instructEl = document.getElementById('breathingPaceInstruction');
-
-            const breathingSteps = [
-                "🧘 Inhale Slowly through nose (4s)...",
-                "🌬️ Hold your breath & relax (4s)...",
-                "💨 Exhale gently through mouth (4s)...",
-                "🛡️ Let go of FOMO & protect your capital..."
-            ];
-            let stepIdx = 0;
-
-            cooldownTimerInterval = setInterval(() => {
-                remainingSeconds--;
-                if (remainingSeconds <= 0) {
-                    clearInterval(cooldownTimerInterval);
-                    if (timerEl) timerEl.innerText = "00:00";
-                    if (instructEl) instructEl.innerText = "✅ 5-Minute Mind Reset Complete! Stay disciplined.";
-                    return;
-                }
-
-                const mins = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
-                const secs = (remainingSeconds % 60).toString().padStart(2, '0');
-                if (timerEl) timerEl.innerText = `${mins}:${secs}`;
-
-                if (remainingSeconds % 4 === 0 && instructEl) {
-                    stepIdx = (stepIdx + 1) % breathingSteps.length;
-                    instructEl.innerText = breathingSteps[stepIdx];
-                }
-            }, 1000);
-        }
-
-        function confirmStopTradingToday() {
-            closeModal('overtradingGuardModal');
-            showToast("🛡️ Discipline Master: Trading locked for today. Enjoy your evening and come back sharp tomorrow!", "👑");
-            updateDisciplineHealthMeter(100);
-        }
+        function startCooldownTimer() { return; }
+        function confirmStopTradingToday() { return; }
         window.confirmStopTradingToday = confirmStopTradingToday;
 
-        function updateDisciplineHealthMeter(score = 100) {
-            const el = document.getElementById('disciplineHealthPercent');
-            if (!el) return;
-            el.innerText = `${score}%`;
-            el.style.color = score >= 80 ? '#34d399' : (score >= 60 ? '#facc15' : '#ef4444');
-        }
+        function updateDisciplineHealthMeter() { return; }
         window.updateDisciplineHealthMeter = updateDisciplineHealthMeter;
 
         // ============================================================
