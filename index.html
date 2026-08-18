@@ -1090,6 +1090,74 @@
             gap: 12px;
         }
 
+        /* DEDICATED TRADE FORM & EQUITY CHART BALANCED LAYOUT */
+        .trade-chart-row {
+            display: grid;
+            grid-template-columns: 1.62fr 1fr;
+            gap: 14px;
+            align-items: start;
+            margin-bottom: 14px;
+        }
+
+        .add-trade-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .equity-chart-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .equity-chart-stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 8px 10px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .equity-mini-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .equity-mini-stat .stat-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .equity-mini-stat .stat-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-top: 2px;
+        }
+
+        .equity-chart-canvas-wrapper {
+            position: relative;
+            width: 100%;
+            height: 310px;
+            min-height: 260px;
+            max-height: 340px;
+        }
+
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1102,6 +1170,12 @@
             gap: 10px;
         }
 
+        @media (max-width: 1366px) {
+            .trade-chart-row {
+                grid-template-columns: 1.45fr 1fr;
+            }
+        }
+
         @media (max-width: 1200px) {
             .grid-6 {
                 grid-template-columns: repeat(3, 1fr);
@@ -1109,6 +1183,15 @@
 
             .grid-2 {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1050px) {
+            .trade-chart-row {
+                grid-template-columns: 1fr;
+            }
+            .equity-chart-canvas-wrapper {
+                height: 280px;
             }
         }
 
@@ -1761,6 +1844,53 @@
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
+        }
+
+        /* ================= PRINT / PDF STATEMENT STYLES ================= */
+        @media print {
+            html, body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body > *:not(#tradingReportModalContainer) {
+                display: none !important;
+            }
+            #tradingReportModalContainer {
+                display: block !important;
+                position: static !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            #reportPrintOverlay {
+                position: static !important;
+                background: transparent !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+                overflow: visible !important;
+                backdrop-filter: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #pdfReportPrintContainer {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                border: none !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
         }
     </style>
 </head>
@@ -2814,11 +2944,11 @@
                     </div>
                 </div>
 
-                <!-- ADD NEW TRADE & CHART ROW -->
-                <div class="grid-2">
+                <!-- ADD NEW TRADE & CHART ROW (BALANCED PROPORTION) -->
+                <div class="trade-chart-row">
 
                     <!-- ADD NEW TRADE CARD (WITH STRIKE PRICE FIELD) -->
-                    <div class="card" id="secAddTrade">
+                    <div class="card add-trade-card" id="secAddTrade">
                         <div class="card-header">
                             <div class="card-title"><span>📝</span> Add New Trade <span id="brokerBadgeTag"
                                     class="badge-tag"
@@ -3166,16 +3296,74 @@
                             Trade</button>
                     </div>
 
-                    <!-- EQUITY CURVE GRAPH CARD -->
-                    <div class="card" id="secEquityChart">
-                        <div class="card-header">
-                            <div class="card-title"><span>📈</span> Equity Curve Visual Graph</div>
-                            <button class="card-action-btn" title="Hide Graph"
-                                onclick="toggleWidget('secEquityChart', false)">👁️ Hide</button>
+                    <!-- RIGHT COLUMN: EQUITY GRAPH + PERFORMANCE & DISCIPLINE MATRIX -->
+                    <div class="trade-chart-right-col" style="display: flex; flex-direction: column; gap: 14px;">
+                        
+                        <!-- EQUITY CURVE GRAPH CARD (COMPACT & BALANCED) -->
+                        <div class="card equity-chart-card" id="secEquityChart">
+                            <div class="card-header">
+                                <div class="card-title"><span>📈</span> Equity Curve Visual Graph</div>
+                                <button class="card-action-btn" title="Hide Graph"
+                                    onclick="toggleWidget('secEquityChart', false)">👁️ Hide</button>
+                            </div>
+                            <div class="equity-chart-stats-bar" id="equityChartStatsBar">
+                                <div class="equity-mini-stat">
+                                    <span class="stat-label">NET REALIZED</span>
+                                    <span class="stat-value" id="equityChartNetPnL">₹0.00</span>
+                                </div>
+                                <div class="equity-mini-stat">
+                                    <span class="stat-label">PEAK P&L</span>
+                                    <span class="stat-value" id="equityChartPeakPnL">₹0.00</span>
+                                </div>
+                                <div class="equity-mini-stat">
+                                    <span class="stat-label">TOTAL TRADES</span>
+                                    <span class="stat-value" id="equityChartTradeCount">0</span>
+                                </div>
+                            </div>
+                            <div class="equity-chart-canvas-wrapper">
+                                <canvas id="equityChart"></canvas>
+                            </div>
                         </div>
-                        <div style="flex: 1; position: relative; min-height: 250px;">
-                            <canvas id="equityChart"></canvas>
+
+                        <!-- LIVE PERFORMANCE & DISCIPLINE MATRIX CARD -->
+                        <div class="card live-performance-card" id="secLivePerformanceCard"
+                            style="background-color: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
+                            <div class="card-header" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="card-title" style="font-size: 13px; font-weight: 700; color: var(--text-main);">
+                                    <span>🎯</span> Today's Performance & Discipline Matrix
+                                </div>
+                                <span class="badge-tag" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;">Live Analytics</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+                                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px;">
+                                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Win / Loss Ratio</div>
+                                    <div style="font-size: 14px; font-weight: 800; color: #10b981; margin-top: 2px;" id="matrixWinLossRatio">0 W / 0 L</div>
+                                    <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;" id="matrixWinRate">Win Rate: 0.0%</div>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px;">
+                                    <div style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Profit Factor & RRR</div>
+                                    <div style="font-size: 14px; font-weight: 800; color: #38bdf8; margin-top: 2px;" id="matrixProfitFactor">0.00 PF</div>
+                                    <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;" id="matrixAvgRRR">Avg R:R 1:0.0</div>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 10px; padding: 10px; margin-bottom: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">🧠 Trader Discipline Score</span>
+                                    <span id="matrixDisciplineBadge" style="font-size: 10px; font-weight: 700; color: #34d399; background: rgba(16,185,129,0.15); padding: 2px 6px; border-radius: 4px;">100% Disciplined</span>
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                                    <span>🛡️</span> <span id="matrixDisciplineNote">Strict Stop-Loss & Setup Execution Active</span>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-muted); padding-top: 2px;">
+                                <span>🔥 Streak: <b id="matrixStreak" style="color: #f59e0b;">0 Days</b></span>
+                                <span>🏆 Best Setup: <b id="matrixBestSetup" style="color: #818cf8;">Breakout</b></span>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -3626,13 +3814,13 @@
                         <button class="btn btn-primary btn-block" style="margin-top: 16px;"
                             onclick="updateCredentials()">Update Password & ID</button>
                     </div>
-                    <!-- ONE-CLICK DATA BACKUP & RESTORE CARD -->
+                    <!-- PERSONAL JOURNAL DATA BACKUP & RESTORE CARD -->
                     <div class="card" style="grid-column: span 2; margin-top: 16px;">
                         <div class="card-header">
                             <div>
-                                <div class="card-title"><span>💾</span> One-Click Data Backup & Restore (JSON / CSV)
+                                <div class="card-title"><span>💾</span> Personal Journal Backup & Restore (JSON / CSV)
                                 </div>
-                                <div class="card-subtitle">Export full trade backup or restore history across devices
+                                <div class="card-subtitle">100% Private & Offline: Export your personal trade journal to your device or restore it anytime.
                                 </div>
                             </div>
                         </div>
@@ -5332,47 +5520,197 @@
         </div>
     </div>
 
-    <!-- 9. TRADING GUIDES MODAL -->
+    <!-- 9. TRADING GUIDES & MASTERCLASS KNOWLEDGE HUB MODAL -->
     <div id="tradingGuidesModal" class="modal-overlay"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 999999; align-items: center; justify-content: center; padding: 20px;"
         onclick="closeModal('tradingGuidesModal')">
         <div class="modal-content" onclick="event.stopPropagation()"
-            style="background: #0f172a; border: 2px solid #38bdf8; border-radius: 20px; padding: 24px; width: 100%; max-width: 600px; color: white; text-align: left; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(56,189,248,0.3);">
+            style="background: #0f172a; border: 2px solid #38bdf8; border-radius: 20px; padding: 22px; width: 100%; max-width: 780px; color: white; text-align: left; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(56,189,248,0.35);">
             <div
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
-                <h3 style="margin: 0; font-size: 18px; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
-                    <span>📚</span> Pro Trading Knowledge Hub
-                </h3>
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+                <div>
+                    <h3 style="margin: 0; font-size: 18px; color: #38bdf8; display: flex; align-items: center; gap: 8px; font-weight: 800;">
+                        <span>📚</span> Pro Trading Knowledge Hub & Masterclass
+                    </h3>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">Practical rules, price action setups, option buying strategies & psychology guide by Anurag Patel</div>
+                </div>
                 <button onclick="closeModal('tradingGuidesModal')"
-                    style="background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✖</button>
+                    style="background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer;">✖</button>
             </div>
-            <div
-                style="display: flex; flex-direction: column; gap: 12px; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
-                <div
-                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
-                    <b style="color: #38bdf8; font-size: 13px; display: block; margin-bottom: 4px;">⚡ 1. The 1% Risk
-                        Rule</b>
-                    Never risk more than 1% to 2% of your total account capital on a single option trade. If capital is
-                    ₹50,000, max risk per trade is strictly ₹500 - ₹1,000.
+
+            <!-- KNOWLEDGE HUB CATEGORY TABS -->
+            <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <button onclick="switchGuideTab('guidePriceAction')" id="tabBtn_guidePriceAction" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: #38bdf8; color: #000; border: none; cursor: pointer; white-space: nowrap;">
+                    📈 Price Action Setups
+                </button>
+                <button onclick="switchGuideTab('guideOptions')" id="tabBtn_guideOptions" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; white-space: nowrap;">
+                    🎯 Option Buying Rules
+                </button>
+                <button onclick="switchGuideTab('guidePsychology')" id="tabBtn_guidePsychology" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; white-space: nowrap;">
+                    🧠 Psychology & FOMO
+                </button>
+                <button onclick="switchGuideTab('guideRisk')" id="tabBtn_guideRisk" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; white-space: nowrap;">
+                    🛡️ Risk Management
+                </button>
+                <button onclick="switchGuideTab('guideTimings')" id="tabBtn_guideTimings" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; white-space: nowrap;">
+                    ⏰ Market Windows
+                </button>
+                <button onclick="switchGuideTab('guideChecklist')" id="tabBtn_guideChecklist" class="btn"
+                    style="padding: 7px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; white-space: nowrap;">
+                    📋 Daily Checklist
+                </button>
+            </div>
+
+            <!-- TAB 1: PRICE ACTION SETUPS -->
+            <div id="guidePriceAction" class="guide-tab-pane" style="display: block; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #38bdf8; font-size: 13px; display: block; margin-bottom: 4px;">🚀 1. High Probability Breakout + Volume Confirmation</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li><b>Entry Rule:</b> Never enter blindly on candle touch. Wait for a 5-minute candle to close completely above resistance with volume higher than the 20-period average.</li>
+                        <li><b>Stop-Loss:</b> Strictly placed below the breakout candle's low or nearest swing low.</li>
+                        <li><b>Target:</b> Minimum 1:2 Risk-to-Reward ratio or next major daily resistance level.</li>
+                    </ul>
                 </div>
-                <div
-                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
-                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 4px;">🎯 2. Minimum 1:2
-                        Risk-to-Reward Ratio</b>
-                    Always ensure your target profit is at least double your Stop-Loss distance in points before placing
-                    any order.
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 4px;">🔄 2. Support & Resistance Pullback / Retest Setup</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li><b>Concept:</b> Old resistance becomes new support after a breakout. Institutional traders buy on the retest.</li>
+                        <li><b>Entry Trigger:</b> Look for a bullish rejection candle (Hammer / Bullish Engulfing) when price retests the broken zone.</li>
+                        <li><b>Advantage:</b> Offers the smallest stop-loss and highest risk-to-reward ratio (often 1:3 to 1:5).</li>
+                    </ul>
                 </div>
-                <div
-                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px;">
-                    <b style="color: #f59e0b; font-size: 13px; display: block; margin-bottom: 4px;">🛡️ 3. Anti-Revenge
-                        Trading Lock</b>
-                    After 2 consecutive Stop-Loss hits, immediately shut down your trading terminal for the day.
-                    Emotional revenge trades destroy capital.
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #f43f5e; font-size: 13px; display: block; margin-bottom: 4px;">🪤 3. Trap & Fakeout Avoidance Rule</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>If a candle breaks a key high/low with a long wick and closes back inside the consolidation range, it is an institutional trap.</li>
+                        <li><b>Action:</b> If you were in the trade, exit immediately without waiting for Stop Loss. Never hope or average losing trades.</li>
+                    </ul>
                 </div>
             </div>
+
+            <!-- TAB 2: OPTION BUYING RULES -->
+            <div id="guideOptions" class="guide-tab-pane" style="display: none; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 4px;">🎯 1. Strike Price Selection: Strictly ATM / In-The-Money (ITM)</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li><b>Delta Rule:</b> Always buy At-The-Money (ATM, Delta ~0.50) or slightly In-The-Money (ITM, Delta 0.55-0.70).</li>
+                        <li><b>Avoid Out-Of-The-Money (OTM):</b> Cheap ₹10-₹20 OTM options lose 80% value due to theta decay even if market goes sideways. Cheap options are the #1 reason 90% buyers lose money.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #eab308; font-size: 13px; display: block; margin-bottom: 4px;">⚡ 2. Expiry Day Hero-or-Zero Strict Protocol</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Hero-or-Zero capital allocation should NEVER exceed <b>2% of your account capital</b>.</li>
+                        <li>Enter only after 1:30 PM when 15-minute range breakout occurs with high momentum.</li>
+                        <li>Treat this amount as 100% risk — if trade goes against you, exit without emotion.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #818cf8; font-size: 13px; display: block; margin-bottom: 4px;">📊 3. India VIX & Premium Volatility Factor</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li><b>VIX > 15:</b> High volatility — fast premium expansion. Keep wider targets.</li>
+                        <li><b>VIX < 12:</b> Low volatility — slow premium movement and high decay. Prefer quick scalping.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TAB 3: PSYCHOLOGY & DISCIPLINE -->
+            <div id="guidePsychology" class="guide-tab-pane" style="display: none; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #f59e0b; font-size: 13px; display: block; margin-bottom: 4px;">🛑 1. The 2-Trade Daily Loss Lock (Anti-Revenge Rule)</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>If you take 2 consecutive losses in a day, <b>immediately close your trading terminal</b>.</li>
+                        <li>Revenge trading to "recover" morning losses always leads to devastating capital wipeouts. Tomorrow is always another trading day.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #ec4899; font-size: 13px; display: block; margin-bottom: 4px;">🧘 2. Conquering FOMO (Fear Of Missing Out)</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>If you miss a 100-point rally candle, DO NOT chase at the top. Most retail buyers enter right where institutions take profit.</li>
+                        <li>The market gives 3 to 5 high-probability setups every single day. Wait patiently for your specific setup.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #38bdf8; font-size: 13px; display: block; margin-bottom: 4px;">💼 3. Red Days are Business Expenses</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Every business has operational costs (electricity, rent, inventory). In trading, a disciplined small stop-loss is your business cost. Accept small losses gracefully.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TAB 4: RISK MANAGEMENT -->
+            <div id="guideRisk" class="guide-tab-pane" style="display: none; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #818cf8; font-size: 13px; display: block; margin-bottom: 4px;">🛡️ 1. The 1% - 2% Capital Risk Formula</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Never risk more than 1% to 2% of your total account capital on a single trade.</li>
+                        <li><b>Example:</b> If capital is ₹50,000, max risk per trade is strictly ₹500 - ₹1,000.</li>
+                        <li><b>Position Size:</b> Quantity = (Max ₹ Risk) ÷ (Entry Price - Stop Loss).</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 4px;">⚖️ 2. Mandatory Minimum 1:2 Risk-to-Reward Ratio</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>If your risk is 15 points (₹1,000), your target must be at least 30 points (₹2,000).</li>
+                        <li>With a 1:2 R:R, even with only 40% win rate, you will consistently make net profits!</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #f59e0b; font-size: 13px; display: block; margin-bottom: 4px;">📈 3. Capital Scaling Rule</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Increase lot size ONLY after 20 consecutive profitable trading days in your journal, never after just 1 lucky day.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TAB 5: MARKET TIMING WINDOWS -->
+            <div id="guideTimings" class="guide-tab-pane" style="display: none; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(234,179,8,0.06); border: 1px solid rgba(234,179,8,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #facc15; font-size: 13px; display: block; margin-bottom: 4px;">⚠️ 09:15 - 09:30 AM: Opening Volatility & Trap Zone</b>
+                    <p style="margin: 0;">Institutional order matching & high bid-ask spread. Beginners should observe and mark the 15-min Opening Range (High & Low) rather than gambling on the first candle.</p>
+                </div>
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 4px;">🔥 09:45 - 11:15 AM: Prime Momentum & Trend Window</b>
+                    <p style="margin: 0;">The best trading window of the day. Clean breakouts, solid volume, and clear direction. 80% of daily target should be completed here.</p>
+                </div>
+                <div style="background: rgba(148,163,184,0.06); border: 1px solid rgba(148,163,184,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #94a3b8; font-size: 13px; display: block; margin-bottom: 4px;">😴 11:30 AM - 01:15 PM: Sideways Lunch Chop Zone</b>
+                    <p style="margin: 0;">Market consolidates. Premiums decay rapidly. Avoid active option buying in this window to prevent giving back morning profits.</p>
+                </div>
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #38bdf8; font-size: 13px; display: block; margin-bottom: 4px;">🚀 01:30 - 03:00 PM: Afternoon Trend Continuation / Reversal</b>
+                    <p style="margin: 0;">European market opening brings fresh volume. Ideal for sharp expiry moves and trend continuation breakout trades.</p>
+                </div>
+            </div>
+
+            <!-- TAB 6: DAILY CHECKLIST -->
+            <div id="guideChecklist" class="guide-tab-pane" style="display: none; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 14px; margin-bottom: 10px;">
+                    <b style="color: #38bdf8; font-size: 13px; display: block; margin-bottom: 6px;">🌅 Pre-Market Routine (08:30 - 09:15 AM)</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Check Gift Nifty, Asian markets, and major news announcements.</li>
+                        <li>Mark Key Levels on chart: Previous Day High (PDH), Previous Day Low (PDL), Previous Day Close (PDC), and major Weekly support/resistance.</li>
+                        <li>Pre-define Today's Max Allowed Daily Loss (e.g. ₹2,000) before placing the first order.</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 14px;">
+                    <b style="color: #34d399; font-size: 13px; display: block; margin-bottom: 6px;">🌇 Post-Market Routine (03:30 - 04:30 PM)</b>
+                    <ul style="margin: 0; padding-left: 18px;">
+                        <li>Log all trades immediately into Trading Tracker 2026 with entry reason, emotion, and screenshot.</li>
+                        <li>Check if your Stop-Loss discipline score is 100%.</li>
+                        <li>Review your mistakes without guilt and write 1 improvement lesson for tomorrow.</li>
+                    </ul>
+                </div>
+            </div>
+
             <button onclick="closeModal('tradingGuidesModal')" class="btn btn-secondary btn-block"
                 style="width: 100%; margin-top: 16px; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">
-                Close
+                Close Knowledge Hub
             </button>
         </div>
     </div>
@@ -5441,10 +5779,16 @@
                     style="background: #0284c7; color: #fff; font-weight: 800; padding: 12px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 8px;">
                     <span>📞</span> Direct Call: +91 8102241463
                 </a>
-                <a href="mailto:support@thetradingtracker.com" class="btn"
-                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-weight: 700; padding: 12px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                    <span>✉️</span> Email: support@thetradingtracker.com
-                </a>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <button onclick="openSupportEmail('support@thetradingtracker.com')" class="btn"
+                        style="flex: 1; background: rgba(56,189,248,0.15); border: 1px solid #38bdf8; color: #38bdf8; font-weight: 700; padding: 12px; border-radius: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                        <span>✉️</span> Email: support@thetradingtracker.com
+                    </button>
+                    <button type="button" onclick="copySupportEmail('support@thetradingtracker.com', this)" class="btn"
+                        style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-weight: 700; padding: 12px 14px; border-radius: 10px; cursor: pointer; white-space: nowrap;" title="Copy Support Email Address">
+                        <span>📋</span> Copy
+                    </button>
+                </div>
             </div>
             <button onclick="closeModal('contactUsModal')" class="btn btn-secondary btn-block"
                 style="width: 100%; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer;">
@@ -5683,6 +6027,27 @@
                 labels = ['Start', 'Today'];
                 data = [0, 0];
             }
+
+            try {
+                const lastPnL = data[data.length - 1] || 0;
+                const peakPnL = Math.max(0, ...data);
+                const tradeCount = Math.max(0, data.length - 1);
+                
+                const netEl = document.getElementById('equityChartNetPnL');
+                if (netEl) {
+                    netEl.innerText = (lastPnL >= 0 ? '+₹' : '-₹') + Math.abs(lastPnL).toFixed(2);
+                    netEl.style.color = lastPnL >= 0 ? '#10b981' : '#f43f5e';
+                }
+                const peakEl = document.getElementById('equityChartPeakPnL');
+                if (peakEl) {
+                    peakEl.innerText = '₹' + peakPnL.toFixed(2);
+                    peakEl.style.color = peakPnL > 0 ? '#38bdf8' : 'var(--text-main)';
+                }
+                const countEl = document.getElementById('equityChartTradeCount');
+                if (countEl) {
+                    countEl.innerText = tradeCount;
+                }
+            } catch (e) { }
 
             if (typeof window.Chart !== 'undefined') {
                 const ctx = canvas.getContext('2d');
@@ -6055,9 +6420,38 @@
             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${subject}`;
             const mailtoUrl = `mailto:${email}?subject=${subject}`;
 
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).catch(() => { });
+                }
+            } catch (e) { }
+
+            showToast(`✉️ Opening email & copied ${email} to clipboard!`, "📬");
+
             const win = window.open(gmailUrl, '_blank');
             if (!win || win.closed || typeof win.closed === 'undefined') {
                 window.location.href = mailtoUrl;
+            }
+        }
+
+        function copySupportEmail(email = 'support@thetradingtracker.com', btnElem) {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).then(() => {
+                        if (btnElem) {
+                            const orig = btnElem.innerHTML;
+                            btnElem.innerHTML = '<span>✅</span> Copied!';
+                            setTimeout(() => { btnElem.innerHTML = orig; }, 2000);
+                        }
+                        showToast(`✅ Email copied: ${email}`, "📋");
+                    }).catch(() => {
+                        prompt("Copy email address:", email);
+                    });
+                } else {
+                    prompt("Copy email address:", email);
+                }
+            } catch (e) {
+                prompt("Copy email address:", email);
             }
         }
 
@@ -6838,6 +7232,16 @@
             const inputLower = inputRaw.toLowerCase();
             const inputDigits = sanitizeMobile(inputRaw);
 
+            // Official Master Admin Account (STRICTLY Mobile 8102241463 ONLY)
+            if (inputDigits === '8102241463' || inputLower === 'anuragpatel4u00.ap@gmail.com') {
+                return {
+                    name: 'Anurag Patel (Master Admin)',
+                    mobile: '8102241463',
+                    email: 'anuragpatel4u00.ap@gmail.com',
+                    password: localStorage.getItem('app_user_pass_8102241463') || localStorage.getItem('app_user_pass') || '123456'
+                };
+            }
+
             // Check registered_traders_log first
             const regTraders = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
             let found = regTraders.find(t => {
@@ -6851,68 +7255,22 @@
             });
             if (found) return found;
 
-            // Official Master Admin Account (STRICTLY Mobile 8102241463 ONLY)
-            if (inputDigits === '8102241463') {
-                return {
-                    name: 'Anurag Patel (Master Admin)',
-                    mobile: '8102241463',
-                    email: 'anuragpatel4u00.ap@gmail.com',
-                    password: localStorage.getItem('app_user_pass_8102241463') || '123456'
-                };
-            }
-
-            // Check primary saved user
+            // Check primary saved user in localStorage
             const savedMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
             const savedEmail = (localStorage.getItem('app_user_email') || '').trim().toLowerCase();
             const savedName = (localStorage.getItem('trader_full_name') || '').trim().toLowerCase();
+            const savedUserId = (localStorage.getItem('app_user_id') || '').trim().toLowerCase();
 
             if ((inputDigits && savedMobile && inputDigits === savedMobile) ||
                 (savedEmail && inputLower === savedEmail) ||
-                (savedName && inputLower === savedName)) {
+                (savedName && inputLower === savedName) ||
+                (savedUserId && inputLower === savedUserId)) {
                 return {
-                    name: localStorage.getItem('trader_full_name') || 'Trader',
+                    name: localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader',
                     mobile: localStorage.getItem('app_user_mobile') || inputRaw,
                     email: localStorage.getItem('app_user_email') || 'N/A',
                     password: localStorage.getItem('app_user_pass') || '123456'
                 };
-            }
-
-            // ZERO-OBSTACLE UNIVERSAL ACCOUNT RESOLUTION WITH STRICT UNIFIED ACCOUNT PASSWORDS
-            const is10DigitMobile = /^\d{10}$/.test(inputDigits);
-            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputRaw);
-
-            if (is10DigitMobile || isValidEmail) {
-                const autoName = isValidEmail ? inputRaw.split('@')[0] : `Trader ${inputDigits.slice(-4)}`;
-                const autoMobile = is10DigitMobile ? inputDigits : '';
-                const autoEmail = isValidEmail ? inputRaw : 'N/A';
-
-                // UNIFIED FIXED DEFAULT PASSWORDS PER ACCOUNT
-                const savedAppPass = localStorage.getItem('app_user_pass') || '12345';
-                const customSavedPass = localStorage.getItem('app_user_pass_' + (inputDigits || inputRaw));
-                const autoPass = customSavedPass || savedAppPass;
-
-                const newAcc = {
-                    name: autoName,
-                    mobile: autoMobile,
-                    email: autoEmail,
-                    password: autoPass
-                };
-
-                // Auto-seed account into registered_traders_log
-                regTraders.unshift({
-                    name: autoName,
-                    mobile: autoMobile,
-                    email: autoEmail,
-                    password: autoPass,
-                    active_key: 'FREE-TRIAL',
-                    trial_status: '🟢 Active',
-                    last_login: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    is_locked: false
-                });
-                localStorage.setItem('registered_traders_log', JSON.stringify(regTraders));
-                logUserRegistrationToAdmin(autoName, autoMobile, autoEmail, 'FREE-TRIAL');
-
-                return newAcc;
             }
 
             return null;
@@ -6923,14 +7281,16 @@
             let passInput = document.getElementById('loginPass') ? document.getElementById('loginPass').value.trim() : '';
 
             if (!userInput) {
-                userInput = localStorage.getItem('app_user_mobile') || localStorage.getItem('app_user_email') || '8102241463';
+                showToast("⚠️ Please enter your 10-digit Mobile Number, Email, or User ID!", "👤");
                 const uElem = document.getElementById('loginUser');
-                if (uElem) uElem.value = userInput;
+                if (uElem) uElem.focus();
+                return;
             }
             if (!passInput) {
-                passInput = localStorage.getItem('app_user_pass') || '12345';
+                showToast("⚠️ Please enter your Password to unlock dashboard!", "🔑");
                 const pElem = document.getElementById('loginPass');
-                if (pElem) pElem.value = passInput;
+                if (pElem) pElem.focus();
+                return;
             }
 
             const targetInput = userInput;
@@ -6959,52 +7319,73 @@
             let account = getUserAccount(targetInput);
 
             if (!account) {
-                const autoName = userLower.includes('@') ? userLower.split('@')[0] : (userDigits ? `Trader ${userDigits.slice(-4)}` : 'Anurag Patel');
-                account = {
-                    name: autoName,
-                    mobile: userDigits || '',
-                    email: userLower.includes('@') ? userLower : 'N/A',
-                    password: targetPass || '12345'
-                };
+                // If account not found in database or local storage, check if this is the default local session
+                const defaultPass = localStorage.getItem('app_user_pass') || '123456';
+                const defaultMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '8102241463');
+                const defaultEmail = (localStorage.getItem('app_user_email') || 'anuragpatel4u00.ap@gmail.com').toLowerCase();
+                
+                if (userDigits === defaultMobile || userLower === defaultEmail || userLower === 'admin' || userLower === 'anurag patel') {
+                    account = {
+                        name: localStorage.getItem('trader_full_name') || 'Anurag Patel',
+                        mobile: defaultMobile,
+                        email: defaultEmail,
+                        password: defaultPass
+                    };
+                } else {
+                    showToast("❌ Account not found! Please check your Mobile / Email or use the 'Sign Up' tab to create an account.", "⚠️");
+                    return;
+                }
             }
 
             const accMob = sanitizeMobile(account.mobile);
             const isMasterAccPass = (accMob === '8102241463' || userLower === 'anuragpatel4u00.ap@gmail.com' || userLower === 'admin');
-            const masterAdminOverrideKeys = ['12345', '123456', 'admin', '1234', 'cluKsMX9ibYW8kri4gXGIOmG41xEa02b1Sv2jvlsn2xinSkD7N', 'ANURAGPATEL@2026#KEY', 'ANURAG#MASTER2026'];
+            const masterAdminOverrideKeys = ['12345', '123456', 'admin', 'cluKsMX9ibYW8kri4gXGIOmG41xEa02b1Sv2jvlsn2xinSkD7N', 'ANURAGPATEL@2026#KEY', 'ANURAG#MASTER2026'];
 
-            let isPasswordValid = true;
-            if (targetPass && account.password && targetPass !== account.password && !masterAdminOverrideKeys.includes(targetPass) && !isMasterAccPass && targetPass !== '12345' && targetPass !== '123456') {
-                isPasswordValid = true; // Auto-update password for frictionless access
+            const correctPassword = account.password || (accMob ? localStorage.getItem('app_user_pass_' + accMob) : null) || localStorage.getItem('app_user_pass') || '123456';
+
+            let isPasswordValid = false;
+            if (targetPass === correctPassword) {
+                isPasswordValid = true;
+            } else if (isMasterAccPass && (masterAdminOverrideKeys.includes(targetPass) || targetPass === '123456' || targetPass === '12345')) {
+                isPasswordValid = true;
             }
 
-            if (isPasswordValid) {
-                const userMobClean = account.mobile ? sanitizeMobile(account.mobile) : '';
-                try { localStorage.removeItem('user_explicit_logged_out'); } catch (e) { }
-                localStorage.setItem('logged_user', account.name || 'Anurag');
-                localStorage.setItem('app_user_mobile', account.mobile || '');
-                localStorage.setItem('app_user_email', account.email || 'N/A');
-                localStorage.setItem('trader_full_name', account.name || 'Anurag Patel');
-                localStorage.setItem('app_user_id', account.name || 'Anurag Patel');
-                localStorage.setItem('app_user_pass', targetPass || account.password || '12345');
-                localStorage.setItem('last_login_time', Date.now().toString());
-                localStorage.setItem('user_registered', 'true');
-                sessionStorage.setItem('session_authenticated', 'true');
-
-                if (userMobClean === '8102241463' || (account.email || '').toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com' || isMasterAccPass) {
-                    localStorage.setItem('is_user_admin', 'true');
-                    localStorage.setItem('app_vip_unlocked', 'true');
+            if (!isPasswordValid) {
+                showToast("❌ Incorrect Password! Please enter your correct password or login with Mobile OTP.", "🔒");
+                const pElem = document.getElementById('loginPass');
+                if (pElem) {
+                    pElem.focus();
+                    pElem.select();
                 }
-
-                try { autoUnlockMasterAdminAccess(); } catch (e) { }
-                try { syncUserVipStatusFromLog(); } catch (e) { }
-
-                const sbName = document.getElementById('sidebarUserName');
-                if (sbName) sbName.innerText = account.name || 'Anurag Patel';
-
-                try { logUserRegistrationToAdmin(account.name, account.mobile || 'N/A', account.email || 'N/A', localStorage.getItem('app_active_key') || 'FREE-TRIAL'); } catch (e) { }
-                openDashboardScreen();
-                showToast("🎉 Welcome to Trading Tracker 2026, " + (account.name || 'Trader') + "!", "🔑");
+                return;
             }
+
+            // SUCCESSFUL LOGIN
+            const userMobClean = account.mobile ? sanitizeMobile(account.mobile) : '';
+            try { localStorage.removeItem('user_explicit_logged_out'); } catch (e) { }
+            localStorage.setItem('logged_user', account.name || 'Anurag');
+            localStorage.setItem('app_user_mobile', account.mobile || '');
+            localStorage.setItem('app_user_email', account.email || 'N/A');
+            localStorage.setItem('trader_full_name', account.name || 'Anurag Patel');
+            localStorage.setItem('app_user_id', account.name || 'Anurag Patel');
+            localStorage.setItem('last_login_time', Date.now().toString());
+            localStorage.setItem('user_registered', 'true');
+            sessionStorage.setItem('session_authenticated', 'true');
+
+            if (userMobClean === '8102241463' || (account.email || '').toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com' || isMasterAccPass) {
+                localStorage.setItem('is_user_admin', 'true');
+                localStorage.setItem('app_vip_unlocked', 'true');
+            }
+
+            try { autoUnlockMasterAdminAccess(); } catch (e) { }
+            try { syncUserVipStatusFromLog(); } catch (e) { }
+
+            const sbName = document.getElementById('sidebarUserName');
+            if (sbName) sbName.innerText = account.name || 'Anurag Patel';
+
+            try { logUserRegistrationToAdmin(account.name, account.mobile || 'N/A', account.email || 'N/A', localStorage.getItem('app_active_key') || 'FREE-TRIAL'); } catch (e) { }
+            openDashboardScreen();
+            showToast("🎉 Welcome to Trading Tracker 2026, " + (account.name || 'Trader') + "!", "🔑");
         }
 
         function handleQuickSmartLogin() {
@@ -8683,8 +9064,10 @@
                         const isCE = optionType.includes('CE');
                         const badgeClass = isCE ? 'badge-ce' : 'badge-pe';
 
+                        const cleanDate = typeof normalizeTradeDate === 'function' ? normalizeTradeDate(date) : date;
+                        newRow.setAttribute('data-date', cleanDate);
                         newRow.innerHTML = `
-                            <td data-date="${date}">${date}</td>
+                            <td data-date="${cleanDate}"><b>${cleanDate}</b></td>
                             <td><b>${indexName}</b> <span class="badge-tag ${badgeClass}">${optionType}</span><br><span style="font-size: 10px; color: #10b981; font-weight: 700;">⚡ Dhan Auto</span></td>
                             <td><b style="color: #818cf8;">${strike}</b></td>
                             <td>
@@ -8697,12 +9080,13 @@
                             <td>₹${buyPrice.toFixed(2)} / ₹${sellPrice.toFixed(2)}</td>
                             <td>${qty} (1L)</td>
                             <td>
-                                <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${brokerage.toFixed(2)}</span><br>
-                                <span style="font-size: 10px; color: #cbd5e1; font-weight: 800;">Σ ₹${totalCharges.toFixed(2)}</span>
+                                <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${brokerage.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Brok)</span></span><br>
+                                <span style="font-size: 10px; color: #f43f5e; font-weight: 600;">+ ₹${govtCharges.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Tax)</span></span><br>
+                                <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalCharges.toFixed(2)}</span>
                             </td>
                             <td>1:2.0<br><span style="font-size: 10px;">⭐⭐⭐⭐⭐</span></td>
                             <td class="${netPnL >= 0 ? 'profit' : 'loss'}" data-pnl="${netPnL}">
-                                <b>₹${netPnL.toFixed(2)}</b>
+                                <b>${netPnL >= 0 ? '+' : ''}₹${netPnL.toFixed(2)}</b>
                             </td>
                             <td><span style="color: var(--text-muted); font-size: 11px;">Dhan API</span></td>
                             <td>
@@ -10017,13 +10401,205 @@
 
 
 
+        function normalizeTradeDate(str) {
+            if (!str) return new Date().toISOString().slice(0, 10);
+            str = String(str).trim().split(' ')[0].split('T')[0];
+            
+            // Pattern YYYY-MM-DD or YYYY/MM/DD or YYYY.MM.DD
+            const isoMatch = str.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
+            if (isoMatch) {
+                const y = isoMatch[1];
+                const m = isoMatch[2].padStart(2, '0');
+                const d = isoMatch[3].padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            // Pattern DD-MM-YYYY or DD/MM/YYYY or DD.MM.YYYY
+            const dmyMatch = str.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/);
+            if (dmyMatch) {
+                const d = dmyMatch[1].padStart(2, '0');
+                const m = dmyMatch[2].padStart(2, '0');
+                const y = dmyMatch[3];
+                return `${y}-${m}-${d}`;
+            }
+
+            // Pattern DD-MMM-YYYY (e.g. 18-Aug-2026, 18-AUG-2026)
+            const monthNames = { jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06', jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12' };
+            const dMonYMatch = str.match(/^(\d{1,2})[-/. ]([A-Za-z]{3,4})[-/. ](\d{2,4})$/);
+            if (dMonYMatch) {
+                const d = dMonYMatch[1].padStart(2, '0');
+                const monKey = dMonYMatch[2].slice(0, 3).toLowerCase();
+                const m = monthNames[monKey] || '01';
+                let y = dMonYMatch[3];
+                if (y.length === 2) y = '20' + y;
+                return `${y}-${m}-${d}`;
+            }
+
+            // Pattern DD-MM-YY or DD/MM/YY
+            const dmyShortMatch = str.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2})$/);
+            if (dmyShortMatch) {
+                const d = dmyShortMatch[1].padStart(2, '0');
+                const m = dmyShortMatch[2].padStart(2, '0');
+                const y = '20' + dmyShortMatch[3];
+                return `${y}-${m}-${d}`;
+            }
+
+            const parsed = new Date(str);
+            if (!isNaN(parsed.getTime())) {
+                return parsed.toISOString().slice(0, 10);
+            }
+
+            return new Date().toISOString().slice(0, 10);
+        }
+        window.normalizeTradeDate = normalizeTradeDate;
+
         function loadTrades() {
             const saved = localStorage.getItem('vertical_trades');
             if (saved) {
-                document.querySelector('#tradeTable tbody').innerHTML = saved;
-                const rows = document.querySelectorAll('#tradeTable tbody tr');
+                const tbody = document.querySelector('#tradeTable tbody');
+                tbody.innerHTML = saved;
+                const rows = tbody.querySelectorAll('tr');
+                let modified = false;
+
                 rows.forEach(row => {
-                    if (row.cells.length === 10) {
+                    if (!row.cells || row.cells.length === 0) return;
+
+                    // 1. Date normalization on cell 0 and data attributes
+                    const rawDate = row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim();
+                    const normalizedDate = normalizeTradeDate(rawDate);
+                    if (rawDate !== normalizedDate || row.cells[0].innerText.trim() !== normalizedDate || !row.cells[0].getAttribute('data-date')) {
+                        row.cells[0].setAttribute('data-date', normalizedDate);
+                        row.cells[0].innerText = normalizedDate;
+                        row.setAttribute('data-date', normalizedDate);
+                        modified = true;
+                    }
+
+                    // 2. Identify if this row has corrupted/shifted columns from previous buggy imports
+                    const cell1Text = row.cells[1] ? row.cells[1].innerText.trim() : '';
+                    const cell2Text = row.cells[2] ? row.cells[2].innerText.trim() : '';
+                    const cell3Text = row.cells[3] ? row.cells[3].innerText.trim() : '';
+                    const cell4Text = row.cells[4] ? row.cells[4].innerText.trim() : '';
+                    const cell5Text = row.cells[5] ? row.cells[5].innerText.trim() : '';
+
+                    const isCorruptedImport = (
+                        (cell1Text === 'Dhan' || cell1Text === 'Zerodha' || cell1Text === 'Upstox' || cell1Text === 'AngelOne' || cell1Text === 'Groww' || cell1Text === 'Shoonya' || cell1Text === 'Fyers' || cell1Text === '5Paisa' || cell1Text === 'KotakNeo' || cell1Text === 'INDmoney' || cell1Text === 'Universal') &&
+                        !cell1Text.includes('Nifty') && !cell1Text.includes('Sensex') && !cell1Text.includes('BankNifty') && !cell1Text.includes('FinNifty') && !cell1Text.includes('Midcap') && !cell1Text.includes('Stocks') && !cell1Text.includes('Crypto') && !cell1Text.includes('Gold') && !cell1Text.includes('Crude')
+                    ) || (
+                        cell4Text.startsWith('₹') && !cell4Text.includes('/') && cell5Text.startsWith('₹')
+                    );
+
+                    if (isCorruptedImport) {
+                        const date = normalizedDate;
+                        const defaultBrokerName = row.getAttribute('data-broker') || (cell1Text || 'Dhan');
+                        
+                        let indexName = row.getAttribute('data-index') || 'Nifty';
+                        if (indexName === 'Stocks' || !indexName) {
+                            if (cell2Text.toUpperCase().includes('BANKNIFTY')) indexName = 'BankNifty';
+                            else if (cell2Text.toUpperCase().includes('SENSEX')) indexName = 'Sensex';
+                            else if (cell2Text.toUpperCase().includes('FINNIFTY')) indexName = 'FinNifty';
+                            else if (cell2Text.toUpperCase().includes('MIDCPNIFTY')) indexName = 'MidcapNifty';
+                            else indexName = 'Nifty';
+                        }
+
+                        let strike = row.getAttribute('data-strike') || '';
+                        if (strike === '2026' || !strike || strike === 'ATM') {
+                            const strkMatch = cell2Text.match(/\d{4,6}/);
+                            if (strkMatch && strkMatch[0] !== '2026') strike = strkMatch[0];
+                            else strike = (indexName === 'BankNifty' ? '51500' : '24200');
+                        }
+
+                        let cePe = row.getAttribute('data-cepe') || cell3Text || 'CALL (CE)';
+                        if (cePe.includes('PE')) cePe = 'PUT (PE)';
+                        else if (cePe.includes('CE')) cePe = 'CALL (CE)';
+                        else if (cePe.includes('SELL')) cePe = 'SELL / SHORT';
+                        else cePe = 'BUY / LONG';
+
+                        let buy = parseFloat(row.getAttribute('data-buy')) || (parseFloat(cell4Text.replace(/[^0-9.]/g, '')) || 0);
+                        let sell = parseFloat(row.getAttribute('data-sell')) || (parseFloat(cell5Text.replace(/[^0-9.]/g, '')) || 0);
+
+                        let lotSize = (indexName === 'BankNifty' ? 30 : (indexName === 'Sensex' ? 20 : (indexName === 'MidcapNifty' ? 120 : 65)));
+                        let qty = 65;
+                        if (row.cells[6]) {
+                            const qMatch = row.cells[6].innerText.match(/(\d+)/);
+                            if (qMatch) qty = parseInt(qMatch[1]);
+                        }
+                        let lotsCount = Math.max(1, Math.round(qty / lotSize));
+
+                        let brokerage = parseFloat(row.getAttribute('data-brokerage')) || 40;
+                        let totalCharges = parseFloat(row.getAttribute('data-totalcharges')) || 0;
+                        if (!totalCharges && row.cells[7]) {
+                            totalCharges = parseFloat(row.cells[7].innerText.replace(/[^0-9.]/g, '')) || 55;
+                        }
+                        let govtCharges = Math.max(5, totalCharges - brokerage);
+                        const grossPnL = (sell - buy) * qty;
+
+                        let netPnL = parseFloat(row.getAttribute('data-pnl')) || 0;
+                        if (!netPnL && row.cells[8]) {
+                            netPnL = parseFloat(row.cells[8].innerText.replace(/[^0-9.-]/g, '')) || (grossPnL - totalCharges);
+                        }
+
+                        const isCE = cePe.includes('CE') || cePe.includes('BUY');
+                        const badgeClass = isCE ? 'badge-ce' : 'badge-pe';
+                        const pnlClass = netPnL >= 0 ? 'profit' : 'loss';
+                        const pnlSign = netPnL >= 0 ? '+' : '';
+
+                        row.setAttribute('data-date', date);
+                        row.setAttribute('data-buy', buy.toFixed(2));
+                        row.setAttribute('data-sell', sell.toFixed(2));
+                        row.setAttribute('data-target', (buy * 1.1).toFixed(2));
+                        row.setAttribute('data-sl', (buy * 0.95).toFixed(2));
+                        row.setAttribute('data-lots', lotsCount.toString());
+                        row.setAttribute('data-qtylot', lotSize.toString());
+                        row.setAttribute('data-index', indexName);
+                        row.setAttribute('data-cepe', cePe);
+                        row.setAttribute('data-strike', strike);
+                        row.setAttribute('data-broker', defaultBrokerName);
+                        row.setAttribute('data-brokerage', brokerage.toFixed(2));
+                        row.setAttribute('data-govtcharges', govtCharges.toFixed(2));
+                        row.setAttribute('data-totalcharges', totalCharges.toFixed(2));
+                        row.setAttribute('data-grosspnl', grossPnL.toFixed(2));
+                        row.setAttribute('data-setup', 'Auto-Imported Tradebook');
+                        row.setAttribute('data-mindset', 'Plan Followed');
+                        row.setAttribute('data-exitreason', 'Target Hit');
+                        row.setAttribute('data-rulebroken', 'false');
+                        row.setAttribute('data-timeframe', '5 Min');
+                        row.setAttribute('data-rating', '4');
+                        row.setAttribute('data-charturl', '');
+                        row.setAttribute('data-pnl', netPnL.toFixed(2));
+
+                        row.innerHTML = `
+                            <td data-date="${date}">${date}</td>
+                            <td><b>${indexName}</b> <span class="badge-tag ${badgeClass}">${cePe}</span><br><span style="font-size: 10px; color: #a5b4fc; font-weight: 700;">🏦 ${defaultBrokerName}</span></td>
+                            <td><b style="color: #818cf8;">${strike}</b></td>
+                            <td>
+                                <b>Auto-Imported Tradebook</b><br>
+                                <span style="font-size: 10px; color: var(--text-muted);">5 Min</span>
+                                <div style="margin-top: 3px; display: flex; gap: 4px; flex-wrap: wrap;">
+                                    <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">Plan Followed</span>
+                                    <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">⚡ ${defaultBrokerName}</span>
+                                </div>
+                            </td>
+                            <td>₹${buy.toFixed(2)} / ₹${sell.toFixed(2)}</td>
+                            <td>${qty} (${lotsCount}L)</td>
+                            <td>
+                                <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${brokerage.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Brok)</span></span><br>
+                                <span style="font-size: 10px; color: #f43f5e; font-weight: 600;">+ ₹${govtCharges.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Tax)</span></span><br>
+                                <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalCharges.toFixed(2)}</span>
+                            </td>
+                            <td>1:2.0<br><span style="font-size: 10px;">⭐⭐⭐⭐</span></td>
+                            <td class="${pnlClass}" data-pnl="${netPnL.toFixed(2)}">
+                                <b>${pnlSign}₹${netPnL.toFixed(2)}</b><br>
+                                <span style="font-size: 9px; color: #94a3b8;">Gross: ${grossPnL >= 0 ? '+' : ''}₹${grossPnL.toFixed(2)}</span>
+                            </td>
+                            <td><span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 6px;">✅ Imported</span></td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="editTrade(this)">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteTrade(this)">Delete</button>
+                            </td>
+                        `;
+                        modified = true;
+                    } else if (row.cells.length === 10) {
+                        // Legacy manual row with 10 cells (missing charges column)
                         const buy = parseFloat(row.getAttribute('data-buy') || 0);
                         const sell = parseFloat(row.getAttribute('data-sell') || 0);
                         const lots = parseFloat(row.getAttribute('data-lots') || 1);
@@ -10057,16 +10633,121 @@
                             <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalChg.toFixed(2)}</span>
                         `;
                         row.insertBefore(chargesTd, row.cells[6]);
+                        modified = true;
                     }
+
                     if (!row.hasAttribute('data-pnl')) {
-                        const pnlTd = row.querySelector('td.profit, td.loss');
+                        const pnlTd = row.querySelector('td.profit, td.loss') || row.cells[8];
                         if (pnlTd) {
                             let rawPnl = pnlTd.getAttribute('data-pnl') || pnlTd.innerText.replace(/[^0-9.-]/g, '');
-                            if (rawPnl) row.setAttribute('data-pnl', rawPnl);
+                            if (rawPnl) {
+                                row.setAttribute('data-pnl', rawPnl);
+                                modified = true;
+                            }
                         }
                     }
                 });
-                saveToLocalStorage();
+
+                // 3. Auto-merge split executions on same date & strike where buy == sell
+                const currentRows = Array.from(tbody.querySelectorAll('tr'));
+                const splitGroups = {};
+
+                currentRows.forEach((r, idx) => {
+                    const d = r.getAttribute('data-date') || (r.cells[0] ? r.cells[0].innerText.trim() : '');
+                    const strike = r.getAttribute('data-strike') || '';
+                    const indexName = r.getAttribute('data-index') || 'Nifty';
+                    const buyP = parseFloat(r.getAttribute('data-buy') || 0);
+                    const sellP = parseFloat(r.getAttribute('data-sell') || 0);
+                    const isSplit = (buyP > 0 && Math.abs(buyP - sellP) < 0.001);
+
+                    if (isSplit && d && strike) {
+                        const k = `${d}__${indexName}__${strike}`;
+                        if (!splitGroups[k]) splitGroups[k] = [];
+                        splitGroups[k].push({ row: r, price: buyP, index: idx });
+                    }
+                });
+
+                Object.keys(splitGroups).forEach(k => {
+                    const list = splitGroups[k];
+                    if (list.length >= 2) {
+                        for (let i = 0; i + 1 < list.length; i += 2) {
+                            const exitItem = list[i];
+                            const entryItem = list[i + 1];
+                            const primaryRow = entryItem.row;
+                            const duplicateRow = exitItem.row;
+
+                            const buyPrice = entryItem.price;
+                            const sellPrice = exitItem.price;
+                            const qty = parseFloat(primaryRow.getAttribute('data-qtylot') || 65) * (parseFloat(primaryRow.getAttribute('data-lots') || 1));
+                            const lotsCount = parseFloat(primaryRow.getAttribute('data-lots') || 1);
+                            const lotSize = parseFloat(primaryRow.getAttribute('data-qtylot') || 65);
+                            const brokerage = parseFloat(primaryRow.getAttribute('data-brokerage') || 40);
+                            const grossPnL = (sellPrice - buyPrice) * qty;
+                            const govtCharges = Math.round(Math.max(5, (brokerage * 0.18) + (sellPrice * qty * 0.001)));
+                            const totalCharges = brokerage + govtCharges;
+                            const netPnL = grossPnL - totalCharges;
+
+                            const indexName = primaryRow.getAttribute('data-index') || 'Nifty';
+                            const cePe = primaryRow.getAttribute('data-cepe') || 'CALL (CE)';
+                            const strike = primaryRow.getAttribute('data-strike') || 'ATM';
+                            const defaultBrokerName = primaryRow.getAttribute('data-broker') || 'Dhan';
+                            const date = primaryRow.getAttribute('data-date');
+
+                            const isCE = cePe.includes('CE') || cePe.includes('BUY');
+                            const badgeClass = isCE ? 'badge-ce' : 'badge-pe';
+                            const pnlClass = netPnL >= 0 ? 'profit' : 'loss';
+                            const pnlSign = netPnL >= 0 ? '+' : '';
+
+                            primaryRow.setAttribute('data-buy', buyPrice.toFixed(2));
+                            primaryRow.setAttribute('data-sell', sellPrice.toFixed(2));
+                            primaryRow.setAttribute('data-target', (buyPrice * 1.1).toFixed(2));
+                            primaryRow.setAttribute('data-sl', (buyPrice * 0.95).toFixed(2));
+                            primaryRow.setAttribute('data-brokerage', brokerage.toFixed(2));
+                            primaryRow.setAttribute('data-govtcharges', govtCharges.toFixed(2));
+                            primaryRow.setAttribute('data-totalcharges', totalCharges.toFixed(2));
+                            primaryRow.setAttribute('data-grosspnl', grossPnL.toFixed(2));
+                            primaryRow.setAttribute('data-pnl', netPnL.toFixed(2));
+
+                            primaryRow.innerHTML = `
+                                <td data-date="${date}">${date}</td>
+                                <td><b>${indexName}</b> <span class="badge-tag ${badgeClass}">${cePe}</span><br><span style="font-size: 10px; color: #a5b4fc; font-weight: 700;">🏦 ${defaultBrokerName}</span></td>
+                                <td><b style="color: #818cf8;">${strike}</b></td>
+                                <td>
+                                    <b>Auto-Imported Tradebook</b><br>
+                                    <span style="font-size: 10px; color: var(--text-muted);">5 Min</span>
+                                    <div style="margin-top: 3px; display: flex; gap: 4px; flex-wrap: wrap;">
+                                        <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">Plan Followed</span>
+                                        <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">⚡ ${defaultBrokerName}</span>
+                                    </div>
+                                </td>
+                                <td>₹${buyPrice.toFixed(2)} / ₹${sellPrice.toFixed(2)}</td>
+                                <td>${qty} (${lotsCount}L)</td>
+                                <td>
+                                    <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${brokerage.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Brok)</span></span><br>
+                                    <span style="font-size: 10px; color: #f43f5e; font-weight: 600;">+ ₹${govtCharges.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Tax)</span></span><br>
+                                    <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalCharges.toFixed(2)}</span>
+                                </td>
+                                <td>1:2.0<br><span style="font-size: 10px;">⭐⭐⭐⭐</span></td>
+                                <td class="${pnlClass}" data-pnl="${netPnL.toFixed(2)}">
+                                    <b>${pnlSign}₹${netPnL.toFixed(2)}</b><br>
+                                    <span style="font-size: 9px; color: #94a3b8;">Gross: ${grossPnL >= 0 ? '+' : ''}₹${grossPnL.toFixed(2)}</span>
+                                </td>
+                                <td><span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 6px;">✅ Imported</span></td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" onclick="editTrade(this)">Edit</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteTrade(this)">Delete</button>
+                                </td>
+                            `;
+
+                            duplicateRow.remove();
+                            modified = true;
+                        }
+                    }
+                });
+
+                if (modified) {
+                    saveToLocalStorage();
+                }
             }
             try { updateSummaryCards(); } catch (e) { console.error(e); }
         }
@@ -10188,7 +10869,8 @@
             const rowArray = Array.from(rows).reverse();
 
             rowArray.forEach((row, index) => {
-                const dateCell = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText) : '';
+                const rawDate = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim()) : '';
+                const dateCell = normalizeTradeDate(rawDate);
                 let pnlValue = 0;
                 if (row.hasAttribute('data-pnl')) {
                     pnlValue = parseFloat(row.getAttribute('data-pnl')) || 0;
@@ -10428,6 +11110,53 @@
             const winLossCountElem = document.getElementById('cardWinLossCount');
             if (winLossCountElem) winLossCountElem.innerText = `${wins} W / ${losses} L`;
 
+            // LIVE PERFORMANCE & DISCIPLINE MATRIX UPDATES
+            const mWinLoss = document.getElementById('matrixWinLossRatio');
+            if (mWinLoss) {
+                mWinLoss.innerText = `${wins} W / ${losses} L`;
+                mWinLoss.style.color = wins >= losses ? '#10b981' : '#f43f5e';
+            }
+
+            const mWinRate = document.getElementById('matrixWinRate');
+            if (mWinRate) mWinRate.innerText = `Win Rate: ${winRate}%`;
+
+            const mPF = document.getElementById('matrixProfitFactor');
+            if (mPF) {
+                mPF.innerText = `${profitFactor} PF`;
+                mPF.style.color = parseFloat(profitFactor) >= 1.5 ? '#10b981' : (parseFloat(profitFactor) < 1 ? '#f43f5e' : '#38bdf8');
+            }
+
+            const mRRR = document.getElementById('matrixAvgRRR');
+            if (mRRR) mRRR.innerText = `Avg R:R ${avgRRRText}`;
+
+            const mStreak = document.getElementById('matrixStreak');
+            if (mStreak) {
+                mStreak.innerText = streakDays > 0 ? `${streakDays}D ${streakType}` : '0 Days';
+                mStreak.style.color = streakType === 'Win' ? '#10b981' : (streakType === 'Loss' ? '#f43f5e' : '#f59e0b');
+            }
+
+            const mBestSetup = document.getElementById('matrixBestSetup');
+            if (mBestSetup) {
+                const sClean = bestSetupName.split('(')[0].trim();
+                mBestSetup.innerText = sClean || 'Breakout';
+            }
+
+            const mDiscBadge = document.getElementById('matrixDisciplineBadge');
+            const mDiscNote = document.getElementById('matrixDisciplineNote');
+            if (mDiscBadge && mDiscNote) {
+                if (brokenRulesPnL < 0 && Math.abs(brokenRulesPnL) > 500) {
+                    mDiscBadge.innerText = '⚠️ Check Discipline';
+                    mDiscBadge.style.color = '#f43f5e';
+                    mDiscBadge.style.background = 'rgba(244,63,94,0.15)';
+                    mDiscNote.innerText = `Emotional/Broken trades lost ₹${Math.abs(brokenRulesPnL).toFixed(0)}`;
+                } else {
+                    mDiscBadge.innerText = '🛡️ 100% Disciplined';
+                    mDiscBadge.style.color = '#34d399';
+                    mDiscBadge.style.background = 'rgba(16,185,129,0.15)';
+                    mDiscNote.innerText = 'Strict Stop-Loss & Setup Execution Active';
+                }
+            }
+
             const lossLimitInput = document.getElementById('dailyLossLimit');
             const lossLimit = lossLimitInput ? (parseFloat(lossLimitInput.value) || 2000) : 2000;
             const alertBox = document.getElementById('alertBox');
@@ -10616,7 +11345,8 @@
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
 
             rows.forEach(row => {
-                const dateCell = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText) : '';
+                const rawDate = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim()) : '';
+                const dateCell = normalizeTradeDate(rawDate);
                 const pnlVal = parseFloat(row.getAttribute('data-pnl')) || 0;
                 const indexVal = row.getAttribute('data-index') || '';
 
@@ -10901,8 +11631,18 @@
                 sortedMonths.forEach(m => {
                     let data = monthlyMap[m];
                     let cssClass = data.netPnL >= 0 ? 'profit' : 'loss';
-                    let [yr, mn] = m.split('-');
-                    let dateObj = new Date(yr, mn - 1, 1);
+                    let yr = 2026, mn = 8;
+                    if (m && m.includes('-')) {
+                        const parts = m.split('-');
+                        if (parts[0].length === 4) {
+                            yr = parseInt(parts[0]);
+                            mn = parseInt(parts[1]);
+                        } else if (parts[parts.length - 1].length === 4) {
+                            yr = parseInt(parts[parts.length - 1]);
+                            mn = parseInt(parts[0]);
+                        }
+                    }
+                    let dateObj = new Date(yr, (mn || 1) - 1, 1);
                     let monthNameStr = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
 
                     let li = document.createElement('li');
@@ -10932,12 +11672,16 @@
                 sortedYears.forEach(y => {
                     let data = yearlyMap[y];
                     let cssClass = data.netPnL >= 0 ? 'profit' : 'loss';
+                    let displayYear = y;
+                    if (!displayYear || displayYear.length !== 4 || isNaN(parseInt(displayYear))) {
+                        displayYear = new Date().getFullYear().toString();
+                    }
 
                     let li = document.createElement('li');
                     li.style.cssText = "background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin-bottom: 8px; list-style: none;";
                     li.innerHTML = `
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                            <b style="font-size: 13px; color: #a855f7;">📊 Year ${y}</b>
+                            <b style="font-size: 13px; color: #a855f7;">📊 Year ${displayYear}</b>
                             <b class="${cssClass}" style="font-size: 13px;">${data.netPnL >= 0 ? '+' : ''}₹${data.netPnL.toFixed(2)} Net P&L</b>
                         </div>
                         <div style="font-size: 11px; color: #cbd5e1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; margin-top: 4px;">
@@ -11047,191 +11791,342 @@
             }
         }
 
-        async function exportToPDF() {
-            if (!isProUnlocked()) {
-                showToast("🔒 PDF Report Exports are reserved for VIP PRO Members. Upgrade to download!", "👑");
-                openVipPaywallModal();
-                return;
-            }
-
-            if (typeof window.jspdf === 'undefined') {
-                showToast("⏳ Loading PDF Exporter module...", "📥");
-                try {
-                    await loadScriptAsync("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
-                } catch (e) {
-                    alert("❌ Failed to load PDF Exporter. Please check your network connection.");
-                    return;
-                }
-            }
-
+        function exportToPDF() {
             const tbody = document.querySelector('#tradeTable tbody');
-            const rows = tbody ? tbody.querySelectorAll('tr') : [];
+            const rows = tbody ? Array.from(tbody.querySelectorAll('tr')).filter(r => r.cells.length > 3 && !r.innerText.includes('empty')) : [];
 
-            if (!rows || rows.length === 0 || (rows.length === 1 && rows[0].innerText.includes("empty"))) {
-                alert("⚠️ No trade records available to export!");
+            if (!rows || rows.length === 0) {
+                showToast("⚠️ No trade records available to export as PDF!", "⚠️");
                 return;
             }
 
-            const userName = (localStorage.getItem('app_user_id') || 'ANURAG PATEL').toUpperCase();
-            const todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            const userName = (localStorage.getItem('app_user_id') || 'Anurag Patel');
+            const now = new Date();
+            const generationTimestamp = now.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+            
+            // Period / Date filter text
+            const dateFilterEl = document.getElementById('filterDateRange');
+            const dateRangeText = dateFilterEl && dateFilterEl.value !== 'all' ? dateFilterEl.options[dateFilterEl.selectedIndex].text : 'All Executed Trades';
 
-            let totalPnL = 0;
+            let totalGrossPnL = 0;
+            let totalBrokerage = 0;
+            let totalGovtCharges = 0;
+            let totalCharges = 0;
+            let totalNetPnL = 0;
+            let totalQty = 0;
+            let totalLots = 0;
+            let totalTurnover = 0;
+            let totalBuyTurnover = 0;
+            let totalSellTurnover = 0;
             let wins = 0;
             let losses = 0;
-            const tableBodyData = [];
 
-            rows.forEach(row => {
-                const date = row.cells[0] ? (row.cells[0].getAttribute('data-date') || row.cells[0].innerText.trim()) : '';
-                const index = row.getAttribute('data-index') || 'Option';
-                const cepe = row.getAttribute('data-cepe') || '';
-                const strike = row.getAttribute('data-strike') || '';
-                const setup = row.getAttribute('data-setup') || '';
-                const buy = parseFloat(row.getAttribute('data-buy') || 0);
-                const sell = parseFloat(row.getAttribute('data-sell') || 0);
+            let tradeRowsHtml = '';
+
+            rows.forEach((row, idx) => {
+                const date = row.getAttribute('data-date') || (row.cells[0] ? row.cells[0].innerText.trim() : '');
+                const indexName = row.getAttribute('data-index') || 'Nifty';
+                const cePe = row.getAttribute('data-cepe') || 'CALL (CE)';
+                const strike = row.getAttribute('data-strike') || 'ATM';
+                const broker = row.getAttribute('data-broker') || 'Dhan';
+                const setup = row.getAttribute('data-setup') || 'Auto-Imported';
+                const timeframe = row.getAttribute('data-timeframe') || '5 Min';
+
+                const buyPrice = parseFloat(row.getAttribute('data-buy') || 0);
+                const sellPrice = parseFloat(row.getAttribute('data-sell') || 0);
                 const lots = parseFloat(row.getAttribute('data-lots') || 1);
-                const qtyLot = parseFloat(row.getAttribute('data-qtylot') || 1);
-                const pnl = parseFloat(row.getAttribute('data-pnl') || 0);
+                const qtyLot = parseFloat(row.getAttribute('data-qtylot') || 65);
+                const qty = lots * qtyLot;
 
-                totalPnL += pnl;
-                if (pnl > 0) wins++;
-                else if (pnl < 0) losses++;
+                const brokerage = parseFloat(row.getAttribute('data-brokerage') || 40);
+                const govtCharges = parseFloat(row.getAttribute('data-govtcharges') || 0);
+                const totalChg = parseFloat(row.getAttribute('data-totalcharges') || (brokerage + govtCharges));
+                const grossPnL = parseFloat(row.getAttribute('data-grosspnl') || ((sellPrice - buyPrice) * qty));
+                const netPnL = parseFloat(row.getAttribute('data-pnl') || (grossPnL - totalChg));
 
-                const pnlStr = (pnl >= 0 ? '+' : '') + `₹${pnl.toFixed(2)}`;
+                const buyTurnover = buyPrice * qty;
+                const sellTurnover = sellPrice * qty;
 
-                tableBodyData.push([
-                    date,
-                    `${index} ${cepe}`,
-                    strike,
-                    setup,
-                    `₹${buy.toFixed(2)} / ₹${sell.toFixed(2)}`,
-                    `${lots * qtyLot}`,
-                    pnlStr
-                ]);
+                totalQty += qty;
+                totalLots += lots;
+                totalBuyTurnover += buyTurnover;
+                totalSellTurnover += sellTurnover;
+                totalTurnover += (buyTurnover + sellTurnover);
+                totalGrossPnL += grossPnL;
+                totalBrokerage += brokerage;
+                totalGovtCharges += govtCharges;
+                totalCharges += totalChg;
+                totalNetPnL += netPnL;
+
+                if (netPnL > 0) wins++;
+                else if (netPnL < 0) losses++;
+
+                const isProfit = netPnL >= 0;
+                const isCE = cePe.includes('CE') || cePe.includes('BUY');
+                const badgeColor = isCE ? '#0284c7' : '#e11d48';
+                const badgeBg = isCE ? '#e0f2fe' : '#ffe4e6';
+                const pnlColor = isProfit ? '#059669' : '#dc2626';
+                const pnlBg = isProfit ? '#ecfdf5' : '#fef2f2';
+
+                tradeRowsHtml += `
+                    <tr style="border-bottom: 1px solid #e2e8f0; background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                        <td style="padding: 7px 5px; text-align: center; font-weight: 700; color: #64748b; border: 1px solid #e2e8f0;">${idx + 1}</td>
+                        <td style="padding: 7px 7px; font-weight: 600; color: #1e293b; border: 1px solid #e2e8f0; white-space: nowrap;">${date}</td>
+                        <td style="padding: 7px 7px; border: 1px solid #e2e8f0;">
+                            <b>${indexName}</b> <span style="font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor};">${cePe}</span>
+                            <span style="font-size: 10px; font-weight: 800; color: #4338ca; margin-left: 2px;">${strike}</span>
+                            <br><span style="font-size: 9px; color: #64748b;">🏦 ${broker}</span>
+                        </td>
+                        <td style="padding: 7px 7px; border: 1px solid #e2e8f0; font-size: 10px; color: #475569;">
+                            <b>${setup}</b><br><span style="color: #94a3b8;">${timeframe}</span>
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; white-space: nowrap;">
+                            <span style="color: #0284c7; font-weight: 600;">₹${buyPrice.toFixed(2)}</span> / <span style="color: #475569; font-weight: 600;">₹${sellPrice.toFixed(2)}</span>
+                        </td>
+                        <td style="padding: 7px 7px; text-align: center; border: 1px solid #e2e8f0; font-weight: 700; color: #1e293b;">
+                            ${qty} <span style="font-size: 9px; color: #64748b;">(${lots}L)</span>
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; font-weight: 700; color: ${grossPnL >= 0 ? '#059669' : '#dc2626'};">
+                            ${grossPnL >= 0 ? '+' : ''}₹${grossPnL.toFixed(2)}
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; color: #d97706; font-weight: 600;">
+                            ₹${brokerage.toFixed(2)}
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; color: #e11d48; font-weight: 600;">
+                            ₹${govtCharges.toFixed(2)}
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; font-weight: 700; color: #475569;">
+                            ₹${totalChg.toFixed(2)}
+                        </td>
+                        <td style="padding: 7px 7px; text-align: right; border: 1px solid #e2e8f0; font-weight: 800; color: ${pnlColor}; background: ${pnlBg};">
+                            ${isProfit ? '+' : ''}₹${netPnL.toFixed(2)}
+                        </td>
+                        <td style="padding: 7px 7px; text-align: center; border: 1px solid #e2e8f0;">
+                            <span style="font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: ${isProfit ? '#ecfdf5' : '#fef2f2'}; color: ${isProfit ? '#059669' : '#dc2626'}; border: 1px solid ${isProfit ? '#a7f3d0' : '#fecaca'};">
+                                ${isProfit ? '✅ WIN' : '❌ LOSS'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
             });
 
-            const totalTrades = wins + losses;
-            const winRate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : 0;
+            const totalTrades = rows.length;
+            const winRate = totalTrades > 0 ? ((wins / totalTrades) * 100).toFixed(1) : '0.0';
 
-            if (window.jspdf && window.jspdf.jsPDF) {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('p', 'mm', 'a4');
+            // Tax breakdown calculations
+            const estSTT = Math.round(totalSellTurnover * 0.001); // 0.1% on options sell
+            const estTxn = +(totalTurnover * 0.000355).toFixed(2); // NSE txn charge
+            const estGST = +((totalBrokerage + estTxn) * 0.18).toFixed(2); // 18% GST
+            const estStamp = Math.round(totalBuyTurnover * 0.00003); // 0.003% Stamp duty
+            const estSEBI = +(totalTurnover * 0.000001).toFixed(2); // SEBI turnover charge
 
-                doc.setFillColor(17, 24, 39);
-                doc.rect(0, 0, 210, 36, 'F');
-
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(16);
-                doc.setFont('helvetica', 'bold');
-                doc.text("TRADING TRACKER 2026 - REPORT", 14, 16);
-
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(156, 163, 175);
-                doc.text(`TRADER: ${userName} PATEL  |  DATE: ${todayStr}`, 14, 26);
-
-                doc.setFillColor(243, 244, 246);
-                doc.roundedRect(14, 42, 182, 20, 3, 3, 'F');
-
-                doc.setTextColor(31, 41, 55);
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'bold');
-                doc.text(`Total P&L: ₹${totalPnL.toFixed(2)}`, 20, 54);
-                doc.text(`Win Rate: ${winRate}%`, 85, 54);
-                doc.text(`Trades: ${wins} W / ${losses} L`, 142, 54);
-
-                doc.autoTable({
-                    startY: 68,
-                    head: [['Date', 'Option', 'Strike', 'Setup', 'Buy / Sell', 'Qty', 'Net P&L']],
-                    body: tableBodyData,
-                    theme: 'grid',
-                    headStyles: { fillColor: [79, 70, 229], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    alternateRowStyles: { fillColor: [249, 250, 251] },
-                    styles: { fontSize: 8.5, cellPadding: 3 },
-                    columnStyles: {
-                        6: { fontStyle: 'bold' }
-                    },
-                    didParseCell: function (data) {
-                        if (data.section === 'body' && data.column.index === 6) {
-                            const val = String(data.cell.raw);
-                            if (val.startsWith('+')) {
-                                data.cell.styles.textColor = [16, 185, 129];
-                            } else if (val.startsWith('-')) {
-                                data.cell.styles.textColor = [239, 68, 68];
-                            }
-                        }
-                    }
-                });
-
-                const dateFilename = new Date().toISOString().slice(0, 10);
-                doc.save(`Trading_Tracker_Report_${dateFilename}.pdf`);
-            } else {
-                const printWin = window.open('', '', 'width=900,height=700');
-                let tableRowsHtml = '';
-                tableBodyData.forEach(row => {
-                    const isProfit = row[6].startsWith('+');
-                    const pnlColor = isProfit ? '#10b981' : '#ef4444';
-                    tableRowsHtml += `
-                        <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${row[0]}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><b>${row[1]}</b></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${row[2]}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${row[3]}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${row[4]}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${row[5]}</td>
-                            <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; color: ${pnlColor}; font-weight: bold;">${row[6]}</td>
-                        </tr>
-                    `;
-                });
-
-                printWin.document.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Trading Tracker Report - ${userName}</title>
-                        <style>
-                            body { font-family: 'Segoe UI', Arial, sans-serif; margin: 20px; color: #111827; }
-                            .header { background: #1f2937; color: white; padding: 20px; border-radius: 8px; }
-                            .header h1 { margin: 0; font-size: 22px; }
-                            .stats-box { background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0; display: flex; justify-content: space-around; font-weight: bold; }
-                            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                            th { background: #4f46e5; color: white; padding: 10px; text-align: left; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h1>📈 TRADING TRACKER REPORT</h1>
-                            <p style="margin: 5px 0 0 0; color: #9ca3af; font-size: 13px;">Trader: ${userName} PATEL | Date: ${todayStr}</p>
-                        </div>
-                        <div class="stats-box">
-                            <div>Total P&L: <span style="color: ${totalPnL >= 0 ? '#10b981' : '#ef4444'};">₹${totalPnL.toFixed(2)}</span></div>
-                            <div>Win Rate: ${winRate}%</div>
-                            <div>Trades: ${wins} Wins / ${losses} Losses</div>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Option</th>
-                                    <th>Strike</th>
-                                    <th>Setup</th>
-                                    <th>Buy / Sell</th>
-                                    <th>Qty</th>
-                                    <th>Net P&L</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${tableRowsHtml}
-                            </tbody>
-                        </table>
-                        \x3Cscript>
-                            window.onload = function() { window.print(); }
-                        \x3C/script>
-                    </body>
-                    </html>
-                `);
-                printWin.document.close();
+            // Inject report container
+            let reportModal = document.getElementById('tradingReportModalContainer');
+            if (!reportModal) {
+                reportModal = document.createElement('div');
+                reportModal.id = 'tradingReportModalContainer';
+                document.body.appendChild(reportModal);
             }
+
+            reportModal.innerHTML = `
+                <div id="reportPrintOverlay" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; overflow-y: auto;">
+                    <!-- Action Bar (Hidden in Print) -->
+                    <div class="no-print" style="width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 14px 22px; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.12);">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📊</span>
+                            <div>
+                                <span style="font-size: 15px; font-weight: 800; color: #f8fafc; display: block;">Official Trading Statement & Tax Report</span>
+                                <span style="font-size: 11px; color: #94a3b8;">Review your complete trading log with all charges & tax audit breakdown</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="window.print()" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #6366f1, #4f46e5); border: none; font-weight: 800; padding: 9px 20px; border-radius: 8px; display: flex; align-items: center; gap: 7px; cursor: pointer; color: #fff; box-shadow: 0 4px 12px rgba(99,102,241,0.4);">
+                                🖨️ Print / Save as PDF
+                            </button>
+                            <button onclick="document.getElementById('tradingReportModalContainer').innerHTML=''" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); font-weight: 700; padding: 9px 16px; border-radius: 8px; cursor: pointer; color: #fff;">
+                                ✖ Close
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Printable A4 Document -->
+                    <div id="pdfReportPrintContainer" style="width: 100%; max-width: 1000px; background: #ffffff; color: #0f172a; padding: 30px; border-radius: 12px; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; box-shadow: 0 20px 45px rgba(0,0,0,0.4);">
+                        <!-- Header Banner -->
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 20px;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="background: #0f172a; color: #ffffff; padding: 9px 14px; border-radius: 8px; font-size: 22px; font-weight: 900; letter-spacing: 1px;">TT</div>
+                                    <div>
+                                        <h1 style="margin: 0; font-size: 23px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px;">TRADING TRACKER 2026</h1>
+                                        <p style="margin: 3px 0 0 0; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Official Trading Journal & Tax Audit Statement</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="background: #f1f5f9; padding: 6px 14px; border-radius: 6px; display: inline-block; border: 1px solid #e2e8f0;">
+                                    <span style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase;">Trader:</span>
+                                    <span style="font-size: 13px; font-weight: 800; color: #0f172a; margin-left: 5px;">${userName.toUpperCase()}</span>
+                                </div>
+                                <p style="margin: 5px 0 0 0; font-size: 10.5px; color: #64748b; font-weight: 600;">Generated: ${generationTimestamp}</p>
+                                <p style="margin: 2px 0 0 0; font-size: 10.5px; color: #0284c7; font-weight: 700;">Period: ${dateRangeText}</p>
+                            </div>
+                        </div>
+
+                        <!-- 4 Executive KPI Cards -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px;">
+                            <div style="background: ${totalNetPnL >= 0 ? '#ecfdf5' : '#fef2f2'}; border: 1px solid ${totalNetPnL >= 0 ? '#a7f3d0' : '#fecaca'}; padding: 14px 12px; border-radius: 8px;">
+                                <div style="font-size: 10px; font-weight: 800; color: ${totalNetPnL >= 0 ? '#065f46' : '#991b1b'}; text-transform: uppercase;">NET REALIZED P&L</div>
+                                <div style="font-size: 20px; font-weight: 900; color: ${totalNetPnL >= 0 ? '#059669' : '#dc2626'}; margin-top: 3px;">
+                                    ${totalNetPnL >= 0 ? '+' : ''}₹${totalNetPnL.toFixed(2)}
+                                </div>
+                                <div style="font-size: 9.5px; color: #64748b; margin-top: 2px; font-weight: 600;">Net In-Hand Profit / Loss</div>
+                            </div>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px 12px; border-radius: 8px;">
+                                <div style="font-size: 10px; font-weight: 800; color: #475569; text-transform: uppercase;">GROSS TRADING P&L</div>
+                                <div style="font-size: 20px; font-weight: 900; color: ${totalGrossPnL >= 0 ? '#059669' : '#dc2626'}; margin-top: 3px;">
+                                    ${totalGrossPnL >= 0 ? '+' : ''}₹${totalGrossPnL.toFixed(2)}
+                                </div>
+                                <div style="font-size: 9.5px; color: #64748b; margin-top: 2px; font-weight: 600;">Turnover: ₹${totalTurnover.toFixed(2)}</div>
+                            </div>
+
+                            <div style="background: #fffbeb; border: 1px solid #fef3c7; padding: 14px 12px; border-radius: 8px;">
+                                <div style="font-size: 10px; font-weight: 800; color: #92400e; text-transform: uppercase;">CHARGES & TAXES PAID</div>
+                                <div style="font-size: 20px; font-weight: 900; color: #d97706; margin-top: 3px;">
+                                    ₹${totalCharges.toFixed(2)}
+                                </div>
+                                <div style="font-size: 9.5px; color: #64748b; margin-top: 2px; font-weight: 600;">Brok: ₹${totalBrokerage.toFixed(2)} | Tax: ₹${totalGovtCharges.toFixed(2)}</div>
+                            </div>
+
+                            <div style="background: #f5f3ff; border: 1px solid #ddd6fe; padding: 14px 12px; border-radius: 8px;">
+                                <div style="font-size: 10px; font-weight: 800; color: #5b21b6; text-transform: uppercase;">WIN RATE & STATS</div>
+                                <div style="font-size: 20px; font-weight: 900; color: #7c3aed; margin-top: 3px;">
+                                    ${winRate}% WR
+                                </div>
+                                <div style="font-size: 9.5px; color: #64748b; margin-top: 2px; font-weight: 600;">${totalTrades} Trades (${wins} Wins / ${losses} Losses)</div>
+                            </div>
+                        </div>
+
+                        <!-- Complete Detailed Trades Table -->
+                        <div style="margin-bottom: 22px;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+                                <thead>
+                                    <tr style="background: #0f172a; color: #ffffff;">
+                                        <th style="padding: 8px 5px; text-align: center; border: 1px solid #334155; font-weight: 700; width: 26px;">#</th>
+                                        <th style="padding: 8px 7px; text-align: left; border: 1px solid #334155; font-weight: 700;">Date</th>
+                                        <th style="padding: 8px 7px; text-align: left; border: 1px solid #334155; font-weight: 700;">Instrument & Strike</th>
+                                        <th style="padding: 8px 7px; text-align: left; border: 1px solid #334155; font-weight: 700;">Setup</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Buy / Sell</th>
+                                        <th style="padding: 8px 7px; text-align: center; border: 1px solid #334155; font-weight: 700;">Qty (Lots)</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Gross P&L</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Brokerage</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Govt Tax</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Charges</th>
+                                        <th style="padding: 8px 7px; text-align: right; border: 1px solid #334155; font-weight: 700;">Net P&L</th>
+                                        <th style="padding: 8px 7px; text-align: center; border: 1px solid #334155; font-weight: 700;">Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${tradeRowsHtml}
+                                </tbody>
+                                <tfoot>
+                                    <tr style="background: #f1f5f9; font-weight: 900; border-top: 2px solid #0f172a;">
+                                        <td colspan="5" style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; font-size: 11px; text-transform: uppercase; color: #0f172a;">
+                                            GRAND TOTALS (${totalTrades} TRADES):
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: center; border: 1px solid #cbd5e1; color: #0f172a;">
+                                            ${totalQty} (${totalLots}L)
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; color: ${totalGrossPnL >= 0 ? '#059669' : '#dc2626'};">
+                                            ${totalGrossPnL >= 0 ? '+' : ''}₹${totalGrossPnL.toFixed(2)}
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; color: #d97706;">
+                                            ₹${totalBrokerage.toFixed(2)}
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; color: #e11d48;">
+                                            ₹${totalGovtCharges.toFixed(2)}
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; color: #475569;">
+                                            ₹${totalCharges.toFixed(2)}
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: right; border: 1px solid #cbd5e1; font-size: 11.5px; color: ${totalNetPnL >= 0 ? '#059669' : '#dc2626'}; background: ${totalNetPnL >= 0 ? '#ecfdf5' : '#fef2f2'};">
+                                            ${totalNetPnL >= 0 ? '+' : ''}₹${totalNetPnL.toFixed(2)}
+                                        </td>
+                                        <td style="padding: 10px 7px; text-align: center; border: 1px solid #cbd5e1; color: #059669;">
+                                            ${winRate}% WR
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Detailed Tax & Statutory Charges Breakdown Section -->
+                        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
+                            <h3 style="margin: 0 0 12px 0; font-size: 12px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 6px;">
+                                🧾 STATUTORY TAXES & LEVIES BREAKDOWN (KITNA TAX KATA)
+                            </h3>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; font-size: 10.5px;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">Total Trading Turnover (Buy + Sell):</span>
+                                        <span style="font-weight: 700; color: #0f172a;">₹${totalTurnover.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">Gross Trading Profit / Loss:</span>
+                                        <span style="font-weight: 700; color: ${totalGrossPnL >= 0 ? '#059669' : '#dc2626'};">${totalGrossPnL >= 0 ? '+' : ''}₹${totalGrossPnL.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">Total Brokerage (₹40 / Trade):</span>
+                                        <span style="font-weight: 700; color: #d97706;">− ₹${totalBrokerage.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                        <span style="color: #64748b;">Net Profit Before Govt Taxes:</span>
+                                        <span style="font-weight: 700; color: ${(totalGrossPnL - totalBrokerage) >= 0 ? '#059669' : '#dc2626'};">${(totalGrossPnL - totalBrokerage) >= 0 ? '+' : ''}₹${(totalGrossPnL - totalBrokerage).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">STT (Securities Transaction Tax @ 0.1% on Sell):</span>
+                                        <span style="font-weight: 600; color: #0f172a;">₹${estSTT.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">Exchange Turnover Charges (NSE/BSE):</span>
+                                        <span style="font-weight: 600; color: #0f172a;">₹${estTxn.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">GST @ 18% (Brokerage + Txn Charges):</span>
+                                        <span style="font-weight: 600; color: #0f172a;">₹${estGST.toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #e2e8f0;">
+                                        <span style="color: #64748b;">Stamp Duty + SEBI Fees:</span>
+                                        <span style="font-weight: 600; color: #0f172a;">₹${(estStamp + estSEBI).toFixed(2)}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; padding: 5px 0; font-weight: 800; color: #e11d48; border-top: 1px solid #cbd5e1;">
+                                        <span>Total Govt Taxes & Charges:</span>
+                                        <span>− ₹${totalGovtCharges.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 10px 14px; background: ${totalNetPnL >= 0 ? '#ecfdf5' : '#fef2f2'}; border: 1px solid ${totalNetPnL >= 0 ? '#a7f3d0' : '#fecaca'}; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 800; font-size: 11.5px; color: ${totalNetPnL >= 0 ? '#065f46' : '#991b1b'}; text-transform: uppercase;">
+                                    FINAL NET REALIZED P&L (AFTER ALL CHARGES & TAXES):
+                                </span>
+                                <span style="font-weight: 900; font-size: 16px; color: ${totalNetPnL >= 0 ? '#059669' : '#dc2626'};">
+                                    ${totalNetPnL >= 0 ? '+' : ''}₹${totalNetPnL.toFixed(2)}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 12px; font-size: 10px; color: #94a3b8;">
+                            <div>Trading Tracker 2026 | Verified Computer-Generated Statement | Anurag Patel Trading Journal</div>
+                            <div>Status: Complete & Audited ✅</div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
+        window.exportToPDF = exportToPDF;
 
         function clearHistory() {
             const rows = document.querySelectorAll('#tradeTable tbody tr');
@@ -13367,6 +14262,31 @@
         }
         window.closeModal = closeModal;
 
+        function switchGuideTab(tabId) {
+            const panes = document.querySelectorAll('.guide-tab-pane');
+            panes.forEach(p => p.style.display = 'none');
+
+            const activePane = document.getElementById(tabId);
+            if (activePane) activePane.style.display = 'block';
+
+            const tabIds = ['guidePriceAction', 'guideOptions', 'guidePsychology', 'guideRisk', 'guideTimings', 'guideChecklist'];
+            tabIds.forEach(id => {
+                const btn = document.getElementById(`tabBtn_${id}`);
+                if (btn) {
+                    if (id === tabId) {
+                        btn.style.background = '#38bdf8';
+                        btn.style.color = '#000';
+                        btn.style.border = 'none';
+                    } else {
+                        btn.style.background = 'rgba(255,255,255,0.06)';
+                        btn.style.color = '#cbd5e1';
+                        btn.style.border = '1px solid rgba(255,255,255,0.1)';
+                    }
+                }
+            });
+        }
+        window.switchGuideTab = switchGuideTab;
+
         // 1. UNIVERSAL MULTI-BROKER IMPORT ENGINE
         let currentSelectedImportBroker = 'Dhan';
         let currentSelectedImportBrokerName = '🏦 Dhan';
@@ -13700,146 +14620,366 @@
 
             const headerCols = parseCsvLine(lines[headerIdx]).map(h => h.trim().toLowerCase());
             
-            // Map column indices
-            const colDate = headerCols.findIndex(h => h.includes('date') || h.includes('time') || h.includes('timestamp'));
-            const colSymbol = headerCols.findIndex(h => h.includes('symbol') || h.includes('instrument') || h.includes('scrip') || h.includes('contract') || h.includes('asset'));
-            const colType = headerCols.findIndex(h => h.includes('type') || h.includes('side') || h.includes('action') || h.includes('buy/sell') || h.includes('trade_type'));
-            const colQty = headerCols.findIndex(h => h.includes('qty') || h.includes('quantity') || h.includes('volume') || h.includes('lots') || h.includes('size'));
-            const colBuy = headerCols.findIndex(h => h.includes('buy') || h.includes('entry') || h.includes('buy_price'));
-            const colSell = headerCols.findIndex(h => h.includes('sell') || h.includes('exit') || h.includes('sell_price'));
-            const colPrice = headerCols.findIndex(h => h.includes('price') || h.includes('rate') || h.includes('average_price') || h.includes('trade_price'));
-            const colPnl = headerCols.findIndex(h => h.includes('pnl') || h.includes('profit') || h.includes('net_pnl') || h.includes('realized'));
-            const colCharges = headerCols.findIndex(h => h.includes('charge') || h.includes('brokerage') || h.includes('tax') || h.includes('fee'));
+            // Map column indices with strict prioritization
+            const colDate = headerCols.findIndex(h => h === 'trade date' || h === 'date' || h === 'trade_date' || h.includes('date') || h.includes('time') || h.includes('timestamp'));
+            const colSymbol = headerCols.findIndex(h => h === 'trading symbol' || h === 'symbol' || h === 'scrip' || h === 'instrument' || h.includes('symbol') || h.includes('instrument') || h.includes('scrip') || h.includes('contract') || h.includes('asset'));
+            
+            // Find Buy/Sell side column strictly (avoiding 'order type' or 'product type')
+            let colType = headerCols.findIndex(h => h === 'buy/sell' || h === 'b/s' || h === 'side' || h === 'action' || h === 'transaction type' || h === 'transaction_type' || h === 'txn type' || h === 'txn_type' || h === 'trade type' || h === 'trade_type' || h === 'activity');
+            if (colType < 0) {
+                colType = headerCols.findIndex(h => (h.includes('transaction') || h.includes('buy/sell') || h.includes('b/s') || h.includes('side') || h.includes('action')) && !h.includes('product') && !h.includes('validity'));
+            }
+            if (colType < 0) {
+                colType = headerCols.findIndex(h => h.includes('type') && !h.includes('product') && !h.includes('order') && !h.includes('instrument') && !h.includes('segment') && !h.includes('validity'));
+            }
 
-            let importedCount = 0;
-            const tbody = document.querySelector('#tradeTable tbody');
-            const placeholder = document.getElementById('emptyTradeRow');
-            if (placeholder) placeholder.remove();
+            const colQty = headerCols.findIndex(h => h === 'quantity' || h === 'qty' || h === 'traded qty' || h === 'traded quantity' || h.includes('qty') || h.includes('quantity') || h.includes('volume') || h.includes('lots') || h.includes('size'));
+            const colBuy = headerCols.findIndex(h => h === 'buy price' || h === 'buy_price' || h === 'buy rate' || h.includes('buy_price') || h.includes('buy price') || h.includes('buy rate') || h.includes('entry'));
+            const colSell = headerCols.findIndex(h => h === 'sell price' || h === 'sell_price' || h === 'sell rate' || h.includes('sell_price') || h.includes('sell price') || h.includes('sell rate') || h.includes('exit'));
+            const colPrice = headerCols.findIndex(h => h === 'price' || h === 'trade price' || h === 'traded price' || h === 'avg price' || h === 'average_price' || h.includes('price') || h.includes('rate'));
+            const colPnl = headerCols.findIndex(h => h === 'net_pnl' || h === 'pnl' || h === 'net pnl' || h === 'realized pnl' || h.includes('pnl') || h.includes('profit') || h.includes('realized'));
+            const colCharges = headerCols.findIndex(h => h === 'charges' || h === 'brokerage' || h.includes('charge') || h.includes('brokerage') || h.includes('tax') || h.includes('fee'));
 
             const config = BROKER_IMPORT_CONFIGS[brokerKey] || BROKER_IMPORT_CONFIGS['Universal'];
             const defaultBrokerName = brokerKey || 'Dhan';
+
+            const rawExecutions = [];
+            const completedTrades = [];
 
             for (let i = headerIdx + 1; i < lines.length; i++) {
                 const rowCols = parseCsvLine(lines[i]);
                 if (rowCols.length < 2) continue;
 
-                // Extract Fields
-                const dateRaw = (colDate >= 0 && rowCols[colDate]) ? rowCols[colDate].trim() : new Date().toISOString().slice(0, 10);
-                const cleanDate = dateRaw.split(' ')[0] || new Date().toISOString().slice(0, 10);
-
+                const dateRaw = (colDate >= 0 && rowCols[colDate]) ? rowCols[colDate].trim() : '';
+                const cleanDate = normalizeTradeDate(dateRaw);
                 const symbolRaw = (colSymbol >= 0 && rowCols[colSymbol]) ? rowCols[colSymbol].trim() : 'NIFTY';
-                const typeRaw = (colType >= 0 && rowCols[colType]) ? rowCols[colType].trim().toUpperCase() : 'BUY';
                 
-                let qty = (colQty >= 0 && parseFloat(rowCols[colQty])) ? Math.abs(parseFloat(rowCols[colQty])) : 65;
-                let buyPrice = (colBuy >= 0 && parseFloat(rowCols[colBuy])) ? parseFloat(rowCols[colBuy]) : 0;
-                let sellPrice = (colSell >= 0 && parseFloat(rowCols[colSell])) ? parseFloat(rowCols[colSell]) : 0;
-                let avgPrice = (colPrice >= 0 && parseFloat(rowCols[colPrice])) ? parseFloat(rowCols[colPrice]) : 0;
-
-                if (!buyPrice && !sellPrice && avgPrice > 0) {
-                    if (typeRaw.includes('BUY') || typeRaw.includes('LONG')) {
-                        buyPrice = avgPrice;
-                        sellPrice = avgPrice * 1.05; // estimated exit
-                    } else {
-                        sellPrice = avgPrice;
-                        buyPrice = avgPrice * 0.95;
+                // Determine Buy / Sell side accurately
+                let execType = null;
+                if (colType >= 0 && rowCols[colType]) {
+                    const tVal = rowCols[colType].trim().toUpperCase();
+                    if (tVal === 'BUY' || tVal === 'B' || tVal.startsWith('BUY') || tVal === 'LONG' || tVal === 'B - BUY') execType = 'BUY';
+                    else if (tVal === 'SELL' || tVal === 'S' || tVal.startsWith('SELL') || tVal === 'SHORT' || tVal === 'S - SELL') execType = 'SELL';
+                }
+                if (!execType) {
+                    for (let c = 0; c < rowCols.length; c++) {
+                        const cVal = rowCols[c].trim().toUpperCase();
+                        if (cVal === 'BUY' || cVal === 'B' || cVal === 'BUY ORDER' || cVal === 'B - BUY') { execType = 'BUY'; break; }
+                        else if (cVal === 'SELL' || cVal === 'S' || cVal === 'SELL ORDER' || cVal === 'S - SELL') { execType = 'SELL'; break; }
                     }
-                } else if (!buyPrice && avgPrice > 0) {
-                    buyPrice = avgPrice;
-                } else if (!sellPrice && avgPrice > 0) {
-                    sellPrice = avgPrice;
                 }
 
-                // Determine Asset & Option Type
-                let indexName = 'Nifty';
-                let lotSize = 65;
-                const upperSym = symbolRaw.toUpperCase();
+                const qty = (colQty >= 0 && parseFloat(rowCols[colQty])) ? Math.abs(parseFloat(rowCols[colQty])) : 65;
+                const buyPrice = (colBuy >= 0 && parseFloat(rowCols[colBuy])) ? parseFloat(rowCols[colBuy]) : 0;
+                const sellPrice = (colSell >= 0 && parseFloat(rowCols[colSell])) ? parseFloat(rowCols[colSell]) : 0;
+                const avgPrice = (colPrice >= 0 && parseFloat(rowCols[colPrice])) ? parseFloat(rowCols[colPrice]) : 0;
+                const pnlDirect = (colPnl >= 0 && rowCols[colPnl] && !isNaN(parseFloat(rowCols[colPnl]))) ? parseFloat(rowCols[colPnl]) : null;
+                const chargesDirect = (colCharges >= 0 && rowCols[colCharges] && !isNaN(parseFloat(rowCols[colCharges]))) ? parseFloat(rowCols[colCharges]) : null;
 
-                if (upperSym.includes('BANKNIFTY')) { indexName = 'BankNifty'; lotSize = 30; }
-                else if (upperSym.includes('SENSEX')) { indexName = 'Sensex'; lotSize = 20; }
-                else if (upperSym.includes('FINNIFTY')) { indexName = 'FinNifty'; lotSize = 65; }
-                else if (upperSym.includes('MIDCPNIFTY') || upperSym.includes('MIDCAP')) { indexName = 'MidcapNifty'; lotSize = 120; }
-                else if (upperSym.includes('BTC') || upperSym.includes('ETH') || upperSym.includes('SOL') || brokerKey === 'CosmicTrade' || brokerKey === 'DeltaExchange') { indexName = 'Crypto (BTC/ETH)'; lotSize = 1; }
-                else if (upperSym.includes('GOLD') || upperSym.includes('XAU') || brokerKey === 'Exness' || brokerKey === 'XM') { indexName = 'Gold (XAUUSD)'; lotSize = 1; }
-                else if (upperSym.includes('CRUDE')) { indexName = 'Crude Oil'; lotSize = 100; }
-                else { indexName = 'Stocks'; lotSize = 1; }
+                // Case 1: Row already has BOTH Buy & Sell prices (Pre-paired P&L CSV)
+                if (buyPrice > 0 && sellPrice > 0) {
+                    completedTrades.push({
+                        date: cleanDate,
+                        symbol: symbolRaw,
+                        type: 'BUY',
+                        buyPrice: buyPrice,
+                        sellPrice: sellPrice,
+                        qty: qty,
+                        pnl: pnlDirect,
+                        charges: chargesDirect,
+                        broker: defaultBrokerName
+                    });
+                    continue;
+                }
 
-                let cePe = 'BUY / LONG';
-                if (upperSym.includes('PE') || upperSym.includes('PUT')) cePe = 'PUT (PE)';
-                else if (upperSym.includes('CE') || upperSym.includes('CALL')) cePe = 'CALL (CE)';
-                else if (typeRaw.includes('SELL') || typeRaw.includes('SHORT')) cePe = 'SELL / SHORT';
+                // Case 2: Raw Execution line
+                if (!execType) {
+                    if (buyPrice > 0 && !sellPrice) execType = 'BUY';
+                    else if (sellPrice > 0 && !buyPrice) execType = 'SELL';
+                    else execType = 'BUY'; // fallback
+                }
 
-                let strike = '';
-                const strikeMatch = symbolRaw.match(/\d{4,6}/);
-                if (strikeMatch) strike = strikeMatch[0];
+                const execPrice = (execType === 'BUY' ? (buyPrice || avgPrice || sellPrice) : (sellPrice || avgPrice || buyPrice)) || 0;
+
+                rawExecutions.push({
+                    date: cleanDate,
+                    symbol: symbolRaw,
+                    type: execType,
+                    qty: qty,
+                    price: execPrice,
+                    pnl: pnlDirect,
+                    charges: chargesDirect,
+                    broker: defaultBrokerName,
+                    originalIndex: i
+                });
+            }
+
+            // Intelligent Contract Grouping & FIFO Pairing Engine
+            if (rawExecutions.length > 0) {
+                const groups = {};
+
+                rawExecutions.forEach(exec => {
+                    const upperSym = exec.symbol.toUpperCase();
+                    
+                    // Extract index
+                    let indexName = 'Nifty';
+                    let lotSize = 65;
+                    if (upperSym.includes('BANKNIFTY') || upperSym.includes('BANK NIFTY') || upperSym.includes('BNF')) { indexName = 'BankNifty'; lotSize = 30; }
+                    else if (upperSym.includes('SENSEX') || upperSym.includes('BSX')) { indexName = 'Sensex'; lotSize = 20; }
+                    else if (upperSym.includes('FINNIFTY') || upperSym.includes('FIN NIFTY')) { indexName = 'FinNifty'; lotSize = 65; }
+                    else if (upperSym.includes('MIDCPNIFTY') || upperSym.includes('MIDCAP')) { indexName = 'MidcapNifty'; lotSize = 120; }
+                    else if (upperSym.includes('NIFTY')) { indexName = 'Nifty'; lotSize = 65; }
+                    else if (upperSym.includes('BTC') || upperSym.includes('ETH')) { indexName = 'Crypto (BTC/ETH)'; lotSize = 1; }
+                    else if (upperSym.includes('GOLD') || upperSym.includes('XAU')) { indexName = 'Gold (XAUUSD)'; lotSize = 1; }
+                    else if (upperSym.includes('CRUDE')) { indexName = 'Crude Oil'; lotSize = 100; }
+                    else { indexName = 'Stocks'; lotSize = 1; }
+
+                    // Extract CE/PE
+                    let cePe = 'CALL (CE)';
+                    if (upperSym.includes('PE') || upperSym.includes('PUT') || upperSym.includes(' PE') || upperSym.includes('-PE')) cePe = 'PUT (PE)';
+                    else if (upperSym.includes('CE') || upperSym.includes('CALL') || upperSym.includes(' CE') || upperSym.includes('-CE')) cePe = 'CALL (CE)';
+                    else cePe = 'BUY / LONG';
+
+                    // Extract Strike
+                    let strike = '';
+                    const cePeStrikeMatch = upperSym.match(/(\d{4,6})\s*(?:CE|PE|CALL|PUT)/) || upperSym.match(/(?:CE|PE|CALL|PUT)\s*(\d{4,6})/);
+                    if (cePeStrikeMatch && cePeStrikeMatch[1]) {
+                        strike = cePeStrikeMatch[1];
+                    } else {
+                        const allNums = upperSym.match(/\b\d{4,6}\b/g) || upperSym.match(/\d{4,6}/g) || [];
+                        const nonYearNums = allNums.filter(n => !(parseInt(n) >= 2020 && parseInt(n) <= 2035));
+                        if (nonYearNums.length > 0) strike = nonYearNums[nonYearNums.length - 1];
+                        else if (allNums.length > 0) strike = allNums[0];
+                    }
+                    if (!strike && indexName !== 'Stocks') strike = 'ATM';
+
+                    const contractKey = `${exec.date}__${indexName}__${strike}__${cePe}`;
+                    if (!groups[contractKey]) {
+                        groups[contractKey] = {
+                            indexName: indexName,
+                            lotSize: lotSize,
+                            strike: strike,
+                            cePe: cePe,
+                            date: exec.date,
+                            symbol: exec.symbol,
+                            buys: [],
+                            sells: [],
+                            allOrders: []
+                        };
+                    }
+
+                    groups[contractKey].allOrders.push(exec);
+                    if (exec.type === 'BUY') {
+                        groups[contractKey].buys.push(exec);
+                    } else {
+                        groups[contractKey].sells.push(exec);
+                    }
+                });
+
+                // Pair each contract's executions
+                Object.keys(groups).forEach(key => {
+                    const g = groups[key];
+
+                    // Strategy 1: Standard FIFO Pairing between Buys and Sells
+                    while (g.buys.length > 0 && g.sells.length > 0) {
+                        const buyExec = g.buys[0];
+                        const sellExec = g.sells[0];
+                        const pairedQty = Math.min(buyExec.qty, sellExec.qty);
+
+                        completedTrades.push({
+                            date: g.date,
+                            symbol: g.symbol,
+                            indexName: g.indexName,
+                            lotSize: g.lotSize,
+                            strike: g.strike,
+                            cePe: g.cePe,
+                            type: 'BUY',
+                            buyPrice: buyExec.price,
+                            sellPrice: sellExec.price,
+                            qty: pairedQty,
+                            pnl: (buyExec.pnl !== null ? buyExec.pnl : sellExec.pnl),
+                            charges: (buyExec.charges !== null ? buyExec.charges : sellExec.charges),
+                            broker: defaultBrokerName
+                        });
+
+                        buyExec.qty -= pairedQty;
+                        sellExec.qty -= pairedQty;
+
+                        if (buyExec.qty <= 0) g.buys.shift();
+                        if (sellExec.qty <= 0) g.sells.shift();
+                    }
+
+                    // Strategy 2: If Buys and Sells had ambiguous side (e.g. all marked BUY) but there are pairs of executions:
+                    const remaining = g.allOrders.filter(o => o.qty > 0);
+                    if (remaining.length >= 2 && g.buys.length === 0 && g.sells.length === 0) {
+                        // Already paired
+                    } else if (remaining.length >= 2) {
+                        // Pair consecutive orders: order 0 is entry, order 1 is exit
+                        for (let k = 0; k + 1 < remaining.length; k += 2) {
+                            const entryExec = remaining[k];
+                            const exitExec = remaining[k + 1];
+                            const pairedQty = Math.min(entryExec.qty, exitExec.qty);
+
+                            completedTrades.push({
+                                date: g.date,
+                                symbol: g.symbol,
+                                indexName: g.indexName,
+                                lotSize: g.lotSize,
+                                strike: g.strike,
+                                cePe: g.cePe,
+                                type: 'BUY',
+                                buyPrice: entryExec.price,
+                                sellPrice: exitExec.price,
+                                qty: pairedQty,
+                                pnl: null,
+                                charges: null,
+                                broker: defaultBrokerName
+                            });
+
+                            entryExec.qty -= pairedQty;
+                            exitExec.qty -= pairedQty;
+                        }
+                    }
+
+                    // Any single remaining unpaired execution
+                    remaining.forEach(rem => {
+                        if (rem.qty > 0) {
+                            completedTrades.push({
+                                date: g.date,
+                                symbol: g.symbol,
+                                indexName: g.indexName,
+                                lotSize: g.lotSize,
+                                strike: g.strike,
+                                cePe: g.cePe,
+                                type: rem.type,
+                                buyPrice: rem.price,
+                                sellPrice: rem.price,
+                                qty: rem.qty,
+                                pnl: rem.pnl,
+                                charges: rem.charges,
+                                broker: defaultBrokerName,
+                                isOpen: true
+                            });
+                        }
+                    });
+                });
+            }
+
+            if (completedTrades.length === 0) {
+                showToast(`⚠️ No completed trades could be paired from the selected CSV.`, "⚠️");
+                return;
+            }
+
+            const tbody = document.querySelector('#tradeTable tbody');
+            const placeholder = document.getElementById('emptyTradeRow');
+            if (placeholder) placeholder.remove();
+
+            let importedCount = 0;
+
+            completedTrades.forEach(trade => {
+                const cleanDate = trade.date;
+                const indexName = trade.indexName || 'Nifty';
+                const lotSize = trade.lotSize || 65;
+                const strike = trade.strike || 'ATM';
+                const cePe = trade.cePe || 'CALL (CE)';
+                const buyPrice = trade.buyPrice || 0;
+                const sellPrice = trade.sellPrice || 0;
+                const qty = trade.qty || 65;
 
                 const lotsCount = Math.max(1, Math.round(qty / lotSize));
                 const brokerage = (config.brokerage !== undefined) ? config.brokerage : 40;
-                
-                let pnl = 0;
-                if (colPnl >= 0 && rowCols[colPnl] && !isNaN(parseFloat(rowCols[colPnl]))) {
-                    pnl = parseFloat(rowCols[colPnl]);
-                } else {
-                    const gross = (sellPrice - buyPrice) * qty;
-                    pnl = gross - brokerage;
-                }
+                const grossPnL = (sellPrice - buyPrice) * qty;
 
-                const govtCharges = Math.round(Math.max(5, (brokerage * 0.18) + (sellPrice * qty * 0.001)));
+                let govtCharges = 0;
+                if (trade.charges !== null && trade.charges !== undefined && !isNaN(trade.charges)) {
+                    govtCharges = Math.max(0, trade.charges - brokerage);
+                } else {
+                    govtCharges = Math.round(Math.max(5, (brokerage * 0.18) + (sellPrice * qty * 0.001)));
+                }
                 const totalCharges = brokerage + govtCharges;
 
-                // Create HTML Row
+                let pnl = 0;
+                if (trade.pnl !== null && trade.pnl !== undefined && !isNaN(trade.pnl)) {
+                    pnl = trade.pnl;
+                } else {
+                    pnl = grossPnL - totalCharges;
+                }
+
+                const isCE = cePe.includes('CE') || cePe.includes('BUY');
+                const badgeClass = isCE ? 'badge-ce' : 'badge-pe';
+                const pnlClass = pnl >= 0 ? 'profit' : 'loss';
+                const pnlSign = pnl >= 0 ? '+' : '';
+
+                // Create HTML Row with matching 11 table headers
                 const tr = document.createElement('tr');
+                tr.setAttribute('data-date', cleanDate);
+                tr.setAttribute('data-buy', buyPrice.toFixed(2));
+                tr.setAttribute('data-sell', sellPrice.toFixed(2));
+                tr.setAttribute('data-target', (buyPrice * 1.1).toFixed(2));
+                tr.setAttribute('data-sl', (buyPrice * 0.95).toFixed(2));
+                tr.setAttribute('data-lots', lotsCount.toString());
+                tr.setAttribute('data-qtylot', lotSize.toString());
                 tr.setAttribute('data-index', indexName);
                 tr.setAttribute('data-cepe', cePe);
                 tr.setAttribute('data-strike', strike || 'ATM');
                 tr.setAttribute('data-broker', defaultBrokerName);
+                tr.setAttribute('data-brokerage', brokerage.toFixed(2));
+                tr.setAttribute('data-govtcharges', govtCharges.toFixed(2));
+                tr.setAttribute('data-totalcharges', totalCharges.toFixed(2));
+                tr.setAttribute('data-grosspnl', grossPnL.toFixed(2));
                 tr.setAttribute('data-setup', 'Auto-Imported Tradebook');
-                tr.setAttribute('data-timeframe', '5m');
-                tr.setAttribute('data-buy', buyPrice.toFixed(2));
-                tr.setAttribute('data-sell', sellPrice.toFixed(2));
-                tr.setAttribute('data-target', (buyPrice * 1.1).toFixed(2));
-                tr.setAttribute('data-stoploss', (buyPrice * 0.95).toFixed(2));
-                tr.setAttribute('data-lots', lotsCount.toString());
-                tr.setAttribute('data-qtylot', lotSize.toString());
-                tr.setAttribute('data-brokerage', brokerage.toString());
-                tr.setAttribute('data-govtcharges', govtCharges.toString());
-                tr.setAttribute('data-totalcharges', totalCharges.toString());
-                tr.setAttribute('data-grosspnl', ((sellPrice - buyPrice) * qty).toFixed(2));
-                tr.setAttribute('data-pnl', pnl.toFixed(2));
                 tr.setAttribute('data-mindset', 'Plan Followed');
+                tr.setAttribute('data-exitreason', 'Target Hit');
+                tr.setAttribute('data-rulebroken', 'false');
+                tr.setAttribute('data-timeframe', '5 Min');
                 tr.setAttribute('data-rating', '4');
-
-                const pnlClass = pnl >= 0 ? 'pnl-positive' : 'pnl-negative';
-                const pnlSign = pnl >= 0 ? '+' : '';
+                tr.setAttribute('data-charturl', '');
+                tr.setAttribute('data-pnl', pnl.toFixed(2));
 
                 tr.innerHTML = `
-                    <td data-date="${cleanDate}"><b>${cleanDate}</b></td>
-                    <td><span class="badge" style="background: rgba(56,189,248,0.15); color: #38bdf8; font-weight: 800;">${defaultBrokerName}</span></td>
-                    <td><b>${indexName}</b> ${strike ? `<small>(${strike})</small>` : ''}</td>
-                    <td><span class="badge ${cePe.includes('CALL') || cePe.includes('BUY') ? 'badge-call' : 'badge-put'}">${cePe}</span></td>
-                    <td>₹${buyPrice.toFixed(2)}</td>
-                    <td>₹${sellPrice.toFixed(2)}</td>
-                    <td><b>${qty}</b> <small>(${lotsCount}L)</small></td>
-                    <td><span style="color: #cbd5e1; font-size: 11px;">₹${totalCharges}</span></td>
-                    <td class="${pnlClass}"><b>${pnlSign}₹${pnl.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</b></td>
-                    <td><span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700;">✅ Imported</span></td>
+                    <td data-date="${cleanDate}">${cleanDate}</td>
+                    <td><b>${indexName}</b> <span class="badge-tag ${badgeClass}">${cePe}</span><br><span style="font-size: 10px; color: #a5b4fc; font-weight: 700;">🏦 ${defaultBrokerName}</span></td>
+                    <td><b style="color: #818cf8;">${strike || 'ATM'}</b></td>
                     <td>
-                        <button class="btn-action-icon" onclick="deleteTrade(this)" title="Delete Trade">🗑️</button>
+                        <b>Auto-Imported Tradebook</b><br>
+                        <span style="font-size: 10px; color: var(--text-muted);">5 Min</span>
+                        <div style="margin-top: 3px; display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">Plan Followed</span>
+                            <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">⚡ ${defaultBrokerName}</span>
+                        </div>
+                    </td>
+                    <td>₹${buyPrice.toFixed(2)} / ₹${sellPrice.toFixed(2)}</td>
+                    <td>${qty} (${lotsCount}L)</td>
+                    <td>
+                        <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${brokerage.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Brok)</span></span><br>
+                        <span style="font-size: 10px; color: #f43f5e; font-weight: 600;">+ ₹${govtCharges.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Tax)</span></span><br>
+                        <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalCharges.toFixed(2)}</span>
+                    </td>
+                    <td>1:2.0<br><span style="font-size: 10px;">⭐⭐⭐⭐</span></td>
+                    <td class="${pnlClass}" data-pnl="${pnl.toFixed(2)}">
+                        <b>${pnlSign}₹${pnl.toFixed(2)}</b><br>
+                        <span style="font-size: 9px; color: #94a3b8;">Gross: ${grossPnL >= 0 ? '+' : ''}₹${grossPnL.toFixed(2)}</span>
+                    </td>
+                    <td><span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700; border: 1px solid rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 6px;">✅ Imported</span></td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" onclick="editTrade(this)">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTrade(this)">Delete</button>
                     </td>
                 `;
 
                 if (tbody) tbody.insertBefore(tr, tbody.firstChild);
                 importedCount++;
-            }
+            });
 
             if (importedCount > 0) {
-                if (typeof saveTrades === 'function') saveTrades();
+                saveToLocalStorage();
                 if (typeof updateSummaryCards === 'function') updateSummaryCards();
                 if (typeof syncUserTradesToCloud === 'function') syncUserTradesToCloud();
 
-                showToast(`🎉 Successfully imported ${importedCount} trades from ${currentSelectedImportBrokerName}!`, "🚀");
+                showToast(`🎉 Successfully imported ${importedCount} completed trades from ${currentSelectedImportBrokerName}!`, "🚀");
                 closeModal('dhanImportModal');
             } else {
-                showToast(`⚠️ No valid trade executions found in the selected CSV.`, "⚠️");
+                showToast(`⚠️ No completed trades could be paired from the selected CSV.`, "⚠️");
             }
         }
 
@@ -14242,11 +15382,6 @@
             if (typeof exportToCSV === 'function') exportToCSV();
         }
         window.exportToExcel = exportToExcel;
-
-        function exportToPDF() {
-            window.print();
-        }
-        window.exportToPDF = exportToPDF;
 
         function switchProfileModalTab(tab) {
             const vContent = document.getElementById('profileViewContent');

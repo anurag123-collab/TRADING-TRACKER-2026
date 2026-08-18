@@ -1,20 +1,20 @@
 [
   {
-    "name": "Anurag Patel",
+    "name": "Anurag Patel (Master Admin)",
     "mobile": "8102241463",
     "email": "anuragpatel4u00.ap@gmail.com",
     "password": "******",
     "active_key": "TT2026-MASTER-ADMIN-ANURAG",
     "trial_status": "🔒 Expired (Blocked)",
-    "last_login": "8/18/2026 02:33 AM"
+    "last_login": "8/18/2026 11:10 AM"
   },
   {
     "name": "Trader 5625",
     "mobile": "8825255625",
     "email": "N/A",
-    "password": "123456",
+    "password": "******",
     "active_key": "FREE-TRIAL",
     "trial_status": "🔒 Expired (Blocked)",
-    "last_login": "8/18/2026 02:50 AM"
+    "last_login": "8/18/2026 11:08 AM"
   }
 ]
