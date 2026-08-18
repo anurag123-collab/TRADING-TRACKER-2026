@@ -34,6 +34,24 @@ const server = http.createServer((req, res) => {
     }
 
     // ============================================================
+    // API ROUTE: GET /api/market-pulse — Live Financial Market Quotes
+    // ============================================================
+    if (cleanUrl === '/api/market-pulse' && req.method === 'GET') {
+        const marketPulseHandler = require('./api/market-pulse');
+        const customRes = {
+            setHeader: (k, v) => res.setHeader(k, v),
+            status: (code) => {
+                res.writeHead(code, { 'Content-Type': 'application/json' });
+                return {
+                    json: (obj) => res.end(JSON.stringify(obj)),
+                    end: () => res.end()
+                };
+            }
+        };
+        return marketPulseHandler(req, customRes);
+    }
+
+    // ============================================================
     // API ROUTE: POST /api/send-otp — Real SMS via 2Factor.in DLT Approved Template
     // ============================================================
     if (cleanUrl === '/api/send-otp' && req.method === 'POST') {
