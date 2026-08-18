@@ -5,8 +5,10 @@
     "email": "anuragpatel4u00.ap@gmail.com",
     "password": "******",
     "active_key": "TT2026-MASTER-ADMIN-ANURAG",
-    "trial_status": "🔒 Expired (Blocked)",
-    "last_login": "8/19/2026 12:48 AM"
+    "trial_status": "👑 Master Admin",
+    "last_login": "8/19/2026 02:01 AM",
+    "is_locked": false,
+    "is_vip": false
   },
   {
     "name": "Trader 5625",
@@ -14,7 +16,9 @@
     "email": "N/A",
     "password": "******",
     "active_key": "FREE-TRIAL",
-    "trial_status": "🔒 Expired (Blocked)",
-    "last_login": "8/18/2026 11:08 AM"
+    "trial_status": "🎁 Free Trial (3d Left)",
+    "last_login": "8/19/2026 01:34 AM",
+    "is_locked": false,
+    "is_vip": false
   }
 ]

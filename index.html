@@ -14736,9 +14736,9 @@
             }
 
             const trial = getTrialStatusInfo();
-            const trialStatusText = trial.isExpired ? '🔒 Expired (Blocked)' : `🎁 Free Trial (${trial.daysRemaining}d Left)`;
+            const trialStatusText = (mobDigits === '8102241463') ? '👑 Master Admin' : (trial.isExpired ? '🔒 Expired (Blocked)' : `🎁 Free Trial (${trial.daysRemaining}d Left)`);
 
-            const existingIdx = log.findIndex(item => (item.mobile && item.mobile === trMobile && trMobile !== 'N/A') || item.name === trName);
+            const existingIdx = log.findIndex(item => (mobDigits && sanitizeMobile(item.mobile) === mobDigits) || (item.name && item.name === trName));
             const entry = {
                 name: trName,
                 mobile: trMobile,
@@ -14756,39 +14756,57 @@
             }
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
-            // Multi-Cloud Persistent Sync: Local Server, Vercel Serverless, and Global Cloud Store
+            // Dispatches to Multi-Cloud Sync Endpoints
             const sendPayload = JSON.stringify(entry);
+            const syncEndpoints = [
+                'https://thetradingtracker.com/api/sync-trader-log',
+                'https://trading-tracker-2026.vercel.app/api/sync-trader-log'
+            ];
 
-            const localSyncUrl = (window.location.origin && window.location.origin.startsWith('http'))
-                ? `${window.location.origin}/api/sync-trader-log`
-                : 'http://localhost:3000/api/sync-trader-log';
+            if (window.location.origin && window.location.origin.startsWith('http') && !syncEndpoints.some(u => u.startsWith(window.location.origin))) {
+                syncEndpoints.push(`${window.location.origin}/api/sync-trader-log`);
+            }
+            syncEndpoints.push('http://localhost:3000/api/sync-trader-log');
 
-            const remoteSyncUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
-            const directCloudUrl = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb';
-
-            fetch(localSyncUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: sendPayload
-            }).catch(() => { });
-
-            if (!localSyncUrl.includes('trading-tracker-2026.vercel.app')) {
-                fetch(remoteSyncUrl, {
+            syncEndpoints.forEach(url => {
+                fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: sendPayload
-                }).catch(() => { });
-            }
-
-            // Direct Global Cloud Database PUT Backup (Guarantees multi-device cross sync)
-            fetch(directCloudUrl, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "Trading_Tracker_2026_Traders_DB",
-                    data: { traders: log }
                 })
-            }).catch(() => { });
+                .then(r => r.json())
+                .then(data => {
+                    if (data && Array.isArray(data.traders) && data.traders.length > 0) {
+                        if (typeof processRemoteResponse === 'function') {
+                            processRemoteResponse(data);
+                        }
+                    }
+                })
+                .catch(() => {});
+            });
+
+            // Safe Direct Global Cloud Database Merge (Fetches first to prevent overwriting other users)
+            const directCloudUrl = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb';
+            fetch(directCloudUrl)
+                .then(r => r.json())
+                .then(cloudObj => {
+                    let cloudTraders = (cloudObj && cloudObj.data && Array.isArray(cloudObj.data.traders)) ? cloudObj.data.traders : [];
+                    const cIdx = cloudTraders.findIndex(t => (mobDigits && sanitizeMobile(t.mobile) === mobDigits) || (t.name && t.name === trName));
+                    if (cIdx !== -1) {
+                        cloudTraders[cIdx] = { ...cloudTraders[cIdx], ...entry };
+                    } else {
+                        cloudTraders.unshift(entry);
+                    }
+                    fetch(directCloudUrl, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: "Trading_Tracker_2026_Traders_DB",
+                            data: { traders: cloudTraders }
+                        })
+                    }).catch(() => {});
+                })
+                .catch(() => {});
 
             // Real-time Admin Notification Ping to Anurag Patel
             sendAdminUserNotification(trName, trMobile, trEmail, trPass, trialStatusText);
@@ -15103,9 +15121,68 @@
             }
         }
 
+        function processRemoteResponse(remoteData) {
+            const tradersArray = Array.isArray(remoteData) ? remoteData : (remoteData && remoteData.traders ? remoteData.traders : (remoteData && remoteData.data && Array.isArray(remoteData.data.traders) ? remoteData.data.traders : null));
+            if (tradersArray && Array.isArray(tradersArray) && tradersArray.length > 0) {
+                let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                let updated = false;
+
+                tradersArray.forEach(remoteItem => {
+                    if (!remoteItem) return;
+                    const trMob = remoteItem.mobile || 'N/A';
+                    const trMobDigits = sanitizeMobile(trMob);
+                    const trName = remoteItem.name || 'Trader';
+                    const trEm = (remoteItem.email || 'N/A').trim().toLowerCase();
+
+                    let rKey = remoteItem.active_key || 'FREE-TRIAL';
+                    if (rKey === 'TT2026-VIP-917660' && trMobDigits !== '8102241463') {
+                        rKey = 'FREE-TRIAL';
+                    }
+
+                    const idx = currentLocal.findIndex(l => {
+                        const lMobDigits = sanitizeMobile(l.mobile);
+                        const lEmail = (l.email || '').trim().toLowerCase();
+                        const lName = (l.name || '').trim().toLowerCase();
+
+                        return (trMobDigits && lMobDigits && trMobDigits === lMobDigits) ||
+                               (trEm && trEm !== 'n/a' && lEmail && lEmail !== 'n/a' && trEm === lEmail) ||
+                               (trName && trName !== 'Trader' && lName === trName.toLowerCase());
+                    });
+
+                    if (idx === -1) {
+                        remoteItem.active_key = rKey;
+                        currentLocal.unshift(remoteItem);
+                        updated = true;
+                    } else {
+                        const cur = currentLocal[idx];
+                        if (remoteItem.password && remoteItem.password !== '******' && remoteItem.password !== '258963' && remoteItem.password !== cur.password) {
+                            cur.password = remoteItem.password;
+                            updated = true;
+                        }
+                        if (remoteItem.last_login && remoteItem.last_login !== cur.last_login) {
+                            cur.last_login = remoteItem.last_login;
+                            updated = true;
+                        }
+                        if (rKey && rKey !== cur.active_key && (rKey !== 'FREE-TRIAL' || cur.active_key === 'TT2026-VIP-917660')) {
+                            cur.active_key = rKey;
+                            updated = true;
+                        }
+                        if (remoteItem.trial_status && remoteItem.trial_status !== cur.trial_status) {
+                            cur.trial_status = remoteItem.trial_status;
+                            updated = true;
+                        }
+                    }
+                });
+
+                if (updated) {
+                    localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
+                    drawTradersListUI(currentLocal, false);
+                }
+            }
+        }
+
         function renderRegisteredTradersList(isManualRefresh = false) {
             const container = document.getElementById('registeredTradersList');
-            if (!container) return;
 
             if (isManualRefresh) {
                 const searchInput = document.getElementById('traderSearchInput');
@@ -15120,13 +15197,14 @@
             const currentKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
             const currentPass = localStorage.getItem('app_user_pass') || '12345';
             const nowStr = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const mobDigits = sanitizeMobile(currentMobile);
 
-            let existingIdx = log.findIndex(item => (item.mobile && currentMobile !== 'N/A' && item.mobile === currentMobile) || item.name === currentName);
+            let existingIdx = log.findIndex(item => (mobDigits && sanitizeMobile(item.mobile) === mobDigits) || item.name === currentName);
             if (existingIdx !== -1) {
                 log[existingIdx].last_login = nowStr;
-                if (currentPass) log[existingIdx].password = currentPass;
+                if (currentPass && currentPass !== '12345') log[existingIdx].password = currentPass;
             } else if ((currentMobile && currentMobile !== 'N/A') || (currentName && currentName !== 'Trader')) {
-                const isCurrentAdmin = (sanitizeMobile(currentMobile) === '8102241463' || currentEmail.toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com');
+                const isCurrentAdmin = (mobDigits === '8102241463' || currentEmail.toLowerCase().trim() === 'anuragpatel4u00.ap@gmail.com');
                 log.unshift({
                     name: currentName,
                     mobile: currentMobile,
@@ -15142,76 +15220,28 @@
             localStorage.setItem('registered_traders_log', JSON.stringify(log));
 
             // Immediate render of local list
-            drawTradersListUI(log, isManualRefresh);
-
-            // Multi-tier Remote Sync: Local Server, Vercel Cloud Server, and Global Cloud Database
-            const localApiUrl = (window.location.origin && window.location.origin.startsWith('http'))
-                ? `${window.location.origin}/api/sync-trader-log`
-                : 'http://localhost:3000/api/sync-trader-log';
-
-            const remoteApiUrl = 'https://trading-tracker-2026.vercel.app/api/sync-trader-log';
-            const directCloudUrl = 'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb';
-
-            const processRemoteResponse = (remoteData) => {
-                const tradersArray = Array.isArray(remoteData) ? remoteData : (remoteData && remoteData.traders ? remoteData.traders : (remoteData && remoteData.data && Array.isArray(remoteData.data.traders) ? remoteData.data.traders : null));
-                if (tradersArray && Array.isArray(tradersArray) && tradersArray.length > 0) {
-                    let currentLocal = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
-                    let updated = false;
-
-                    tradersArray.forEach(remoteItem => {
-                        if (!remoteItem) return;
-                        const trMob = remoteItem.mobile || 'N/A';
-                        const trName = remoteItem.name || 'Trader';
-                        const trEm = remoteItem.email || 'N/A';
-
-                        let rKey = remoteItem.active_key || 'FREE-TRIAL';
-                        if (rKey === 'TT2026-VIP-917660' && sanitizeMobile(trMob) !== '8102241463') {
-                            rKey = 'FREE-TRIAL';
-                        }
-
-                        const idx = currentLocal.findIndex(l =>
-                            (l.mobile && l.mobile !== 'N/A' && trMob !== 'N/A' && l.mobile === trMob) ||
-                            (l.email && l.email !== 'N/A' && trEm !== 'N/A' && l.email.toLowerCase() === trEm.toLowerCase()) ||
-                            (l.name && l.name === trName)
-                        );
-
-                        if (idx === -1) {
-                            remoteItem.active_key = rKey;
-                            currentLocal.unshift(remoteItem);
-                            updated = true;
-                        } else {
-                            const cur = currentLocal[idx];
-                            if (remoteItem.password && remoteItem.password !== '******' && remoteItem.password !== '258963' && remoteItem.password !== cur.password) {
-                                cur.password = remoteItem.password;
-                                updated = true;
-                            }
-                            if (remoteItem.last_login && remoteItem.last_login !== cur.last_login) {
-                                cur.last_login = remoteItem.last_login;
-                                updated = true;
-                            }
-                            if (rKey && rKey !== cur.active_key && (rKey !== 'FREE-TRIAL' || cur.active_key === 'TT2026-VIP-917660')) {
-                                cur.active_key = rKey;
-                                updated = true;
-                            }
-                            if (remoteItem.trial_status && remoteItem.trial_status !== cur.trial_status) {
-                                cur.trial_status = remoteItem.trial_status;
-                                updated = true;
-                            }
-                        }
-                    });
-
-                    if (updated) {
-                        localStorage.setItem('registered_traders_log', JSON.stringify(currentLocal));
-                        drawTradersListUI(currentLocal, false);
-                    }
-                }
-            };
-
-            fetch(localApiUrl).then(r => r.json()).then(processRemoteResponse).catch(() => { });
-            if (!localApiUrl.includes('trading-tracker-2026.vercel.app')) {
-                fetch(remoteApiUrl).then(r => r.json()).then(processRemoteResponse).catch(() => { });
+            if (container) {
+                drawTradersListUI(log, isManualRefresh);
             }
-            fetch(directCloudUrl).then(r => r.json()).then(processRemoteResponse).catch(() => { });
+
+            // Multi-tier Remote Sync: thetradingtracker.com, vercel serverless, local server, and global cloud store
+            const syncEndpoints = [
+                'https://thetradingtracker.com/api/sync-trader-log',
+                'https://trading-tracker-2026.vercel.app/api/sync-trader-log'
+            ];
+
+            if (window.location.origin && window.location.origin.startsWith('http') && !syncEndpoints.some(u => u.startsWith(window.location.origin))) {
+                syncEndpoints.push(`${window.location.origin}/api/sync-trader-log`);
+            }
+            syncEndpoints.push('http://localhost:3000/api/sync-trader-log');
+            syncEndpoints.push('https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb');
+
+            syncEndpoints.forEach(url => {
+                fetch(url)
+                    .then(r => r.json())
+                    .then(processRemoteResponse)
+                    .catch(() => {});
+            });
         }
 
         let currentGeneratedKey = "";
@@ -20158,6 +20188,7 @@
                 try { loadAdSensePublisherId(); } catch (e) { console.error(e); }
                 try { initDailyMarketCloseNotification(); } catch (e) { console.error(e); }
                 try { fetchUserTradesFromCloud(); } catch (e) { console.error(e); }
+                try { renderRegisteredTradersList(false); } catch (e) { }
                 try { checkOvertradingRisk(); } catch (e) { console.error(e); }
                 try { renderTvTradeMarkers('active'); } catch (e) { console.error(e); }
             });

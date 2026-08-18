@@ -179,74 +179,124 @@ const server = http.createServer((req, res) => {
     // ============================================================
     if (cleanUrl === '/api/sync-trader-log') {
         const TRADERS_FILE = path.join(PUBLIC_DIR, 'traders_log.json');
-        let tradersList = [
+        let defaultList = [
             {
                 name: "Anurag Patel (Master Admin)",
                 mobile: "8102241463",
                 email: "anuragpatel4u00.ap@gmail.com",
                 password: "******",
-                active_key: "TT2026-VIP-917660",
+                active_key: "TT2026-MASTER-ADMIN-ANURAG",
                 trial_status: "👑 Master Admin",
                 last_login: new Date().toLocaleString()
             },
             {
-                name: "ANURAG PATEL",
+                name: "Trader 5625",
                 mobile: "8825255625",
-                email: "anuragpatel4u00.ap@gmail.com",
+                email: "N/A",
                 password: "******",
-                active_key: "TT2026-VIP-FREE-206772",
-                trial_status: "👑 VIP Pro (1 Year Free Access)",
+                active_key: "FREE-TRIAL",
+                trial_status: "🎁 Free Trial",
                 last_login: new Date().toLocaleString()
             }
         ];
 
+        let tradersList = [...defaultList];
+
         if (fs.existsSync(TRADERS_FILE)) {
             try {
                 const fileData = JSON.parse(fs.readFileSync(TRADERS_FILE, 'utf-8'));
-                if (Array.isArray(fileData) && fileData.length > 0) tradersList = fileData;
+                if (Array.isArray(fileData) && fileData.length > 0) {
+                    tradersList = fileData;
+                }
             } catch (e) {}
         }
+
+        const sanitizeMobDigits = (m) => String(m || '').replace(/[^0-9]/g, '').slice(-10);
+
+        const mergeLocalTraders = (base, incoming) => {
+            let res = Array.isArray(base) ? [...base] : [];
+            const items = Array.isArray(incoming) ? incoming : [incoming];
+
+            items.forEach(entry => {
+                if (!entry || typeof entry !== 'object') return;
+                const trMob = entry.mobile || 'N/A';
+                const trMobDigits = sanitizeMobDigits(trMob);
+                const trName = entry.name || 'Trader';
+                const trEmail = (entry.email || 'N/A').trim().toLowerCase();
+
+                if (trMobDigits === '' && trName === 'Trader' && trEmail === 'n/a') return;
+
+                let rawKey = entry.active_key || 'FREE-TRIAL';
+                if (rawKey === 'TT2026-VIP-917660' && trMobDigits !== '8102241463') {
+                    rawKey = 'FREE-TRIAL';
+                }
+
+                const existingIdx = res.findIndex(t => {
+                    const tMobDigits = sanitizeMobDigits(t.mobile);
+                    const tEmail = (t.email || '').trim().toLowerCase();
+                    const tName = (t.name || '').trim().toLowerCase();
+
+                    return (trMobDigits && tMobDigits && trMobDigits === tMobDigits) ||
+                           (trEmail && trEmail !== 'n/a' && tEmail && tEmail !== 'n/a' && trEmail === tEmail) ||
+                           (trName && trName !== 'Trader' && tName === trName.toLowerCase());
+                });
+
+                if (existingIdx !== -1) {
+                    const old = res[existingIdx];
+                    const newPass = (entry.password && entry.password !== '******') ? entry.password : old.password;
+                    res[existingIdx] = {
+                        ...old,
+                        name: (trName && trName !== 'Trader') ? trName : old.name,
+                        mobile: (trMob && trMob !== 'N/A') ? trMob : old.mobile,
+                        email: (trEmail && trEmail !== 'n/a') ? entry.email : old.email,
+                        password: newPass || '12345',
+                        active_key: (rawKey && rawKey !== 'FREE-TRIAL') ? rawKey : old.active_key,
+                        trial_status: entry.trial_status || old.trial_status || '🎁 Free Trial',
+                        last_login: entry.last_login || new Date().toLocaleString(),
+                        is_locked: entry.is_locked !== undefined ? entry.is_locked : (old.is_locked || false),
+                        is_vip: entry.is_vip !== undefined ? entry.is_vip : (old.is_vip || false)
+                    };
+                } else {
+                    res.unshift({
+                        name: trName,
+                        mobile: trMob,
+                        email: entry.email || 'N/A',
+                        password: (entry.password && entry.password !== '******') ? entry.password : '12345',
+                        active_key: rawKey,
+                        trial_status: entry.trial_status || '🎁 Free Trial',
+                        last_login: entry.last_login || new Date().toLocaleString(),
+                        is_locked: entry.is_locked || false,
+                        is_vip: entry.is_vip || false
+                    });
+                }
+            });
+
+            const hasAdmin = res.some(t => sanitizeMobDigits(t.mobile) === '8102241463');
+            if (!hasAdmin) res.push(defaultList[0]);
+
+            return res;
+        };
+
+        tradersList = mergeLocalTraders(defaultList, tradersList);
 
         if (req.method === 'GET') {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ success: true, count: tradersList.length, traders: tradersList }));
         }
 
-        if (req.method === 'POST') {
+        if (req.method === 'POST' || req.method === 'PUT') {
             let body = '';
             req.on('data', chunk => { body += chunk.toString(); });
             req.on('end', () => {
                 try {
-                    const entry = JSON.parse(body || '{}');
-                    if (entry && (entry.mobile || entry.name || entry.email)) {
-                        const trMobile = entry.mobile || 'N/A';
-                        const trName = entry.name || 'Trader';
-                        const trEmail = entry.email || 'N/A';
+                    let parsed = JSON.parse(body || '{}');
+                    const incoming = Array.isArray(parsed) ? parsed : (parsed.traders || parsed);
+                    tradersList = mergeLocalTraders(tradersList, incoming);
 
-                        const existingIdx = tradersList.findIndex(t => 
-                            (t.mobile && t.mobile !== 'N/A' && trMobile !== 'N/A' && t.mobile === trMobile) ||
-                            (t.email && t.email !== 'N/A' && trEmail !== 'N/A' && t.email.toLowerCase() === trEmail.toLowerCase()) ||
-                            (t.name && t.name === trName)
-                        );
-
-                        const updatedEntry = {
-                            name: trName,
-                            mobile: trMobile,
-                            email: trEmail,
-                            password: entry.password || '******',
-                            active_key: entry.active_key || 'FREE-TRIAL',
-                            trial_status: entry.trial_status || '🎁 Free Trial',
-                            last_login: entry.last_login || new Date().toLocaleString()
-                        };
-
-                        if (existingIdx !== -1) {
-                            tradersList[existingIdx] = { ...tradersList[existingIdx], ...updatedEntry };
-                        } else {
-                            tradersList.unshift(updatedEntry);
-                        }
-
+                    try {
                         fs.writeFileSync(TRADERS_FILE, JSON.stringify(tradersList, null, 2), 'utf-8');
-                    }
+                    } catch (e) {}
+
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ success: true, count: tradersList.length, traders: tradersList }));
                 } catch (e) {
