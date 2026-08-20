@@ -2658,6 +2658,10 @@
                     <b id="vipModalPlan" style="color: #34d399;">1 Year Access</b>
                 </div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+                    <span style="color: #94a3b8;">📅 Expiry Date:</span>
+                    <b id="vipModalExpiryDate" style="color: #facc15;">20 Sep 2026</b>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
                     <span style="color: #94a3b8;">Status / Validity:</span>
                     <b id="vipModalStatus" style="color: #fde047;">🟢 Active (365 Days)</b>
                 </div>
@@ -2718,6 +2722,18 @@
                     <div style="font-size: 11.5px; font-weight: 800; color: #c084fc;">🧠 Prop-Firm Habit</div>
                     <div style="font-size: 9.5px; color: #94a3b8;">Treat virtual money like real capital.</div>
                 </div>
+            </div>
+
+            <!-- ⚡ PAY ONLINE VIA RAZORPAY (INSTANT 1-CLICK AUTO REFILL) -->
+            <button type="button" onclick="triggerRefillRazorpay(99)" 
+                    style="width: 100%; padding: 13px; margin-bottom: 14px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(16,185,129,0.4); text-transform: uppercase; letter-spacing: 0.5px;">
+                <span>💳</span> <span>PAY ₹99 ONLINE VIA RAZORPAY (INSTANT REFILL)</span> <span>⚡</span>
+            </button>
+
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; font-size: 11px; color: #94a3b8;">
+                <span style="height: 1px; flex: 1; background: rgba(255,255,255,0.1);"></span>
+                <span>OR SCAN UPI QR CODE BELOW</span>
+                <span style="height: 1px; flex: 1; background: rgba(255,255,255,0.1);"></span>
             </div>
 
             <!-- DYNAMIC ₹99 UPI SCANNER BOX -->
@@ -3025,6 +3041,17 @@
                             Verification OTP</h3>
                         <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Real 4-Digit Text OTP sent
                             to <span id="otpTargetText" style="color: #34d399; font-weight: 700;">+91 ******</span></p>
+                    </div>
+
+                    <!-- ⚡ INSTANT OTP AUTO-FILL BOX (Zero Waiting Time) -->
+                    <div id="otpCodeDisplayBox" style="margin-bottom: 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 12px; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+                        <div style="font-size: 11px; color: #34d399; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                            <span>⚡ Instant OTP:</span>
+                            <span id="otpCodeDisplay" style="font-family: monospace; font-size: 15px; color: #fff; letter-spacing: 2px; font-weight: 900;">1234</span>
+                        </div>
+                        <button type="button" onclick="autoFillInstantOtp()" style="background: #10b981; color: #000; border: none; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.4);">
+                            <span>⚡</span> <span>Auto-Fill</span>
+                        </button>
                     </div>
 
                     <div class="login-form-group" style="text-align: center;">
@@ -14435,10 +14462,72 @@
                         prefill: { name: userName, email: userEmail, contact: userMobile },
                         theme: { color: "#e91e63" },
                         handler: function (response) {
-                            showToast("✅ Payment Successful! ID: " + response.razorpay_payment_id, "🎉");
-                            alert("🎉 Payment Successful!\nPayment ID: " + response.razorpay_payment_id + "\n\nPlease send this Payment ID to Admin on WhatsApp to get your Instant Activation Key!");
-                            const text = encodeURIComponent(`Hi Anurag Patel, I completed payment via ${method.toUpperCase()}! Payment ID: ${response.razorpay_payment_id}, Plan: ${currentSelectedPlan}, Total Paid: Rs.${breakdown.totalPayable}. Please send my Activation Key.`);
-                            window.open(`https://wa.me/918825255625?text=${text}`, '_blank');
+                            showToast("🎉 Payment Successful! ID: " + response.razorpay_payment_id, "✅");
+                            
+                            // Determine subscription duration & expiry
+                            let duration = '1';
+                            let durationMs = 365 * 24 * 60 * 60 * 1000;
+                            const pName = (currentSelectedPlan || '').toLowerCase();
+                            
+                            if (pName.includes('1 month') || breakdown.totalPayable === 499) {
+                                duration = '1m';
+                                durationMs = 30 * 24 * 60 * 60 * 1000;
+                            } else if (pName.includes('6 month') || breakdown.totalPayable === 1999) {
+                                duration = '6m';
+                                durationMs = 180 * 24 * 60 * 60 * 1000;
+                            } else if (pName.includes('2 year') || breakdown.totalPayable === 5999) {
+                                duration = '2';
+                                durationMs = 730 * 24 * 60 * 60 * 1000;
+                            } else if (pName.includes('lifetime') || breakdown.totalPayable === 9999) {
+                                duration = '99';
+                                durationMs = 36500 * 24 * 60 * 60 * 1000;
+                            } else {
+                                duration = '1';
+                                durationMs = 365 * 24 * 60 * 60 * 1000;
+                            }
+
+                            const expiryTimestamp = Date.now() + durationMs;
+                            const autoKey = 'RZP-' + response.razorpay_payment_id.slice(-8).toUpperCase();
+
+                            // 100% INSTANT AUTOMATIC VIP ACTIVATION
+                            localStorage.setItem('app_vip_unlocked', 'true');
+                            localStorage.setItem('app_active_key', autoKey);
+                            localStorage.setItem('app_vip_duration_years', duration);
+                            localStorage.setItem('app_vip_expiry_timestamp', expiryTimestamp.toString());
+                            localStorage.removeItem('test_force_expired_mode');
+
+                            // Close paywall modal
+                            closeVipPaywallModal();
+
+                            // Update UI, VIP badges, sidebar & indicators
+                            try { renderVipBadgeAndInfo(); } catch (e) { }
+                            try { updateProFeatureLockIndicators(true); } catch (e) { }
+                            
+                            // Suppress all Google Ads for entire paid duration
+                            try { renderAdSenseBanner(); } catch (e) { }
+
+                            // Update registered traders log
+                            try {
+                                const regTraders = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                                const currMob = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+                                const currEmail = (localStorage.getItem('app_user_email') || '').trim().toLowerCase();
+                                const idx = regTraders.findIndex(t => sanitizeMobile(t.mobile) === currMob || (currEmail && (t.email || '').trim().toLowerCase() === currEmail));
+                                if (idx !== -1) {
+                                    regTraders[idx].isVip = true;
+                                    regTraders[idx].vipPlan = currentSelectedPlan;
+                                    regTraders[idx].vipKey = autoKey;
+                                    regTraders[idx].vipExpiry = expiryTimestamp;
+                                    localStorage.setItem('registered_traders_log', JSON.stringify(regTraders));
+                                }
+                            } catch (e) { }
+
+                            alert(`🎉 CONGRATULATIONS! PAYMENT SUCCESSFUL!\n\n👑 Plan: ${currentSelectedPlan}\n⚡ Status: INSTANTLY ACTIVATED\n🚫 Ads: 0 ADS ENABLED for your entire plan!\n🔓 Pro Features: All VIP Tools & Paper Trading Unlocked 100%!\n\nTransaction ID: ${response.razorpay_payment_id}`);
+
+                            // Send WhatsApp receipt notification to Admin
+                            try {
+                                const text = encodeURIComponent(`🎉 New VIP Pro Subscription Activated via Razorpay!\n\nPayment ID: ${response.razorpay_payment_id}\nPlan: ${currentSelectedPlan}\nAmount: Rs.${breakdown.totalPayable}\nUser: ${userName} (${userMobile} / ${userEmail})\nLicense Key: ${autoKey}`);
+                                window.open(`https://wa.me/918102241463?text=${text}`, '_blank');
+                            } catch (e) { }
                         }
                     };
                     const rzp = new Razorpay(options);
@@ -14617,7 +14706,7 @@
             const isAdmin = localStorage.getItem('is_user_admin') === 'true';
             const activeKey = localStorage.getItem('app_active_key') || '';
             const durationYears = localStorage.getItem('app_vip_duration_years') || '1';
-            const expiryStr = localStorage.getItem('app_vip_expiry');
+            const expiryStr = localStorage.getItem('app_vip_expiry_timestamp') || localStorage.getItem('app_vip_expiry');
             const trial = getTrialStatusInfo();
 
             const adminNavItem = document.getElementById('sidebarAdminNavItem');
@@ -14637,40 +14726,64 @@
             let planName = '30-Day Free Trial Mode';
             let subText = `${trial.daysRemaining}d ${trial.hoursRemaining}h Left`;
             let daysLeftText = `${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Free Trial Remaining`;
+            let expiryDateText = '30 Days From Registration';
 
             if (isAdmin) {
                 statusText = '👑 Master Admin';
                 planName = 'Full Admin Rights (Free Access)';
                 subText = 'Unlimited Access';
-                daysLeftText = 'Master Admin Access';
+                daysLeftText = 'Master Admin Access (Never Expires)';
+                expiryDateText = 'Never (Lifetime Master Admin Access)';
             } else if (isVip) {
-                statusText = '👑 VIP Pro Active';
-                planName = durationYears === '99' ? 'Lifetime Access' : `${durationYears} Year(s) Access`;
+                if (durationYears === '1m') planName = '🥉 1 Month Pro Pass';
+                else if (durationYears === '6m') planName = '🥈 6 Months Swing Pass';
+                else if (durationYears === '1') planName = '⭐ 1 Year Master Pro';
+                else if (durationYears === '2') planName = '🥈 2 Years Elite Pro';
+                else if (durationYears === '99') planName = '🥇 Lifetime VIP King Pass';
+                else planName = `${durationYears} Year(s) VIP Access`;
+
                 if (expiryStr) {
                     const expiryTime = parseInt(expiryStr);
                     const diffMs = expiryTime - Date.now();
                     const daysLeft = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+                    const expDateFormatted = new Date(expiryTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
                     if (durationYears === '99' || daysLeft > 3650) {
-                        subText = 'Lifetime';
-                        daysLeftText = 'Lifetime Valid';
+                        subText = 'Lifetime Active';
+                        daysLeftText = '🟢 Lifetime Valid (Never Expires)';
+                        statusText = '👑 VIP Lifetime Active';
+                        expiryDateText = 'Never (Lifetime VIP Access)';
+                    } else if (daysLeft > 0) {
+                        subText = `${daysLeft}d left (Exp: ${expDateFormatted})`;
+                        daysLeftText = `🟢 Active: ${daysLeft} Days Remaining`;
+                        statusText = `👑 VIP Pro Active (${daysLeft}d left)`;
+                        expiryDateText = `${expDateFormatted} (${daysLeft} Days Remaining)`;
                     } else {
-                        subText = `${daysLeft} Days Left`;
-                        daysLeftText = `${daysLeft} Days Remaining`;
+                        subText = 'Expired';
+                        daysLeftText = `⏰ Subscription Expired on ${expDateFormatted}`;
+                        statusText = '⚡ VIP Pro Expired';
+                        expiryDateText = `Expired on ${expDateFormatted}`;
                     }
                 } else {
                     subText = durationYears === '99' ? 'Lifetime' : `${durationYears} Year(s)`;
                     daysLeftText = durationYears === '99' ? 'Lifetime Valid' : `${durationYears} Year(s) Access`;
+                    statusText = '👑 VIP Pro Active';
+                    expiryDateText = durationYears === '99' ? 'Never (Lifetime Access)' : `${durationYears} Year(s) from Activation`;
                 }
             } else if (!trial.isExpired) {
                 statusText = '🎁 30-Day Free Trial';
                 planName = '30-Day Free Trial Mode';
                 subText = `${trial.daysRemaining}d ${trial.hoursRemaining}h Left`;
                 daysLeftText = `${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Free Trial Remaining`;
+                const trialExpTimestamp = Date.now() + (trial.daysRemaining * 86400000) + (trial.hoursRemaining * 3600000);
+                const trialDate = new Date(trialExpTimestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+                expiryDateText = `${trialDate} (${trial.daysRemaining}d ${trial.hoursRemaining}h Left)`;
             } else {
                 statusText = '⚡ Free Mode (PRO Locked)';
                 planName = 'Free Mode (PRO Features & Paper Trading Locked)';
                 subText = 'Upgrade to VIP Pro';
                 daysLeftText = 'Free Mode Active - VIP Activation Required for PRO & Paper Trading Features';
+                expiryDateText = 'Trial Expired (Upgrade for Unlimited Access)';
             }
 
             const sidebarBadge = document.getElementById('sidebarVipBadge');
@@ -14729,10 +14842,12 @@
 
             const modalKey = document.getElementById('vipModalKey');
             const modalPlan = document.getElementById('vipModalPlan');
+            const modalExpiryDate = document.getElementById('vipModalExpiryDate');
             const modalStatus = document.getElementById('vipModalStatus');
 
             if (modalKey) modalKey.innerText = isVip ? activeKey : (isAdmin ? 'ADMIN-KEY' : 'TRIAL-MODE');
             if (modalPlan) modalPlan.innerText = planName;
+            if (modalExpiryDate) modalExpiryDate.innerText = expiryDateText;
             if (modalStatus) modalStatus.innerText = daysLeftText;
         }
 
@@ -19893,6 +20008,49 @@
         }
         window.confirmAndResetDemoCapital = confirmAndResetDemoCapital;
         window.resetPaperCapital = openPaperResetRefillModal;
+
+        async function triggerRefillRazorpay(amount = 99) {
+            const userEmail = localStorage.getItem('app_user_email') || 'customer@thetradingtracker.com';
+            const userMobile = localStorage.getItem('app_user_mobile') || '8102241463';
+            const userName = localStorage.getItem('trader_full_name') || 'Trader';
+            const rzpKey = localStorage.getItem('razorpay_key_id') || 'rzp_live_TPHS2Ev8R8ubH7';
+
+            if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder') {
+                if (typeof Razorpay === 'undefined') {
+                    showToast("⏳ Loading Razorpay Gateway...", "💳");
+                    try {
+                        await loadScriptAsync("https://checkout.razorpay.com/v1/checkout.js");
+                    } catch (e) { }
+                }
+            }
+
+            if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder' && typeof Razorpay !== 'undefined') {
+                try {
+                    const options = {
+                        key: rzpKey,
+                        amount: amount * 100,
+                        currency: "INR",
+                        name: "Trading Tracker 2026",
+                        description: "₹10 Lakh Virtual Capital Refill Token (Instant Auto-Reset)",
+                        image: "./profile.jpg",
+                        prefill: { name: userName, email: userEmail, contact: userMobile },
+                        theme: { color: "#10b981" },
+                        handler: function (response) {
+                            showToast("🎉 Payment Successful! ID: " + response.razorpay_payment_id, "✅");
+                            confirmAndResetDemoCapital(true);
+                        }
+                    };
+                    const rzpInstance = new Razorpay(options);
+                    rzpInstance.open();
+                } catch (err) {
+                    console.error("Razorpay Refill error:", err);
+                    showToast("⚠️ Gateway error, please scan the UPI QR Code below!", "⚠️");
+                }
+            } else {
+                showToast("📲 Please scan the UPI QR Code below to pay ₹99!", "ℹ️");
+            }
+        }
+        window.triggerRefillRazorpay = triggerRefillRazorpay;
 
         function clearPaperTradeHistory() {
             if (confirm("🗑️ Clear all closed paper trade history logs?")) {
