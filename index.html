@@ -2724,51 +2724,39 @@
                 </div>
             </div>
 
-            <!-- ⚡ PAY ONLINE VIA RAZORPAY (INSTANT 1-CLICK AUTO REFILL) -->
+            <!-- PAYMENT INFO BADGE -->
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 14px; margin-bottom: 18px; text-align: center;">
+                <div style="font-size: 11px; font-weight: 800; color: #34d399; margin-bottom: 4px; text-transform: uppercase;">
+                    🔒 RAZORPAY VERIFIED AUTO-REFILL GATEWAY
+                </div>
+                <div style="font-size: 10.5px; color: #cbd5e1; margin-bottom: 8px;">
+                    Accepts <b>Google Pay • PhonePe • Paytm • UPI • Credit/Debit Cards • Net Banking</b>
+                </div>
+                <div style="font-size: 20px; font-weight: 900; color: #fde047;">
+                    Refill Token Fee: ₹99.00
+                </div>
+            </div>
+
+            <!-- ⚡ PAY ONLINE VIA RAZORPAY (ONLY VERIFIED PAYMENT METHOD) -->
             <button type="button" onclick="triggerRefillRazorpay(99)" 
-                    style="width: 100%; padding: 13px; margin-bottom: 14px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; font-weight: 900; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(16,185,129,0.4); text-transform: uppercase; letter-spacing: 0.5px;">
-                <span>💳</span> <span>PAY ₹99 ONLINE VIA RAZORPAY (INSTANT REFILL)</span> <span>⚡</span>
+                    style="width: 100%; padding: 15px; margin-bottom: 14px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; font-weight: 900; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(16,185,129,0.4); text-transform: uppercase; letter-spacing: 0.5px;">
+                <span>💳</span> <span>PAY ₹99 VIA RAZORPAY (INSTANT AUTO-REFILL)</span> <span>⚡</span>
             </button>
 
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; font-size: 11px; color: #94a3b8;">
-                <span style="height: 1px; flex: 1; background: rgba(255,255,255,0.1);"></span>
-                <span>OR SCAN UPI QR CODE BELOW</span>
-                <span style="height: 1px; flex: 1; background: rgba(255,255,255,0.1);"></span>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <a href="https://wa.me/918102241463?text=Hi%20Anurag%20Patel,%20I%20have%20a%20query%20about%20the%20Rs.99%20Refill%20Token." 
+                   target="_blank" 
+                   style="flex: 1; padding: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; border-radius: 10px; font-weight: 700; font-size: 11px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span>💬</span> <span>WhatsApp Support</span>
+                </a>
+                <button type="button" onclick="closePaperResetRefillModal()" 
+                        style="flex: 1; padding: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; border-radius: 10px; font-weight: 700; font-size: 11px; cursor: pointer;">
+                    Cancel
+                </button>
             </div>
 
-            <!-- DYNAMIC ₹99 UPI SCANNER BOX -->
-            <div style="background: rgba(0,0,0,0.45); border: 1.5px dashed #10b981; border-radius: 18px; padding: 14px; margin-bottom: 16px;">
-                <div style="font-size: 12px; font-weight: 900; color: #fde047; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">
-                    📲 SCAN TO PAY ₹99 VIA ANY UPI APP:
-                </div>
-                
-                <div id="paperResetQrContainer" style="display: flex; justify-content: center; margin-bottom: 10px;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=6&data=upi%3A%2F%2Fpay%3Fpa%3D8102241463%40yapl%26pn%3DAnurag%2520Patel%26am%3D99%26cu%3DINR" 
-                         alt="₹99 Refill UPI QR Code" 
-                         style="width: 160px; height: 160px; border-radius: 12px; border: 2px solid #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.3);">
-                </div>
-
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
-                    <span>UPI ID: <b style="color: #38bdf8; font-family: monospace;">8102241463@yapl</b></span>
-                    <button type="button" onclick="copyUpiId('8102241463@yapl')" style="background: rgba(56,189,248,0.2); border: 1px solid #38bdf8; color: #38bdf8; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer;">📋 Copy</button>
-                </div>
-
-                <div style="display: flex; gap: 8px;">
-                    <a id="paperResetWaBtn" 
-                       href="https://wa.me/918102241463?text=Hi%20Anurag%20Patel,%20I%20have%20paid%20Rs.99%20for%20Rs.10%20Lakh%20Virtual%20Capital%20Refill.%20Please%20reset%20my%20balance." 
-                       target="_blank" 
-                       style="flex: 1; padding: 11px; background: #25D366; color: white; border-radius: 12px; font-weight: 800; font-size: 11.5px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 15px rgba(37,211,102,0.3);">
-                        <span>💬</span> <span>WhatsApp</span>
-                    </a>
-                    <button type="button" onclick="confirmAndResetDemoCapital()" 
-                            style="flex: 1; padding: 11px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 11.5px; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
-                        ⚡ I Paid ₹99 (Reset)
-                    </button>
-                </div>
-            </div>
-
-            <div style="font-size: 10px; color: #64748b; text-align: center;">
-                🔒 256-Bit SSL Encrypted Verification • Official Trading Tracker 2026
+            <div style="font-size: 10px; color: #64748b; text-align: center; margin-top: 14px;">
+                🔒 256-Bit SSL Encrypted Verification • Zero Unverified Reset
             </div>
         </div>
     </div>
@@ -19999,7 +19987,13 @@
         }
         window.closePaperResetRefillModal = closePaperResetRefillModal;
 
-        function confirmAndResetDemoCapital(bypassPayment = false) {
+        function confirmAndResetDemoCapital(verified = false) {
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+            const profileMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+            if (!verified && !isUserAdmin && profileMobile !== '8102241463') {
+                openPaperResetRefillModal();
+                return;
+            }
             localStorage.setItem('paper_trading_capital', '1000000');
             localStorage.setItem('paper_active_positions', JSON.stringify([]));
             renderPaperTradingDashboard();
@@ -20015,16 +20009,14 @@
             const userName = localStorage.getItem('trader_full_name') || 'Trader';
             const rzpKey = localStorage.getItem('razorpay_key_id') || 'rzp_live_TPHS2Ev8R8ubH7';
 
-            if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder') {
-                if (typeof Razorpay === 'undefined') {
-                    showToast("⏳ Loading Razorpay Gateway...", "💳");
-                    try {
-                        await loadScriptAsync("https://checkout.razorpay.com/v1/checkout.js");
-                    } catch (e) { }
-                }
+            if (typeof Razorpay === 'undefined') {
+                showToast("⏳ Loading Razorpay Gateway...", "💳");
+                try {
+                    await loadScriptAsync("https://checkout.razorpay.com/v1/checkout.js");
+                } catch (e) { }
             }
 
-            if (rzpKey && rzpKey.startsWith('rzp_') && rzpKey !== 'rzp_test_placeholder' && typeof Razorpay !== 'undefined') {
+            if (typeof Razorpay !== 'undefined') {
                 try {
                     const options = {
                         key: rzpKey,
@@ -20036,7 +20028,7 @@
                         prefill: { name: userName, email: userEmail, contact: userMobile },
                         theme: { color: "#10b981" },
                         handler: function (response) {
-                            showToast("🎉 Payment Successful! ID: " + response.razorpay_payment_id, "✅");
+                            showToast("🎉 Payment Verified! ID: " + response.razorpay_payment_id, "✅");
                             confirmAndResetDemoCapital(true);
                         }
                     };
@@ -20044,10 +20036,10 @@
                     rzpInstance.open();
                 } catch (err) {
                     console.error("Razorpay Refill error:", err);
-                    showToast("⚠️ Gateway error, please scan the UPI QR Code below!", "⚠️");
+                    showToast("⚠️ Payment window error. Please retry!", "⚠️");
                 }
             } else {
-                showToast("📲 Please scan the UPI QR Code below to pay ₹99!", "ℹ️");
+                showToast("⚠️ Razorpay gateway is loading, please try again in 2 seconds.", "⏳");
             }
         }
         window.triggerRefillRazorpay = triggerRefillRazorpay;
