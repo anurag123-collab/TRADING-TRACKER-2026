@@ -35,6 +35,10 @@
     <meta name="twitter:image" content="https://thetradingtracker.com/profile.jpg">
     <meta name="google-site-verification" content="google0bf3624461f65d7b" />
 
+    <!-- Google AdSense Official Script Tag (pub-1815684098843825) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1815684098843825" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-1815684098843825">
+
     <!-- Immediate Zero-Flash Auth Shield: Completely Prevents Dashboard Flashing on Load -->
     <script>
         (function () {
@@ -69,7 +73,13 @@
             "@type": "Person",
             "name": "Anurag Patel",
             "image": "https://thetradingtracker.com/profile.jpg",
-            "logo": "https://thetradingtracker.com/profile.jpg"
+            "logo": "https://thetradingtracker.com/profile.jpg",
+            "sameAs": [
+              "https://x.com/Anurag19111221",
+              "https://www.facebook.com/profile.php?id=100010197130996",
+              "https://instagram.com/happyoptions16",
+              "https://github.com/anurag123-collab"
+            ]
           }
         },
         {
@@ -82,7 +92,13 @@
             "@type": "Person",
             "name": "Anurag Patel",
             "jobTitle": "Founder & Creator",
-            "image": "https://thetradingtracker.com/profile.jpg"
+            "image": "https://thetradingtracker.com/profile.jpg",
+            "sameAs": [
+              "https://x.com/Anurag19111221",
+              "https://www.facebook.com/profile.php?id=100010197130996",
+              "https://instagram.com/happyoptions16",
+              "https://github.com/anurag123-collab"
+            ]
           },
           "publisher": {
             "@type": "Person",
@@ -410,17 +426,34 @@
             left: 0;
             z-index: 9999;
             transition: background-color 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 10px;
+            box-sizing: border-box;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 440px;
+            margin: auto;
+            gap: 14px;
+            box-sizing: border-box;
         }
 
         .login-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
-            padding: 35px;
+            padding: 28px 22px;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px var(--shadow-color), 0 10px 10px -5px var(--shadow-color);
-            width: 380px;
+            box-shadow: 0 20px 35px -5px var(--shadow-color), 0 10px 15px -5px var(--shadow-color);
+            width: 100%;
+            max-width: 440px;
             text-align: center;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         .login-avatar-container {
@@ -2189,6 +2222,83 @@
             background: rgba(234, 179, 8, 0.05);
         }
 
+        /* 🎮 PRO PAPER TRADING LIVE CHART & ON-CHART HUD STYLES */
+        .paper-chart-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #0b1329;
+            border: 1.5px solid rgba(56, 189, 248, 0.3);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .paper-chart-hud-overlay {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: auto;
+            max-width: 350px;
+            width: calc(100% - 24px);
+        }
+
+        .paper-hud-card {
+            background: rgba(11, 19, 41, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            color: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .paper-hud-card.profit-glow {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+        }
+
+        .paper-hud-card.loss-glow {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+        }
+
+        .paper-chart-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .paper-chart-sym-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .paper-chart-sym-btn.active, .paper-chart-sym-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+
         /* 3. CSV DRAG & DROP ZONE */
         .csv-dropzone {
             border: 2px dashed rgba(56, 189, 248, 0.4);
@@ -2327,92 +2437,65 @@
                             </span>
                         </div>
 
-                        <!-- 6 FLEXIBLE PLAN CARDS GRID -->
+                        <!-- 5 FLEXIBLE PREMIUM PLAN CARDS GRID -->
                         <div
                             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
-                            <div onclick="selectPaywallPlan(1999, '1 Year Access', this)"
+                            
+                            <!-- 1 MONTH -->
+                            <div onclick="selectPaywallPlan(423, '1 Month Pro Pass', this)" class="paywall-plan-card"
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">1 MONTH PRO</span>
+                                    <span style="font-size: 8.5px; background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">STARTER</span>
+                                </div>
+                                <div style="font-size: 19px; font-weight: 900; color: #38bdf8;">₹499</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">(₹423 + 18% GST ₹76)</div>
+                            </div>
+
+                            <!-- 6 MONTHS -->
+                            <div onclick="selectPaywallPlan(1694, '6 Months Swing Pass', this)" class="paywall-plan-card"
+                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">6 MONTHS SWING</span>
+                                    <span style="font-size: 8.5px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">POPULAR</span>
+                                </div>
+                                <div style="font-size: 19px; font-weight: 900; color: #fbbf24;">₹1,999</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">(₹1,694 + 18% GST ₹305)</div>
+                            </div>
+
+                            <!-- 1 YEAR (HERO / BEST VALUE) -->
+                            <div onclick="selectPaywallPlan(2965, '1 Year Master Pro', this)"
                                 class="paywall-plan-card active"
                                 style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(5, 150, 105, 0.1)); border: 2px solid #10b981; border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #a7f3d0; font-weight: 900; text-transform: uppercase;">1
-                                        YEAR VIP</span>
-                                    <span
-                                        style="font-size: 8.5px; background: #10b981; color: #000; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">BEST
-                                        VALUE</span>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 10.5px; color: #a7f3d0; font-weight: 900; text-transform: uppercase;">1 YEAR MASTER</span>
+                                    <span style="font-size: 8.5px; background: #10b981; color: #000; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">⭐ BEST VALUE</span>
                                 </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #34d399;">₹1,999</div>
-                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹2,359</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #34d399;">₹3,499</div>
+                                <div style="font-size: 9.5px; color: #a7f3d0; font-weight: 700; margin-top: 2px;">(₹2,965 + 18% GST ₹534)</div>
                             </div>
 
-                            <div onclick="selectPaywallPlan(3500, '2 Years Access', this)" class="paywall-plan-card"
+                            <!-- 2 YEARS -->
+                            <div onclick="selectPaywallPlan(5084, '2 Years Elite Pro', this)" class="paywall-plan-card"
                                 style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">2
-                                        YEARS VIP</span>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">2 YEARS ELITE</span>
                                 </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹3,500</div>
-                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹4,130</div>
+                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹5,999</div>
+                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">(₹5,084 + 18% GST ₹915)</div>
                             </div>
 
-                            <div onclick="selectPaywallPlan(5500, '3 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">3
-                                        YEARS VIP</span>
+                            <!-- LIFETIME KING -->
+                            <div onclick="selectPaywallPlan(8474, 'Lifetime VIP King Pass', this)" class="paywall-plan-card"
+                                style="grid-column: span 2; background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(147, 51, 234, 0.12)); border: 1.5px solid rgba(168, 85, 247, 0.6); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <span style="font-size: 11px; color: #e9d5ff; font-weight: 900; text-transform: uppercase;">👑 LIFETIME VIP KING PASS (NEVER PAY AGAIN)</span>
+                                    <span style="font-size: 8.5px; background: #a855f7; color: #fff; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">ROYAL VIP</span>
                                 </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹5,500</div>
-                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹6,490</div>
-                            </div>
-
-                            <div onclick="selectPaywallPlan(7500, '4 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">4
-                                        YEARS VIP</span>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 20px; font-weight: 900; color: #c084fc;">₹9,999</div>
+                                    <div style="font-size: 10px; color: #d8b4fe; font-weight: 700;">(Base ₹8,474 + 18% GST ₹1,525)</div>
                                 </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹7,500</div>
-                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹8,850</div>
-                            </div>
-
-                            <div onclick="selectPaywallPlan(9500, '5 Years Access', this)" class="paywall-plan-card"
-                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #cbd5e1; font-weight: 900; text-transform: uppercase;">5
-                                        YEARS VIP</span>
-                                </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #60a5fa;">₹9,500</div>
-                                <div style="font-size: 9.5px; color: #94a3b8; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹11,210</div>
-                            </div>
-
-                            <div onclick="selectPaywallPlan(14999, 'Lifetime Access', this)" class="paywall-plan-card"
-                                style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(147, 51, 234, 0.12)); border: 1.5px solid rgba(168, 85, 247, 0.6); border-radius: 16px; padding: 13px; cursor: pointer; transition: all 0.25s ease;">
-                                <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <span
-                                        style="font-size: 10.5px; color: #e9d5ff; font-weight: 900; text-transform: uppercase;">LIFETIME
-                                        VIP</span>
-                                    <span
-                                        style="font-size: 8.5px; background: #a855f7; color: #fff; font-weight: 900; padding: 2px 7px; border-radius: 8px; letter-spacing: 0.3px;">KING
-                                        PLAN</span>
-                                </div>
-                                <div style="font-size: 19px; font-weight: 900; color: #c084fc;">₹14,999</div>
-                                <div style="font-size: 9.5px; color: #d8b4fe; font-weight: 600; margin-top: 2px;">+18%
-                                    GST = ₹17,699</div>
                             </div>
                         </div>
 
@@ -2422,12 +2505,11 @@
                             <div>
                                 <div id="selectedPlanLabel"
                                     style="font-size: 11px; text-transform: uppercase; color: #a5b4fc; font-weight: 900; letter-spacing: 0.5px;">
-                                    1 YEAR VIP ACCESS PLAN
+                                    1 YEAR MASTER PRO (INCL. 18% GST)
                                 </div>
                                 <div id="selectedPlanPrice"
                                     style="font-size: 24px; font-weight: 900; color: #10b981; margin-top: 2px;">
-                                    ₹2,359 <span style="font-size: 11px; font-weight: 500; color: #94a3b8;">(₹1,999 +
-                                        18% GST)</span>
+                                    ₹3,499 <span style="font-size: 11px; font-weight: 500; color: #94a3b8;">(₹2,965 + 18% GST: ₹534)</span>
                                 </div>
                             </div>
                             <div
@@ -2439,8 +2521,7 @@
                         <!-- INSTANT ONLINE RAZORPAY PAYMENT BUTTON -->
                         <button onclick="triggerPaymentGateway('razorpay')" id="razorpayMainPayBtn" type="button"
                             style="width: 100%; padding: 16px; margin-bottom: 18px; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #d946ef 100%); color: white; border: none; border-radius: 16px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.25s ease; border: 1.5px solid rgba(255,255,255,0.25);">
-                            <span style="font-size: 20px;">💳</span> <span id="razorpayBtnText">PAY ONLINE VIA RAZORPAY
-                                (₹2,359)</span> <span style="font-size: 18px;">⚡</span>
+                            <span style="font-size: 20px;">💳</span> <span id="razorpayBtnText">PAY ONLINE VIA RAZORPAY (₹3,499)</span> <span style="font-size: 18px;">⚡</span>
                         </button>
 
                         <!-- VIP ACTIVATION KEY SECTION -->
@@ -2601,6 +2682,81 @@
         </div>
     </div>
 
+    <!-- 💰 ₹99 DISCIPLINED CAPITAL REFILL & WALLET RESET MODAL -->
+    <div id="paperResetRefillModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 9999999; align-items: center; justify-content: center; padding: 20px;">
+        <div
+            style="background: linear-gradient(145deg, #111827 0%, #0b0f19 100%); border: 2px solid #10b981; border-radius: 24px; padding: 24px; width: 100%; max-width: 460px; color: white; text-align: center; box-shadow: 0 25px 60px rgba(16, 185, 129, 0.4); max-height: 94vh; overflow-y: auto;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 24px;">🛡️</span>
+                    <span style="font-size: 15px; font-weight: 900; color: #34d399; text-transform: uppercase; letter-spacing: 0.5px;">Disciplined Capital Refill</span>
+                </div>
+                <button onclick="closePaperResetRefillModal()" style="background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✖</button>
+            </div>
+
+            <p style="font-size: 11.5px; color: #94a3b8; line-height: 1.4; margin-bottom: 16px; text-align: left;">
+                To cultivate <b style="color: #38bdf8;">strict risk discipline</b> and stop reckless gambling/overtrading, resetting your virtual wallet back to fresh <b style="color: #facc15;">₹10,00,000 dummy cash</b> requires a nominal <b style="color: #34d399;">₹99 Refill Token fee</b>.
+            </p>
+
+            <!-- 4 REFILL HIGHLIGHTS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; text-align: left;">
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 10px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #facc15;">💰 ₹10,00,000 Refill</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Fresh demo capital restored instantly.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 10px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #38bdf8;">🔄 Clean Slate</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">All active loss positions closed.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 10px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #34d399;">📊 Win-Rate Restart</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Fresh equity curve & mock analytics.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 10px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #c084fc;">🧠 Prop-Firm Habit</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Treat virtual money like real capital.</div>
+                </div>
+            </div>
+
+            <!-- DYNAMIC ₹99 UPI SCANNER BOX -->
+            <div style="background: rgba(0,0,0,0.45); border: 1.5px dashed #10b981; border-radius: 18px; padding: 14px; margin-bottom: 16px;">
+                <div style="font-size: 12px; font-weight: 900; color: #fde047; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">
+                    📲 SCAN TO PAY ₹99 VIA ANY UPI APP:
+                </div>
+                
+                <div id="paperResetQrContainer" style="display: flex; justify-content: center; margin-bottom: 10px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=6&data=upi%3A%2F%2Fpay%3Fpa%3D8102241463%40yapl%26pn%3DAnurag%2520Patel%26am%3D99%26cu%3DINR" 
+                         alt="₹99 Refill UPI QR Code" 
+                         style="width: 160px; height: 160px; border-radius: 12px; border: 2px solid #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.3);">
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
+                    <span>UPI ID: <b style="color: #38bdf8; font-family: monospace;">8102241463@yapl</b></span>
+                    <button type="button" onclick="copyUpiId('8102241463@yapl')" style="background: rgba(56,189,248,0.2); border: 1px solid #38bdf8; color: #38bdf8; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer;">📋 Copy</button>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <a id="paperResetWaBtn" 
+                       href="https://wa.me/918102241463?text=Hi%20Anurag%20Patel,%20I%20have%20paid%20Rs.99%20for%20Rs.10%20Lakh%20Virtual%20Capital%20Refill.%20Please%20reset%20my%20balance." 
+                       target="_blank" 
+                       style="flex: 1; padding: 11px; background: #25D366; color: white; border-radius: 12px; font-weight: 800; font-size: 11.5px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 15px rgba(37,211,102,0.3);">
+                        <span>💬</span> <span>WhatsApp</span>
+                    </a>
+                    <button type="button" onclick="confirmAndResetDemoCapital()" 
+                            style="flex: 1; padding: 11px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 11.5px; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
+                        ⚡ I Paid ₹99 (Reset)
+                    </button>
+                </div>
+            </div>
+
+            <div style="font-size: 10px; color: #64748b; text-align: center;">
+                🔒 256-Bit SSL Encrypted Verification • Official Trading Tracker 2026
+            </div>
+        </div>
+    </div>
+
     <!-- ADMIN LICENSING PORTAL MODAL -->
     <div id="adminLicensingModal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 9999999; align-items: center; justify-content: center; padding: 20px;">
@@ -2742,178 +2898,218 @@
                 <span id="loginThemeIcon">🌙</span> <span id="loginThemeText">Dark Mode</span>
             </button>
         </div>
-        <div class="login-card">
-            <div class="login-avatar-container"
-                style="position: relative; width: 90px; height: 90px; margin: 0 auto 16px; border-radius: 50%; border: 3px solid var(--primary); padding: 2px; box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); background: var(--card-bg);">
-                <img src="profile.jpg" alt="Anurag Patel" class="login-avatar-img"
-                    style="width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 50%; display: block;"
-                    onerror="if(window.PROFILE_AVATAR_BASE64){this.onerror=null;this.src=window.PROFILE_AVATAR_BASE64;}">
-                <div style="position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px; background: #10b981; border: 2px solid var(--card-bg); border-radius: 50%; box-shadow: 0 0 8px #10b981;"
-                    title="Trading System Active"></div>
-            </div>
-            <h2 id="loginTitleHeader">TRADING TRACKER 2026</h2>
-            <p
-                style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">
-                PRO TRADER PORTAL 2026</p>
+        <div class="auth-wrapper">
+            <div class="login-card">
+                <div class="login-avatar-container"
+                    style="position: relative; width: 90px; height: 90px; margin: 0 auto 16px; border-radius: 50%; border: 3px solid var(--primary); padding: 2px; box-shadow: 0 0 25px rgba(99, 102, 241, 0.4); background: var(--card-bg);">
+                    <img src="profile.jpg" alt="Anurag Patel" class="login-avatar-img"
+                        style="width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 50%; display: block;"
+                        onerror="if(window.PROFILE_AVATAR_BASE64){this.onerror=null;this.src=window.PROFILE_AVATAR_BASE64;}">
+                    <div style="position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px; background: #10b981; border: 2px solid var(--card-bg); border-radius: 50%; box-shadow: 0 0 8px #10b981;"
+                        title="Trading System Active"></div>
+                </div>
+                <h2 id="loginTitleHeader">TRADING TRACKER 2026</h2>
+                <p
+                    style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">
+                    PRO TRADER PORTAL 2026</p>
 
-            <!-- LOGIN / SIGNUP TABS -->
-            <div id="authTabsHeader"
-                style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border); gap: 4px;">
-                <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')"
-                    style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">🔑 Login</button>
-                <button id="authTabOtpBtn" class="auth-tab-btn" onclick="switchAuthTab('otp')"
-                    style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">📲
-                    Mobile OTP</button>
-                <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')"
-                    style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">📝 Sign Up</button>
-            </div>
-
-            <div id="loginSecurityNotice"
-                style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 10px 14px; border-radius: 10px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
-            </div>
-
-            <!-- LOGIN FORM (MOBILE / EMAIL + PASSWORD OR OTP) -->
-            <div id="loginFormContainer">
-                <div class="login-form-group">
-                    <label id="loginUserLabel">📱 Mobile Number / Email ID</label>
-                    <input type="text" id="loginUser" placeholder="Enter 10-Digit Mobile or Email ID"
-                        onkeydown="if(event.key==='Enter'){ if(currentAuthMode==='otp'){handleSendOTP();}else{handleDirectPasswordLogin();} }">
+                <!-- LOGIN / SIGNUP TABS -->
+                <div id="authTabsHeader"
+                    style="display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid var(--card-border); gap: 4px;">
+                    <button id="authTabLoginBtn" class="auth-tab-btn active" onclick="switchAuthTab('login')"
+                        style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">🔑 Login</button>
+                    <button id="authTabOtpBtn" class="auth-tab-btn" onclick="switchAuthTab('otp')"
+                        style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">📲
+                        Mobile OTP</button>
+                    <button id="authTabSignupBtn" class="auth-tab-btn" onclick="switchAuthTab('signup')"
+                        style="flex: 1; font-weight: 700; font-size: 11px; padding: 8px 4px;">📝 Sign Up</button>
                 </div>
 
-                <div class="login-form-group" id="loginPassGroup">
-                    <label>🔑 Password</label>
-                    <div style="position: relative;">
-                        <input type="password" id="loginPass" placeholder="Enter Password (default: 12345)"
-                            onkeydown="if(event.key==='Enter') handleDirectPasswordLogin()"
-                            style="padding-right: 40px;">
-                        <span onclick="togglePasswordVisibility('loginPass', this)"
-                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                <div id="loginSecurityNotice"
+                    style="font-size: 11px; margin-bottom: 14px; color: #818cf8; background: rgba(99,102,241,0.12); padding: 10px 14px; border-radius: 10px; border: 1px dashed rgba(99,102,241,0.3); display: none; text-align: center;">
+                </div>
+
+                <!-- LOGIN FORM (MOBILE / EMAIL + PASSWORD OR OTP) -->
+                <div id="loginFormContainer">
+                    <div class="login-form-group">
+                        <label id="loginUserLabel">📱 Mobile Number / Email ID</label>
+                        <input type="text" id="loginUser" placeholder="Enter 10-Digit Mobile or Email ID"
+                            onkeydown="if(event.key==='Enter'){ if(currentAuthMode==='otp'){handleSendOTP();}else{handleDirectPasswordLogin();} }">
+                    </div>
+
+                    <div class="login-form-group" id="loginPassGroup">
+                        <label>🔑 Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="loginPass" placeholder="Enter Password (default: 12345)"
+                                onkeydown="if(event.key==='Enter') handleDirectPasswordLogin()"
+                                style="padding-right: 40px;">
+                            <span onclick="togglePasswordVisibility('loginPass', this)"
+                                style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-login-submit" id="loginPasswordBtn" onclick="handleDirectPasswordLogin()">🚀 Login to
+                        Dashboard</button>
+                    <button class="btn-login-submit" id="sendOtpSubmitBtn"
+                        style="display: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: 1px solid #34d399; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);"
+                        onclick="handleSendOTP()">📲 Send Mobile OTP Code</button>
+
+                    <div id="loginFormFooter"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 11px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-muted);">
+                            <input type="checkbox" id="rememberMeCheck" checked style="accent-color: var(--primary);"> Keep
+                            Me Logged In
+                        </label>
+                        <a class="forgot-link" style="margin-top:0;" onclick="forgotPassword()">🔑 Forgot Password?</a>
                     </div>
                 </div>
 
-                <button class="btn-login-submit" id="loginPasswordBtn" onclick="handleDirectPasswordLogin()">🚀 Login to
-                    Dashboard</button>
-                <button class="btn-login-submit" id="sendOtpSubmitBtn"
-                    style="display: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: 1px solid #34d399; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);"
-                    onclick="handleSendOTP()">📲 Send Mobile OTP Code</button>
+                <!-- SIGN UP FORM FOR NEW DEVICE / NEW USER -->
+                <div id="signupFormContainer" style="display: none;">
+                    <div class="login-form-group">
+                        <label>👤 Trader Full Name</label>
+                        <input type="text" id="signupName" placeholder="e.g. Anurag Patel">
+                    </div>
 
-                <div id="loginFormFooter"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-size: 11px;">
-                    <label
-                        style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-muted);">
-                        <input type="checkbox" id="rememberMeCheck" checked style="accent-color: var(--primary);"> Keep
-                        Me Logged In
-                    </label>
-                    <a class="forgot-link" style="margin-top:0;" onclick="forgotPassword()">🔑 Forgot Password?</a>
+                    <div class="login-form-group">
+                        <label>✉️ Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="e.g. anurag@gmail.com">
+                    </div>
+
+                    <div class="login-form-group">
+                        <label>📱 Mobile Number (10 Digits)</label>
+                        <input type="tel" id="signupMobile" placeholder="e.g. 9876543210" maxlength="10">
+                    </div>
+
+                    <div class="login-form-group">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label style="margin-bottom: 0;">🔑 Password</label>
+                            <button type="button" onclick="autoGenerateSignupPassword()"
+                                style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; border-radius: 6px; padding: 3px 8px; font-size: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                ⚡ Auto-Generate Password
+                            </button>
+                        </div>
+                        <div style="position: relative;">
+                            <input type="password" id="signupPass" placeholder="Create or auto-generate password"
+                                style="padding-right: 40px;">
+                            <span onclick="togglePasswordVisibility('signupPass', this)"
+                                style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
+                        </div>
+                        <div id="autoPassDisplay"
+                            style="display: none; margin-top: 6px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #34d399; font-weight: 700;">
+                            Auto Password: <span id="autoPassCode" style="font-family: monospace; font-size: 13px;"></span>
+                            <button type="button" onclick="copyPasswordToClipboard()"
+                                style="float: right; background: #10b981; color: #000; border: none; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 9px; cursor: pointer;">📋
+                                Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="login-form-group">
+                        <label>💰 Starting Account Capital (₹)</label>
+                        <input type="number" id="signupCapital" placeholder="e.g. 50000" value="50000">
+                    </div>
+
+                    <button class="btn-login-submit"
+                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: 1px solid #34d399; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);"
+                        onclick="handleSignupSendOTP()">📲
+                        Verify OTP & Create Account</button>
                 </div>
-            </div>
 
-            <!-- SIGN UP FORM FOR NEW DEVICE / NEW USER -->
-            <div id="signupFormContainer" style="display: none;">
-                <div class="login-form-group">
-                    <label>👤 Trader Full Name</label>
-                    <input type="text" id="signupName" placeholder="e.g. Anurag Patel">
-                </div>
+                <!-- 3. OTP VERIFICATION FORM CONTAINER -->
+                <div id="otpFormContainer" style="display: none;">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <div style="font-size: 36px; margin-bottom: 6px;">📲</div>
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Enter
+                            Verification OTP</h3>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Real 4-Digit Text OTP sent
+                            to <span id="otpTargetText" style="color: #34d399; font-weight: 700;">+91 ******</span></p>
+                    </div>
 
-                <div class="login-form-group">
-                    <label>✉️ Email Address</label>
-                    <input type="email" id="signupEmail" placeholder="e.g. anurag@gmail.com">
-                </div>
+                    <div class="login-form-group" style="text-align: center;">
+                        <label
+                            style="display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: var(--primary);">Enter
+                            4-Digit Security Code</label>
+                        <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 16px;">
+                            <input type="text" id="otpBox1" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox2')"
+                                style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                            <input type="text" id="otpBox2" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox3')"
+                                onkeydown="focusPrevOtpInput(event, this, 'otpBox1')"
+                                style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                            <input type="text" id="otpBox3" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox4')"
+                                onkeydown="focusPrevOtpInput(event, this, 'otpBox2')"
+                                style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                            <input type="text" id="otpBox4" maxlength="1" oninput="focusNextOtpInput(this, null)"
+                                onkeydown="focusPrevOtpInput(event, this, 'otpBox3')"
+                                style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
+                        </div>
+                    </div>
 
-                <div class="login-form-group">
-                    <label>📱 Mobile Number (10 Digits)</label>
-                    <input type="tel" id="signupMobile" placeholder="e.g. 9876543210" maxlength="10">
-                </div>
+                    <button class="btn-login-submit" onclick="verifyOTPAndLogin()"
+                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
+                        ✅ Verify OTP & Access Dashboard
+                    </button>
 
-                <div class="login-form-group">
                     <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <label style="margin-bottom: 0;">🔑 Password</label>
-                        <button type="button" onclick="autoGenerateSignupPassword()"
-                            style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; border-radius: 6px; padding: 3px 8px; font-size: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                            ⚡ Auto-Generate Password
+                        style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 11px;">
+                        <button type="button" onclick="cancelOtpVerification()"
+                            style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
+                            ⬅️ Back to Login
+                        </button>
+                        <button type="button" onclick="window.open('https://mail.google.com','_blank')"
+                            style="background: rgba(234,67,53,0.15); border: 1px solid #ea4335; color: #ea4335; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+                            📬 Open Gmail
+                        </button>
+                        <button type="button" id="resendOtpBtn" onclick="resendOTPCode()"
+                            style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
+                            🔄 Resend OTP (<span id="otpTimerCount">60</span>s)
                         </button>
                     </div>
-                    <div style="position: relative;">
-                        <input type="password" id="signupPass" placeholder="Create or auto-generate password"
-                            style="padding-right: 40px;">
-                        <span onclick="togglePasswordVisibility('signupPass', this)"
-                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.6; font-size: 14px;">👁️</span>
-                    </div>
-                    <div id="autoPassDisplay"
-                        style="display: none; margin-top: 6px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 6px 10px; font-size: 11px; color: #34d399; font-weight: 700;">
-                        Auto Password: <span id="autoPassCode" style="font-family: monospace; font-size: 13px;"></span>
-                        <button type="button" onclick="copyPasswordToClipboard()"
-                            style="float: right; background: #10b981; color: #000; border: none; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 9px; cursor: pointer;">📋
-                            Copy</button>
-                    </div>
                 </div>
-
-                <div class="login-form-group">
-                    <label>💰 Starting Account Capital (₹)</label>
-                    <input type="number" id="signupCapital" placeholder="e.g. 50000" value="50000">
-                </div>
-
-                <button class="btn-login-submit"
-                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: 1px solid #34d399; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);"
-                    onclick="handleSignupSendOTP()">📲
-                    Verify OTP & Create Account</button>
-            </div>
-
-            <!-- 3. OTP VERIFICATION FORM CONTAINER -->
-            <div id="otpFormContainer" style="display: none;">
-                <div style="text-align: center; margin-bottom: 16px;">
-                    <div style="font-size: 36px; margin-bottom: 6px;">📲</div>
-                    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">Enter
-                        Verification OTP</h3>
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Real 4-Digit Text OTP sent
-                        to <span id="otpTargetText" style="color: #34d399; font-weight: 700;">+91 ******</span></p>
-                </div>
-
-                <div class="login-form-group" style="text-align: center;">
-                    <label
-                        style="display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: var(--primary);">Enter
-                        4-Digit Security Code</label>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 16px;">
-                        <input type="text" id="otpBox1" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox2')"
-                            style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                        <input type="text" id="otpBox2" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox3')"
-                            onkeydown="focusPrevOtpInput(event, this, 'otpBox1')"
-                            style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                        <input type="text" id="otpBox3" maxlength="1" oninput="focusNextOtpInput(this, 'otpBox4')"
-                            onkeydown="focusPrevOtpInput(event, this, 'otpBox2')"
-                            style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                        <input type="text" id="otpBox4" maxlength="1" oninput="focusNextOtpInput(this, null)"
-                            onkeydown="focusPrevOtpInput(event, this, 'otpBox3')"
-                            style="width: 50px; height: 55px; font-size: 24px; font-weight: 800; text-align: center; border-radius: 12px; border: 2px solid var(--primary); background: rgba(0,0,0,0.4); color: #fff;">
-                    </div>
-                </div>
-
-                <button class="btn-login-submit" onclick="verifyOTPAndLogin()"
-                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
-                    ✅ Verify OTP & Access Dashboard
-                </button>
 
                 <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 11px;">
-                    <button type="button" onclick="cancelOtpVerification()"
-                        style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 700;">
-                        ⬅️ Back to Login
-                    </button>
-                    <button type="button" onclick="window.open('https://mail.google.com','_blank')"
-                        style="background: rgba(234,67,53,0.15); border: 1px solid #ea4335; color: #ea4335; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;">
-                        📬 Open Gmail
-                    </button>
-                    <button type="button" id="resendOtpBtn" onclick="resendOTPCode()"
-                        style="background: none; border: none; color: #38bdf8; cursor: pointer; font-weight: 700;">
-                        🔄 Resend OTP (<span id="otpTimerCount">60</span>s)
-                    </button>
+                    style="margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 10px; color: var(--text-muted); text-align: center;">
+                    🛡️ 256-Bit Encrypted Session | Official Trading Tracker 2026
                 </div>
             </div>
 
-            <div
-                style="margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 10px; color: var(--text-muted); text-align: center;">
-                🛡️ 256-Bit Encrypted Session | Official Trading Tracker 2026
+            <!-- 🛡️ 4-PILLAR FOUNDER & SECURITY TRUST SHIELD (Directly Attached Under Card) -->
+            <div style="width: 100%; max-width: 440px; background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span style="font-size: 16px;">🛡️</span>
+                        <span style="font-size: 12px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">100% Verified Safe Platform</span>
+                    </div>
+                    <span style="font-size: 10px; font-weight: 700; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; padding: 2px 8px; border-radius: 20px;">✔ Norton Safe Certified</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px;">🔒 Zero Broker Risk</div>
+                        <div style="font-size: 9.5px; color: #94a3b8; line-height: 1.3;">No Zerodha/Groww Demat login or API password required.</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px;">🎮 Free Paper Trading</div>
+                        <div style="font-size: 9.5px; color: #94a3b8; line-height: 1.3;">Practice live Nifty & Stocks with ₹10,00,000 dummy cash.</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px;">🎁 30-Day Free Trial</div>
+                        <div style="font-size: 9.5px; color: #94a3b8; line-height: 1.3;">1 Month 100% full VIP access & paper trading free.</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 8px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px;">👑 Verified Founder</div>
+                        <div style="font-size: 9.5px; color: #94a3b8; line-height: 1.3;">Anurag Patel (<a href="https://instagram.com/happyoptions16" target="_blank" style="color: #e1306c; text-decoration: none; font-weight: 700;">Insta</a> | <a href="https://x.com/Anurag19111221" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 700;">X</a> | <a href="https://www.facebook.com/profile.php?id=100010197130996" target="_blank" style="color: #60a5fa; text-decoration: none; font-weight: 700;">FB</a>).</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 11px; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <a href="/about.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">🏢 About Founder</a>
+                    <span style="opacity: 0.3;">•</span>
+                    <a href="/terms.html" style="color: #38bdf8; text-decoration: none; font-weight: 600;">📜 Terms & Refund</a>
+                    <span style="opacity: 0.3;">•</span>
+                    <a href="https://wa.me/918102241463?text=Hi%20Anurag%20Patel,%20I%20have%20a%20question%20about%20Trading%20Tracker" target="_blank" style="color: #34d399; text-decoration: none; font-weight: 700;">💬 Direct WhatsApp</a>
+                </div>
             </div>
         </div>
     </div>
@@ -3139,10 +3335,10 @@
                         <span style="font-size: 22px;">🎁</span>
                         <div>
                             <div id="trialBannerTitle" style="font-weight: 800; font-size: 13px; color: #34d399;">
-                                🎁 7-DAY FREE TRIAL ACTIVE
+                                🎁 30-DAY UNRESTRICTED FREE TRIAL ACTIVE
                             </div>
                             <div id="trialBannerSub" style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
-                                Enjoy 7 days of full unlimited access to all features! Upgrade anytime to VIP Pro.
+                                Enjoy 30 full days of unlimited access to Paper Trading, AI Coach, Live Charts & All Pro Features! Upgrade anytime to VIP Pro.
                             </div>
                         </div>
                     </div>
@@ -5088,10 +5284,10 @@
                         </div>
 
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button type="button" onclick="resetPaperCapital()" class="btn btn-sm"
+                            <button type="button" onclick="openPaperResetRefillModal()" class="btn btn-sm"
                                 style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; font-weight: 800; padding: 8px 14px; border-radius: 10px; cursor: pointer;"
-                                title="Reset Demo Balance to ₹10,00,000">
-                                🔄 Reset Demo Funds
+                                title="Disciplined ₹99 Capital Refill to ₹10,00,000">
+                                🔄 Reset Demo Funds (₹99)
                             </button>
                         </div>
                     </div>
@@ -5113,6 +5309,57 @@
                         <div class="paper-stat-badge">
                             <div style="font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Mock Win-Rate</div>
                             <div id="paperWinRateVal" style="font-size: 19px; font-weight: 900; color: #a5b4fc; margin-top: 3px;">0.0%</div>
+                        </div>
+                    </div>
+
+                    <!-- 📈 PRO LIVE CHART & INTERACTIVE ON-CHART TRADING HUD OVERLAY -->
+                    <div class="card" style="background: rgba(11, 19, 41, 0.95); border: 1.5px solid rgba(56, 189, 248, 0.4); border-radius: 16px; padding: 16px; margin-bottom: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                        
+                        <!-- CHART TOP BAR: SYMBOL QUICK TABS, OPTION CHAIN & HUD CONTROLS -->
+                        <div class="paper-chart-top-bar">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 13px; font-weight: 900; color: #facc15; display: flex; align-items: center; gap: 6px;">
+                                    <span>📊</span> Live Chart:
+                                </span>
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="paperChartSymbolTabs">
+                                    <button type="button" class="paper-chart-sym-btn active" id="pTab_NIFTY" onclick="switchPaperChartSymbol('NIFTY')">NIFTY 50</button>
+                                    <button type="button" class="paper-chart-sym-btn" id="pTab_BANKNIFTY" onclick="switchPaperChartSymbol('BANKNIFTY')">BANK NIFTY</button>
+                                    <button type="button" class="paper-chart-sym-btn" id="pTab_FINNIFTY" onclick="switchPaperChartSymbol('FINNIFTY')">FINNIFTY</button>
+                                    <button type="button" class="paper-chart-sym-btn" id="pTab_SENSEX" onclick="switchPaperChartSymbol('SENSEX')">SENSEX</button>
+                                    <button type="button" class="paper-chart-sym-btn" id="pTab_RELIANCE" onclick="switchPaperChartSymbol('RELIANCE')">RELIANCE</button>
+                                    <button type="button" class="paper-chart-sym-btn" id="pTab_HDFCBANK" onclick="switchPaperChartSymbol('HDFCBANK')">HDFC BANK</button>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <!-- DIRECT ON-CHART OPTION CHAIN BUTTON -->
+                                <button type="button" onclick="openPaperOptionChainModal()" class="btn btn-sm"
+                                    style="background: linear-gradient(135deg, rgba(56,189,248,0.2) 0%, rgba(14,165,233,0.15) 100%); border: 1.5px solid #38bdf8; color: #38bdf8; font-weight: 800; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px;"
+                                    title="Open Live Option Chain with Strike Selection">
+                                    📊 Option Chain
+                                </button>
+
+                                <!-- TOGGLE DRAGGABLE SCALP HUD ON/OFF -->
+                                <button type="button" id="paperChartToggleHudBtn" onclick="togglePaperChartHud()" class="paper-chart-sym-btn active"
+                                    style="border-color: #facc15; color: #facc15; display: flex; align-items: center; gap: 4px;"
+                                    title="Show/Hide Draggable 1-Click Scalping HUD">
+                                    ⚡ Scalp HUD: <b>ON</b>
+                                </button>
+
+                                <span id="paperChartActiveFeedBadge" style="font-size: 10.5px; font-weight: 800; padding: 4px 8px; border-radius: 6px; background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #34d399; display: flex; align-items: center; gap: 4px;">
+                                    <span class="live-blink-dot" style="width: 7px; height: 7px;"></span> Live Sync
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- EMBEDDED CHART CONTAINER WITH INTERACTIVE DRAGGABLE TRADING HUD -->
+                        <div class="paper-chart-container" id="paperChartWrapper">
+                            <div id="paper_tv_chart_container" style="width: 100%; height: 100%;"></div>
+
+                            <!-- ON-CHART LIVE TRADING HUD (DRAGGABLE & MOVABLE OVERLAY) -->
+                            <div id="paperChartTradeHud" class="paper-chart-hud-overlay">
+                                <!-- Populated dynamically by renderPaperChartTradeHud() -->
+                            </div>
                         </div>
                     </div>
 
@@ -7000,14 +7247,15 @@
         function switchTab(tabId, el) {
             if (!tabId) return;
 
-            const proTabs = ['aiCoachTab', 'tradingViewTab', 'leaderboardTab'];
+            const proTabs = ['aiCoachTab', 'tradingViewTab', 'leaderboardTab', 'paperTradingTab'];
             if (proTabs.includes(tabId) && typeof isProUnlocked === 'function' && !isProUnlocked()) {
                 const tabNames = {
-                    'aiCoachTab': 'AI Coach',
-                    'tradingViewTab': 'Live Charts',
-                    'leaderboardTab': 'Leaderboard'
+                    'aiCoachTab': 'AI Discipline Coach',
+                    'tradingViewTab': 'Live Pro Charts',
+                    'leaderboardTab': 'Community Leaderboard',
+                    'paperTradingTab': 'Live Paper Trading Simulator'
                 };
-                showToast(`🔒 ${tabNames[tabId] || 'This feature'} is a VIP PRO feature! Upgrade to VIP Pro to unlock.`, "👑");
+                showToast(`🔒 ${tabNames[tabId] || 'This feature'} is a VIP PRO feature after your 30-Day Free Trial! Upgrade to VIP Pro to unlock.`, "👑");
                 if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
                 return;
             }
@@ -13834,9 +14082,9 @@
         }
 
         /* ==========================================================
-         * 🎁 7-DAY FREE TRIAL & VIP PAID ACCESS LOCK SYSTEM
+         * 🎁 30-DAY UNRESTRICTED FREE TRIAL & VIP PAID ACCESS LOCK SYSTEM
          * ========================================================== */
-        const TRIAL_DURATION_MS = 7 * 24 * 60 * 60 * 1000; // 7 Days in milliseconds
+        const TRIAL_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 Days in milliseconds
 
         function initTrialStartTime() {
             let trialStart = localStorage.getItem('app_trial_start_time');
@@ -13854,7 +14102,7 @@
                     remainingMs: 0,
                     daysRemaining: 0,
                     hoursRemaining: 0,
-                    trialStart: Date.now() - (8 * 24 * 60 * 60 * 1000)
+                    trialStart: Date.now() - (31 * 24 * 60 * 60 * 1000)
                 };
             }
             const trialStart = initTrialStartTime();
@@ -13918,7 +14166,7 @@
                                 logModified = true;
                             }
                             if (t.trial_status && ((t.trial_status || '').includes('VIP') || (t.trial_status || '').includes('Master Admin'))) {
-                                t.trial_status = '🟢 Active';
+                                t.trial_status = '🟢 Active (30-Day Trial)';
                                 logModified = true;
                             }
                         }
@@ -14001,7 +14249,6 @@
             const isUnlocked = isProUnlocked();
             const overlay = document.getElementById('vipLockOverlay');
 
-            // Website stays FREE after 7-day trial! Do not auto-show blocking overlay.
             if (overlay) {
                 overlay.style.cssText = "display: none !important;";
             }
@@ -14016,9 +14263,9 @@
                 overlay.style.cssText = "display: flex !important; position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(9, 13, 22, 0.96) !important; backdrop-filter: blur(16px) !important; z-index: 99999999 !important; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;";
             }
 
-            const firstCard = document.querySelector('.paywall-plan-card');
-            if (firstCard && typeof selectPaywallPlan === 'function') {
-                selectPaywallPlan(1999, '1 Year Access', firstCard);
+            const heroCard = document.querySelector('.paywall-plan-card.active') || document.querySelector('.paywall-plan-card');
+            if (heroCard && typeof selectPaywallPlan === 'function') {
+                selectPaywallPlan(2965, '1 Year Master Pro', heroCard);
             }
 
             const backBtnTop = document.getElementById('vipModalBackBtnTop');
@@ -14045,12 +14292,28 @@
             });
         }
 
-        let currentSelectedPrice = 1999;
-        let currentSelectedPlan = '1 Year Access';
+        const PLAN_PRICING_TABLE = {
+            423: { base: 423, gst: 76, total: 499, name: '1 Month Pro Pass' },
+            1694: { base: 1694, gst: 305, total: 1999, name: '6 Months Swing Pass' },
+            2965: { base: 2965, gst: 534, total: 3499, name: '1 Year Master Pro' },
+            5084: { base: 5084, gst: 915, total: 5999, name: '2 Years Elite Pro' },
+            8474: { base: 8474, gst: 1525, total: 9999, name: 'Lifetime VIP King Pass' }
+        };
+
+        let currentSelectedPrice = 2965;
+        let currentSelectedPlan = '1 Year Master Pro';
         const GST_TAX_RATE = 0.18; // 18% GST Govt Tax Rate
         let rzpTimerInterval = null;
 
         function calculatePaymentBreakdown(basePrice) {
+            if (PLAN_PRICING_TABLE[basePrice]) {
+                const p = PLAN_PRICING_TABLE[basePrice];
+                return {
+                    basePrice: p.base,
+                    gstAmount: p.gst,
+                    totalPayable: p.total
+                };
+            }
             const gstAmount = Math.round(basePrice * GST_TAX_RATE);
             const totalPayable = basePrice + gstAmount;
             return {
@@ -14137,7 +14400,7 @@
             const waBtn = document.getElementById('paywallWaButton');
             if (waBtn) {
                 const text = encodeURIComponent(`Hi Anurag Patel, I have paid Total Rs.${breakdown.totalPayable.toLocaleString()} (Base Plan: Rs.${price.toLocaleString()} + 18% Govt GST: Rs.${breakdown.gstAmount.toLocaleString()}) for ${planName} VIP Access. Please send my Activation Key.`);
-                waBtn.href = `https://wa.me/918825255625?text=${text}`;
+                waBtn.href = `https://wa.me/918102241463?text=${text}`;
             }
 
             showToast(`Selected: ${planName} (Total ₹${breakdown.totalPayable.toLocaleString()} incl. 18% GST)`, "💳");
@@ -14370,8 +14633,8 @@
                 adminAdsenseCard.style.display = isAdmin ? 'block' : 'none';
             }
 
-            let statusText = '🎁 7-Day Free Trial';
-            let planName = 'Free Trial Mode';
+            let statusText = '🎁 30-Day Free Trial';
+            let planName = '30-Day Free Trial Mode';
             let subText = `${trial.daysRemaining}d ${trial.hoursRemaining}h Left`;
             let daysLeftText = `${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Free Trial Remaining`;
 
@@ -14399,15 +14662,15 @@
                     daysLeftText = durationYears === '99' ? 'Lifetime Valid' : `${durationYears} Year(s) Access`;
                 }
             } else if (!trial.isExpired) {
-                statusText = '🎁 7-Day Free Trial';
-                planName = 'Free Trial Mode';
+                statusText = '🎁 30-Day Free Trial';
+                planName = '30-Day Free Trial Mode';
                 subText = `${trial.daysRemaining}d ${trial.hoursRemaining}h Left`;
                 daysLeftText = `${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Free Trial Remaining`;
             } else {
                 statusText = '⚡ Free Mode (PRO Locked)';
-                planName = 'Free Mode (PRO Features Locked)';
+                planName = 'Free Mode (PRO Features & Paper Trading Locked)';
                 subText = 'Upgrade to VIP Pro';
-                daysLeftText = 'Free Mode Active - VIP Activation Required for PRO Features';
+                daysLeftText = 'Free Mode Active - VIP Activation Required for PRO & Paper Trading Features';
             }
 
             const sidebarBadge = document.getElementById('sidebarVipBadge');
@@ -14447,14 +14710,14 @@
                     bannerBox.style.borderColor = 'rgba(234, 179, 8, 0.4)';
                     bannerBox.style.display = 'flex';
                 } else if (!trial.isExpired) {
-                    if (bannerTitle) bannerTitle.innerText = `🎁 7-DAY FREE TRIAL ACTIVE (${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Left)`;
-                    if (bannerSub) bannerSub.innerText = "Enjoy unlimited access to all features! Upgrade anytime to VIP Pro.";
+                    if (bannerTitle) bannerTitle.innerText = `🎁 30-DAY FREE TRIAL ACTIVE (${trial.daysRemaining} Days & ${trial.hoursRemaining} Hours Left)`;
+                    if (bannerSub) bannerSub.innerText = "Enjoy unlimited access to Paper Trading, AI Coach & all features! Upgrade anytime to VIP Pro.";
                     bannerBox.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%)';
                     bannerBox.style.borderColor = 'rgba(16, 185, 129, 0.4)';
                     bannerBox.style.display = 'flex';
                 } else {
-                    if (bannerTitle) bannerTitle.innerText = "⚡ FREE MODE ACTIVE (7-Day Trial Expired)";
-                    if (bannerSub) bannerSub.innerText = "Website is free to use! Upgrade to VIP Pro to unlock AI Coach, Live Charts, Leaderboard, Broker Imports, Constitution, Replay Day, Data Vault, CA Tax Report, Reconcile, Passport, Excel/PDF Exports & WhatsApp Sharing.";
+                    if (bannerTitle) bannerTitle.innerText = "⚡ FREE MODE ACTIVE (30-Day Trial Expired)";
+                    if (bannerSub) bannerSub.innerText = "Trade Journaling is free to view! Upgrade to VIP Pro to unlock Live Paper Trading, AI Coach, Live Charts, Leaderboard, Broker Imports, Constitution, Replay Day, Data Vault, CA Tax Report & WhatsApp Reports.";
                     bannerBox.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)';
                     bannerBox.style.borderColor = 'rgba(239, 68, 68, 0.4)';
                     bannerBox.style.display = 'flex';
@@ -17317,7 +17580,7 @@
                         const slotAttr = slotId ? `data-ad-slot="${slotId}"` : '';
 
                         const trialBadge = !trial.isExpired
-                            ? `<span style="color: #60a5fa; font-size: 9.5px; font-weight: 700; background: rgba(96, 165, 250, 0.15); padding: 2px 8px; border-radius: 8px;">⚡ 7-Day Free Trial (${trial.daysRemaining}d ${trial.hoursRemaining}h left)</span>`
+                            ? `<span style="color: #60a5fa; font-size: 9.5px; font-weight: 700; background: rgba(96, 165, 250, 0.15); padding: 2px 8px; border-radius: 8px;">⚡ 30-Day Free Trial (${trial.daysRemaining}d ${trial.hoursRemaining}h left)</span>`
                             : `<span style="color: #ef4444; font-size: 9.5px; font-weight: 700; background: rgba(239, 68, 68, 0.15); padding: 2px 8px; border-radius: 8px;">⏰ Trial Expired (Upgrade for No Ads)</span>`;
 
                         container.innerHTML = `
@@ -17657,19 +17920,57 @@
             const container = document.getElementById('tv_chart_container');
             if (!container) return;
 
-            let sym = symbol || currentTvSymbol || 'NSE:NIFTY';
+            let sym = symbol || currentTvSymbol || 'NSE:NIFTY1!';
+            let tvSymbol = 'NSE:NIFTY1!';
             const s = sym.toUpperCase();
 
-            if (s === 'NIFTY' || s.includes('NIFTY50')) sym = 'NSE:NIFTY';
-            else if (s === 'BANKNIFTY' || s.includes('BANK')) sym = 'NSE:BANKNIFTY';
-            else if (s === 'SENSEX' || s.includes('SENSEX')) sym = 'BSE:SENSEX';
-            else if (s === 'GOLD' || s.includes('XAU')) sym = 'OANDA:XAUUSD';
-            else if (s === 'BTC' || s.includes('BITCOIN')) sym = 'BINANCE:BTCUSDT';
-            else if (s === 'ETH' || s.includes('ETHEREUM')) sym = 'BINANCE:ETHUSDT';
+            if (s === 'NIFTY' || s.includes('NIFTY50') || s === 'NSE:NIFTY') tvSymbol = 'NSE:NIFTY1!';
+            else if (s === 'BANKNIFTY' || s.includes('BANK') || s === 'NSE:BANKNIFTY') tvSymbol = 'NSE:BANKNIFTY1!';
+            else if (s === 'FINNIFTY' || s === 'NSE:FINNIFTY') tvSymbol = 'NSE:FINNIFTY1!';
+            else if (s === 'MIDCPNIFTY' || s === 'NSE:MIDCPNIFTY') tvSymbol = 'NSE:MIDCPNIFTY1!';
+            else if (s === 'SENSEX' || s.includes('SENSEX')) tvSymbol = 'BSE:SENSEX';
+            else if (s === 'GOLD' || s.includes('XAU')) tvSymbol = 'OANDA:XAUUSD';
+            else if (s === 'BTC' || s.includes('BITCOIN')) tvSymbol = 'BINANCE:BTCUSDT';
+            else if (s === 'ETH' || s.includes('ETHEREUM')) tvSymbol = 'BINANCE:ETHUSDT';
+            else tvSymbol = s.includes(':') ? s : 'NSE:' + s;
 
-            const tvEmbedUrl = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(sym)}&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=0d0617&theme=dark&style=1&timezone=Asia%2FKolkata`;
+            container.innerHTML = `
+                <div class="tradingview-widget-container" style="height:100%; width:100%;">
+                    <div id="tv_widget_main_elem" style="height:100%; width:100%;"></div>
+                </div>
+            `;
 
-            container.innerHTML = `<iframe id="tv_chart_iframe" src="${tvEmbedUrl}" style="width:100%; height:100%; border:none; border-radius:12px;" allowfullscreen></iframe>`;
+            function renderMainTv() {
+                if (typeof TradingView !== 'undefined' && TradingView.widget) {
+                    new TradingView.widget({
+                        "autosize": true,
+                        "symbol": tvSymbol,
+                        "interval": "5",
+                        "timezone": "Asia/Kolkata",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "in",
+                        "toolbar_bg": "#0d0617",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tv_widget_main_elem"
+                    });
+                } else {
+                    const tvEmbedUrl = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(tvSymbol)}&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=0d0617&theme=dark&style=1&timezone=Asia%2FKolkata`;
+                    container.innerHTML = `<iframe id="tv_chart_iframe" src="${tvEmbedUrl}" style="width:100%; height:100%; border:none; border-radius:12px;" allowfullscreen></iframe>`;
+                }
+            }
+
+            if (typeof TradingView === 'undefined') {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://s3.tradingview.com/tv.js';
+                script.onload = renderMainTv;
+                document.head.appendChild(script);
+            } else {
+                renderMainTv();
+            }
         }
 
         // ============================================================
@@ -17845,8 +18146,6 @@
         // ============================================================
         // 🌐 MODULE 1: LIVE MARKET PULSE TICKER & SLIDER ENGINE
         // ============================================================
-        // 🌐 MODULE 1: LIVE MARKET PULSE TICKER & SLIDER ENGINE
-        // ============================================================
         let marketPulseTimer = null;
         let isMarketCurrentlyLive = false;
 
@@ -17873,6 +18172,34 @@
             btc: { price: 64717.00, chg: 230.00, pct: 0.36, name: 'BITCOIN', prefix: '$' }
         };
 
+        // Synchronize Market Prices with Paper Trading Engine
+        function syncMarketPricesToPaperDefaults() {
+            if (typeof PAPER_DEFAULTS === 'undefined') return;
+            const keyMap = {
+                nifty: 'NIFTY',
+                banknifty: 'BANKNIFTY',
+                sensex: 'SENSEX',
+                finnifty: 'FINNIFTY',
+                midcap: 'MIDCPNIFTY',
+                reliance: 'RELIANCE',
+                hdfcbank: 'HDFCBANK',
+                icicibank: 'ICICIBANK',
+                infy: 'INFY',
+                tcs: 'TCS',
+                tatamotors: 'TATAMOTORS',
+                sbin: 'SBIN',
+                airtel: 'BHARTIARTL',
+                lt: 'LT',
+                itc: 'ITC'
+            };
+            Object.keys(keyMap).forEach(mk => {
+                const pk = keyMap[mk];
+                if (marketBasePrices[mk] && PAPER_DEFAULTS[pk]) {
+                    PAPER_DEFAULTS[pk].cmp = marketBasePrices[mk].price;
+                }
+            });
+        }
+
         async function fetchLiveMarketQuotes() {
             try {
                 // 1. Try local/backend API endpoint
@@ -17887,6 +18214,7 @@
                                 marketBasePrices[k].pct = json.data[k].pct;
                             }
                         });
+                        syncMarketPricesToPaperDefaults();
                         renderMarketTickers();
                         return;
                     }
@@ -17914,6 +18242,7 @@
 
         let isTickerMarqueePaused = false;
         let tickerMarqueeAnimId = null;
+        let marketStatusTimer = null;
 
         function initLiveMarketTicker() {
             updateMarketSessionStatus();
@@ -17922,17 +18251,21 @@
             startContinuousTickerMarquee();
             fetchLiveMarketQuotes();
 
-            // Refresh live financial quotes every 30s
-            setInterval(fetchLiveMarketQuotes, 30000);
+            // Refresh live financial quotes every 25s
+            setInterval(fetchLiveMarketQuotes, 25000);
 
-            // Only oscillate if the real market is open
+            // Continuously monitor and update Market Session Status (every 3 seconds)
+            if (marketStatusTimer) clearInterval(marketStatusTimer);
+            marketStatusTimer = setInterval(() => {
+                updateMarketSessionStatus();
+            }, 3000);
+
+            // Active price pulse simulation & live feed
             if (marketPulseTimer) clearInterval(marketPulseTimer);
-            if (isMarketCurrentlyLive) {
-                marketPulseTimer = setInterval(() => {
-                    simulateMarketMicroTicks();
-                    renderMarketTickers();
-                }, 2500);
-            }
+            marketPulseTimer = setInterval(() => {
+                simulateMarketMicroTicks();
+                renderMarketTickers();
+            }, 2000);
         }
         window.initLiveMarketTicker = initLiveMarketTicker;
 
@@ -17975,8 +18308,8 @@
             const statusEl = document.getElementById('marketSessionStatusText');
             const pillWrapper = document.getElementById('marketStatusPillWrapper');
             const blinkDot = document.getElementById('marketStatusBlinkDot');
-            if (!statusEl) return;
 
+            // Accurate Indian Standard Time (IST = UTC + 5:30)
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
             const ist = new Date(utc + (3600000 * 5.5));
@@ -17986,58 +18319,112 @@
             const timeInMinutes = hours * 60 + mins;
 
             const isWeekend = (day === 0 || day === 6);
-            const isMarketOpen = (!isWeekend && timeInMinutes >= 555 && timeInMinutes <= 930); // 9:15 AM to 3:30 PM IST
+            // NSE/BSE Normal Trading: 09:15 AM (555 min) to 03:30 PM (930 min)
+            const isMarketOpen = (!isWeekend && timeInMinutes >= 555 && timeInMinutes <= 930);
+            // Pre-Open Session: 09:00 AM (540 min) to 09:15 AM (555 min)
+            const isPreOpen = (!isWeekend && timeInMinutes >= 540 && timeInMinutes < 555);
 
             isMarketCurrentlyLive = isMarketOpen;
 
+            if (statusEl) {
+                if (isMarketOpen) {
+                    statusEl.innerText = "MARKET OPEN 🟢";
+                    if (pillWrapper) {
+                        pillWrapper.className = "market-status-pill";
+                        pillWrapper.style.background = "rgba(16, 185, 129, 0.2)";
+                        pillWrapper.style.border = "1.5px solid #10b981";
+                        pillWrapper.style.color = "#34d399";
+                    }
+                    if (blinkDot) {
+                        blinkDot.className = "live-blink-dot";
+                    }
+                } else if (isPreOpen) {
+                    statusEl.innerText = "PRE-OPEN 🟡";
+                    if (pillWrapper) {
+                        pillWrapper.className = "market-status-pill preopen";
+                        pillWrapper.style.background = "rgba(234, 179, 8, 0.2)";
+                        pillWrapper.style.border = "1.5px solid #eab308";
+                        pillWrapper.style.color = "#facc15";
+                    }
+                    if (blinkDot) {
+                        blinkDot.className = "live-blink-dot preopen";
+                    }
+                } else {
+                    statusEl.innerText = "MARKET CLOSED 🔴";
+                    if (pillWrapper) {
+                        pillWrapper.className = "market-status-pill closed";
+                        pillWrapper.style.background = "rgba(239, 68, 68, 0.2)";
+                        pillWrapper.style.border = "1.5px solid #ef4444";
+                        pillWrapper.style.color = "#fca5a5";
+                    }
+                    if (blinkDot) {
+                        blinkDot.className = "live-blink-dot closed";
+                    }
+                }
+            }
+
+            // Also update Paper Trading quick banner if visible
+            const bannerEl = document.getElementById('paperTerminalMarketTimingBanner');
+            const bannerTitle = document.getElementById('paperTimingBannerTitle');
+            const bannerTag = document.getElementById('paperTimingBannerTag');
+            const orderBtn = document.getElementById('paperExecuteOrderBtn');
+
             if (isMarketOpen) {
-                statusEl.innerText = "NSE LIVE 🟢";
-                if (pillWrapper) {
-                    pillWrapper.className = "market-status-pill";
-                    pillWrapper.style.background = "rgba(16, 185, 129, 0.2)";
-                    pillWrapper.style.border = "1.5px solid #10b981";
-                    pillWrapper.style.color = "#34d399";
+                if (bannerEl) {
+                    bannerEl.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.12) 100%)';
+                    bannerEl.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                    bannerEl.style.color = '#6ee7b7';
                 }
-                if (blinkDot) {
-                    blinkDot.className = "live-blink-dot";
+                if (bannerTitle) bannerTitle.innerHTML = `<span class="live-blink-dot" style="display: inline-block; margin-right: 4px;"></span> <b style="color: #34d399;">NSE / BSE Live Session Active</b>`;
+                if (bannerTag) {
+                    bannerTag.innerHTML = `🟢 LIVE SESSION`;
+                    bannerTag.style.background = 'rgba(16,185,129,0.25)';
+                    bannerTag.style.borderColor = '#10b981';
+                    bannerTag.style.color = '#34d399';
                 }
-            } else if (!isWeekend && timeInMinutes >= 540 && timeInMinutes < 555) {
-                statusEl.innerText = "PRE-OPEN 🟡";
-                if (pillWrapper) {
-                    pillWrapper.className = "market-status-pill preopen";
-                    pillWrapper.style.background = "rgba(234, 179, 8, 0.2)";
-                    pillWrapper.style.border = "1.5px solid #eab308";
-                    pillWrapper.style.color = "#facc15";
-                }
-                if (blinkDot) {
-                    blinkDot.className = "live-blink-dot preopen";
+                if (orderBtn) {
+                    orderBtn.innerHTML = `🚀 Execute Live Virtual Buy Order`;
+                    orderBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                    orderBtn.style.border = 'none';
+                    orderBtn.style.color = '#fff';
                 }
             } else {
-                statusEl.innerText = "MARKET CLOSED 🔴";
-                if (pillWrapper) {
-                    pillWrapper.className = "market-status-pill closed";
-                    pillWrapper.style.background = "rgba(239, 68, 68, 0.2)";
-                    pillWrapper.style.border = "1.5px solid #ef4444";
-                    pillWrapper.style.color = "#fca5a5";
+                if (bannerEl) {
+                    bannerEl.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(185, 28, 28, 0.12) 100%)';
+                    bannerEl.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                    bannerEl.style.color = '#fca5a5';
                 }
-                if (blinkDot) {
-                    blinkDot.className = "live-blink-dot closed";
+                if (bannerTitle) bannerTitle.innerHTML = `<b style="color: #f87171;">Market is Currently CLOSED</b>`;
+                if (bannerTag) {
+                    bannerTag.innerHTML = `OPENS AT 09:15 AM`;
+                    bannerTag.style.background = 'rgba(239,68,68,0.25)';
+                    bannerTag.style.borderColor = '#ef4444';
+                    bannerTag.style.color = '#fca5a5';
+                }
+                if (orderBtn) {
+                    orderBtn.innerHTML = `🔒 Market is CLOSED (Orders Disabled)`;
+                    orderBtn.style.background = 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)';
+                    orderBtn.style.border = '1.5px solid rgba(239, 68, 68, 0.4)';
+                    orderBtn.style.color = '#94a3b8';
+                    orderBtn.style.cursor = 'not-allowed';
                 }
             }
         }
         window.updateMarketSessionStatus = updateMarketSessionStatus;
 
         function simulateMarketMicroTicks() {
-            if (!isMarketCurrentlyLive) return; // Freeze prices when market is closed!
-
+            // Realistic unbiased Gaussian-like random walk (Mean = 0.0)
             Object.keys(marketBasePrices).forEach(k => {
                 const item = marketBasePrices[k];
-                const deltaPct = (Math.random() - 0.48) * 0.05;
+                // Random value strictly centered at 0: (Math.random() - 0.5)
+                const randSpread = (Math.random() - 0.5) * 2; // Range [-1.0, +1.0]
+                const deltaPct = randSpread * 0.035;
                 const change = item.price * (deltaPct / 100);
-                item.price = parseFloat((item.price + change).toFixed(2));
+                item.price = parseFloat(Math.max(0.1, item.price + change).toFixed(2));
                 item.chg = parseFloat((item.chg + change).toFixed(2));
-                item.pct = parseFloat((item.pct + (deltaPct * 0.5)).toFixed(2));
+                item.pct = parseFloat((item.pct + (deltaPct * 0.4)).toFixed(2));
             });
+            syncMarketPricesToPaperDefaults();
         }
 
         function renderMarketTickers() {
@@ -18247,6 +18634,400 @@
         }
         window.filterPaperSymbols = filterPaperSymbols;
 
+        let currentPaperChartSymbol = 'NIFTY';
+        let isDraggingHud = false;
+        let hudOffsetX = 0;
+        let hudOffsetY = 0;
+
+        function togglePaperChartHud() {
+            const hud = document.getElementById('paperChartTradeHud');
+            const btn = document.getElementById('paperChartToggleHudBtn');
+            if (!hud) return;
+
+            if (hud.style.display === 'none') {
+                hud.style.display = 'flex';
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '⚡ Scalp HUD: <b>ON</b>';
+                }
+            } else {
+                hud.style.display = 'none';
+                if (btn) {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '⚡ Scalp HUD: <b>OFF</b>';
+                }
+            }
+        }
+        window.togglePaperChartHud = togglePaperChartHud;
+
+        function startDragPaperHud(e) {
+            const hud = document.getElementById('paperChartTradeHud');
+            const wrapper = document.getElementById('paperChartWrapper');
+            if (!hud || !wrapper) return;
+
+            // Don't drag when clicking buttons, inputs, or interactive controls
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select')) return;
+
+            isDraggingHud = true;
+            const clientX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+
+            const rect = hud.getBoundingClientRect();
+            hudOffsetX = clientX - rect.left;
+            hudOffsetY = clientY - rect.top;
+
+            function onMove(moveEvent) {
+                if (!isDraggingHud) return;
+                const curX = moveEvent.type.startsWith('touch') ? moveEvent.touches[0].clientX : moveEvent.clientX;
+                const curY = moveEvent.type.startsWith('touch') ? moveEvent.touches[0].clientY : moveEvent.clientY;
+
+                const wrapRect = wrapper.getBoundingClientRect();
+                let newLeft = curX - wrapRect.left - hudOffsetX;
+                let newTop = curY - wrapRect.top - hudOffsetY;
+
+                // Clamp inside wrapper boundaries
+                newLeft = Math.max(6, Math.min(wrapRect.width - hud.offsetWidth - 6, newLeft));
+                newTop = Math.max(6, Math.min(wrapRect.height - hud.offsetHeight - 6, newTop));
+
+                hud.style.left = newLeft + 'px';
+                hud.style.top = newTop + 'px';
+                hud.style.right = 'auto';
+            }
+
+            function onEnd() {
+                isDraggingHud = false;
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onEnd);
+                window.removeEventListener('touchmove', onMove);
+                window.removeEventListener('touchend', onEnd);
+            }
+
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+            window.addEventListener('touchmove', onMove, { passive: false });
+            window.addEventListener('touchend', onEnd);
+        }
+        window.startDragPaperHud = startDragPaperHud;
+
+        function switchPaperChartSymbol(symKey, syncDropdown = true) {
+            currentPaperChartSymbol = symKey;
+            
+            // Update active tab styling
+            const tabs = document.querySelectorAll('#paperChartSymbolTabs .paper-chart-sym-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            const activeTab = document.getElementById('pTab_' + symKey);
+            if (activeTab) activeTab.classList.add('active');
+
+            if (syncDropdown) {
+                const item = PAPER_DEFAULTS[symKey];
+                if (item) {
+                    const hiddenInput = document.getElementById('paperSymbolSelect');
+                    const searchInput = document.getElementById('paperSymbolSearchInput');
+                    if (hiddenInput) hiddenInput.value = symKey;
+                    if (searchInput) searchInput.value = `${item.name} (Lot Size: ${item.lotSize})`;
+                    updatePaperMarketPrice(false);
+                }
+            }
+
+            initPaperTradingViewChart(symKey);
+            renderPaperChartTradeHud();
+        }
+        window.switchPaperChartSymbol = switchPaperChartSymbol;
+
+        function initPaperTradingViewChart(symbol) {
+            const container = document.getElementById('paper_tv_chart_container');
+            if (!container) return;
+
+            let sym = symbol || currentPaperChartSymbol || 'NIFTY';
+            let tvSymbol = 'NSE:NIFTY';
+
+            const s = sym.toUpperCase();
+            if (s === 'NIFTY' || s.includes('NIFTY50') || s === 'NSE:NIFTY' || s.includes('NIFTY1')) tvSymbol = 'NSE:NIFTY';
+            else if (s === 'BANKNIFTY' || s.includes('BANK') || s === 'NSE:BANKNIFTY') tvSymbol = 'NSE:BANKNIFTY';
+            else if (s === 'FINNIFTY' || s === 'NSE:FINNIFTY') tvSymbol = 'NSE:CNXFINANCE';
+            else if (s === 'MIDCPNIFTY' || s === 'NSE:MIDCPNIFTY') tvSymbol = 'NSE:NIFTY';
+            else if (s === 'SENSEX') tvSymbol = 'BSE:SENSEX';
+            else if (s === 'BANKEX') tvSymbol = 'BSE:BANKEX';
+            else if (s === 'RELIANCE') tvSymbol = 'NSE:RELIANCE';
+            else if (s === 'HDFCBANK') tvSymbol = 'NSE:HDFCBANK';
+            else if (s === 'ICICIBANK') tvSymbol = 'NSE:ICICIBANK';
+            else if (s === 'TCS') tvSymbol = 'NSE:TCS';
+            else if (s === 'INFY') tvSymbol = 'NSE:INFY';
+            else if (s === 'TATAMOTORS') tvSymbol = 'NSE:TATAMOTORS';
+            else if (s === 'SBIN') tvSymbol = 'NSE:SBIN';
+            else tvSymbol = s.includes(':') ? s : 'NSE:' + s;
+
+            // Generate clean Advanced Chart Embed script container to load official NSE/BSE quotes properly
+            container.innerHTML = `
+                <div class="tradingview-widget-container" style="height:100%; width:100%;">
+                    <div id="paper_tv_widget_elem" style="height:100%; width:100%;"></div>
+                </div>
+            `;
+
+            function renderTv() {
+                if (typeof TradingView !== 'undefined' && TradingView.widget) {
+                    new TradingView.widget({
+                        "autosize": true,
+                        "symbol": tvSymbol,
+                        "interval": "5",
+                        "timezone": "Asia/Kolkata",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "in",
+                        "toolbar_bg": "#0b1329",
+                        "enable_publishing": false,
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "save_image": false,
+                        "container_id": "paper_tv_widget_elem"
+                    });
+                } else {
+                    const tvEmbedUrl = `https://s.tradingview.com/widgetembed/?frameElementId=paper_tv_widget&symbol=${encodeURIComponent(tvSymbol)}&interval=5&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=0b1329&theme=dark&style=1&timezone=Asia%2FKolkata`;
+                    container.innerHTML = `<iframe id="paper_tv_iframe" src="${tvEmbedUrl}" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>`;
+                }
+            }
+
+            if (typeof TradingView === 'undefined') {
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://s3.tradingview.com/tv.js';
+                script.onload = renderTv;
+                document.head.appendChild(script);
+            } else {
+                renderTv();
+            }
+        }
+        window.initPaperTradingViewChart = initPaperTradingViewChart;
+
+        function renderPaperChartTradeHud() {
+            const hud = document.getElementById('paperChartTradeHud');
+            if (!hud) return;
+
+            const positions = getPaperPositions();
+            let activePos = positions.find(p => p.symbol === currentPaperChartSymbol);
+            if (!activePos && positions.length > 0) {
+                activePos = positions[0];
+            }
+
+            const cfg = PAPER_DEFAULTS[currentPaperChartSymbol] || PAPER_DEFAULTS.NIFTY;
+
+            if (activePos) {
+                const pnl = (activePos.currentPrice - activePos.buyPrice) * activePos.qty;
+                const isProfit = pnl >= 0;
+                const pnlSign = isProfit ? '+' : '';
+                const pctPnl = activePos.buyPrice > 0 ? (((activePos.currentPrice - activePos.buyPrice) / activePos.buyPrice) * 100).toFixed(1) : '0.0';
+                const pnlColor = isProfit ? '#34d399' : '#f87171';
+                const glowClass = isProfit ? 'profit-glow' : 'loss-glow';
+
+                const slText = activePos.sl ? `₹${parseFloat(activePos.sl).toFixed(2)}` : 'None';
+                const tgtText = activePos.target ? `₹${parseFloat(activePos.target).toFixed(2)}` : 'None';
+
+                hud.innerHTML = `
+                    <div class="paper-hud-card ${glowClass}">
+                        <!-- Draggable Header Grip -->
+                        <div class="paper-hud-drag-handle" onmousedown="startDragPaperHud(event)" ontouchstart="startDragPaperHud(event)">
+                            <div style="display: flex; align-items: center; gap: 6px; cursor: grab;">
+                                <span style="color: #94a3b8; font-size: 12px;">⠿</span>
+                                <span class="live-blink-dot"></span>
+                                <b style="font-size: 12.5px; color: #fff;">${activePos.strike}</b>
+                                <span style="font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 900; ${activePos.instrument === 'CE' ? 'background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid #10b981;' : 'background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444;'}">
+                                    ${activePos.instrument}
+                                </span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 10px; color: #38bdf8; font-weight: 800; background: rgba(56,189,248,0.15); padding: 2px 6px; border-radius: 4px;">
+                                    ${activePos.lots ? activePos.lots + 'L (' + activePos.qty + 'Q)' : activePos.qty + 'Q'}
+                                </span>
+                                <button type="button" onclick="togglePaperChartHud()" style="background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer; padding: 0 3px;" title="Hide HUD">✕</button>
+                            </div>
+                        </div>
+
+                        <!-- LIVE FLOATING P&L DISPLAY (BIG NEON TEXT) -->
+                        <div style="background: rgba(0,0,0,0.45); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; text-align: center; border: 1px dashed ${isProfit ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)'};">
+                            <div style="font-size: 9.5px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">Real-Time On-Chart P&L</div>
+                            <div style="font-size: 20px; font-weight: 900; color: ${pnlColor}; margin-top: 1px; text-shadow: 0 0 12px ${pnlColor}40;">
+                                ${pnlSign}₹${pnl.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                <span style="font-size: 12px; font-weight: 800; opacity: 0.9;">(${pnlSign}${pctPnl}%)</span>
+                            </div>
+                            <div style="font-size: 10.5px; color: #cbd5e1; margin-top: 4px; display: flex; justify-content: space-around;">
+                                <span>Entry Buy: <b style="color:#fff;">₹${activePos.buyPrice.toFixed(2)}</b></span>
+                                <span>Live LTP: <b style="color:${pnlColor};">₹${activePos.currentPrice.toFixed(2)}</b></span>
+                            </div>
+                        </div>
+
+                        <!-- ON-CHART SL & TP CONTROLS -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; font-size: 10px;">
+                            <!-- STOP LOSS -->
+                            <div style="background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.35); border-radius: 6px; padding: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                                    <b style="color: #fca5a5;">🛑 SL: ${slText}</b>
+                                    <span onclick="openModifyPaperSlTargetModal('${activePos.id}')" style="cursor:pointer; color:#38bdf8;" title="Edit SL">✏️</span>
+                                </div>
+                                <div style="display: flex; gap: 3px;">
+                                    <button type="button" onclick="quickAdjustPaperSl('${activePos.id}', 'cost')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="Move SL to Cost">Cost</button>
+                                    <button type="button" onclick="quickAdjustPaperSl('${activePos.id}', '10')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="-10% SL">-10%</button>
+                                    <button type="button" onclick="quickAdjustPaperSl('${activePos.id}', '20')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="-20% SL">-20%</button>
+                                </div>
+                            </div>
+
+                            <!-- TARGET (TP) -->
+                            <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.35); border-radius: 6px; padding: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+                                    <b style="color: #6ee7b7;">🎯 TP: ${tgtText}</b>
+                                    <span onclick="openModifyPaperSlTargetModal('${activePos.id}')" style="cursor:pointer; color:#38bdf8;" title="Edit Target">✏️</span>
+                                </div>
+                                <div style="display: flex; gap: 3px;">
+                                    <button type="button" onclick="quickAdjustPaperTarget('${activePos.id}', '20')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="+20% Target">+20%</button>
+                                    <button type="button" onclick="quickAdjustPaperTarget('${activePos.id}', '50')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="+50% Target">+50%</button>
+                                    <button type="button" onclick="quickAdjustPaperTarget('${activePos.id}', '100')" style="flex:1; background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; border-radius:3px; padding:2px; font-size:8.5px; cursor:pointer;" title="+100% Target">+100%</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 1-CLICK MARKET SQUARE-OFF BUTTON -->
+                        <button type="button" onclick="squareOffPaperPosition('${activePos.id}', 'Chart 1-Click Exit')" 
+                            style="width: 100%; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; border: none; border-radius: 8px; padding: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(239,68,68,0.4);">
+                            ⚡ 1-Click Market Square-Off
+                        </button>
+                    </div>
+                `;
+            } else {
+                // NO ACTIVE POSITION: RENDER DRAGGABLE 1-CLICK FAST SCALPING HUD
+                const step = cfg.strikeStep || 50;
+                const atmStrike = Math.round(cfg.cmp / step) * step;
+                const basePrem = cfg.premium || 120;
+                const isClosed = !isMarketCurrentlyLive;
+
+                hud.innerHTML = `
+                    <div class="paper-hud-card" style="border-color: ${isClosed ? 'rgba(239, 68, 68, 0.5)' : 'rgba(56, 189, 248, 0.4)'};">
+                        <!-- Draggable Header Grip -->
+                        <div class="paper-hud-drag-handle" onmousedown="startDragPaperHud(event)" ontouchstart="startDragPaperHud(event)">
+                            <span style="font-size: 11.5px; font-weight: 800; color: #facc15; display: flex; align-items: center; gap: 5px; cursor: grab;">
+                                <span style="color: #94a3b8;">⠿</span> ⚡ Quick 1-Click Scalp
+                            </span>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 9.5px; color: ${isMarketCurrentlyLive ? '#34d399' : '#fca5a5'}; background: ${isMarketCurrentlyLive ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.2)'}; padding: 1px 5px; border-radius: 4px; font-weight: 800;">
+                                    ${isMarketCurrentlyLive ? '🟢 LIVE' : '🔴 CLOSED'}
+                                </span>
+                                <button type="button" onclick="togglePaperChartHud()" style="background: none; border: none; color: #94a3b8; font-size: 12px; cursor: pointer; padding: 0 3px;" title="Hide HUD">✕</button>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.35); border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; font-size: 10.5px; display: flex; justify-content: space-between;">
+                            <span>Spot: <b style="color:#fff;">₹${cfg.cmp.toFixed(1)}</b></span>
+                            <span style="cursor: pointer; color: #38bdf8;" onclick="openPaperOptionChainModal()" title="Open Option Chain">
+                                Strike: <b>${atmStrike}</b> 📊
+                            </span>
+                        </div>
+
+                        ${isClosed ? `
+                            <div style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); border-radius: 6px; padding: 8px; margin-bottom: 8px; text-align: center;">
+                                <div style="font-size: 11px; font-weight: 900; color: #f87171;">🛑 MARKET IS CURRENTLY CLOSED</div>
+                                <div style="font-size: 9.5px; color: #cbd5e1; margin-top: 2px;">Orders Disabled (Mon–Fri | 09:15 – 15:30 IST)</div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button type="button" onclick="showToast('🛑 Market is CLOSED! Orders are only allowed during Live Hours (09:15 AM - 03:30 PM IST).', '🔴')"
+                                    style="background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 6px; font-size: 11px; font-weight: 800; cursor: not-allowed; display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.6;">
+                                    <span>🔒 BUY CALL (CE)</span>
+                                    <span style="font-size: 9px;">Market Closed</span>
+                                </button>
+
+                                <button type="button" onclick="showToast('🛑 Market is CLOSED! Orders are only allowed during Live Hours (09:15 AM - 03:30 PM IST).', '🔴')"
+                                    style="background: rgba(255,255,255,0.06); color: #94a3b8; border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 6px; font-size: 11px; font-weight: 800; cursor: not-allowed; display: flex; flex-direction: column; align-items: center; gap: 2px; opacity: 0.6;">
+                                    <span>🔒 BUY PUT (PE)</span>
+                                    <span style="font-size: 9px;">Market Closed</span>
+                                </button>
+                            </div>
+                        ` : `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button type="button" onclick="quickChartExecute('CE', 1)"
+                                    style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; border: none; border-radius: 8px; padding: 8px 6px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+                                    <span>🟢 BUY CALL (CE)</span>
+                                    <span style="font-size: 9px; opacity: 0.85;">${atmStrike} CE @ ₹${basePrem}</span>
+                                </button>
+
+                                <button type="button" onclick="quickChartExecute('PE', 1)"
+                                    style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; border: none; border-radius: 8px; padding: 8px 6px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; box-shadow: 0 4px 12px rgba(239,68,68,0.3);">
+                                    <span>🔴 BUY PUT (PE)</span>
+                                    <span style="font-size: 9px; opacity: 0.85;">${atmStrike} PE @ ₹${basePrem}</span>
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }
+        }
+        window.renderPaperChartTradeHud = renderPaperChartTradeHud;
+
+        function quickAdjustPaperSl(posId, preset) {
+            const positions = getPaperPositions();
+            const pos = positions.find(p => p.id === posId);
+            if (!pos) return;
+
+            if (preset === 'cost') {
+                pos.sl = pos.buyPrice;
+            } else if (preset === '10') {
+                pos.sl = parseFloat((pos.buyPrice * 0.90).toFixed(2));
+            } else if (preset === '20') {
+                pos.sl = parseFloat((pos.buyPrice * 0.80).toFixed(2));
+            }
+
+            localStorage.setItem('paper_active_positions', JSON.stringify(positions));
+            showToast(`🛑 SL Adjusted to ₹${pos.sl} for ${pos.strike}`, "🟢");
+            renderPaperChartTradeHud();
+            renderPaperPositionsList();
+        }
+        window.quickAdjustPaperSl = quickAdjustPaperSl;
+
+        function quickAdjustPaperTarget(posId, preset) {
+            const positions = getPaperPositions();
+            const pos = positions.find(p => p.id === posId);
+            if (!pos) return;
+
+            if (preset === '20') {
+                pos.target = parseFloat((pos.buyPrice * 1.20).toFixed(2));
+            } else if (preset === '50') {
+                pos.target = parseFloat((pos.buyPrice * 1.50).toFixed(2));
+            } else if (preset === '100') {
+                pos.target = parseFloat((pos.buyPrice * 2.00).toFixed(2));
+            }
+
+            localStorage.setItem('paper_active_positions', JSON.stringify(positions));
+            showToast(`🎯 Target Adjusted to ₹${pos.target} for ${pos.strike}`, "🟢");
+            renderPaperChartTradeHud();
+            renderPaperPositionsList();
+        }
+        window.quickAdjustPaperTarget = quickAdjustPaperTarget;
+
+        function quickChartExecute(type = 'CE', lots = 1) {
+            if (!isMarketCurrentlyLive) {
+                showToast("🛑 MARKET IS CLOSED! Orders are only allowed during Live Trading Hours (Mon – Fri | 09:15 AM – 03:30 PM IST).", "🔴");
+                return;
+            }
+
+            const sym = currentPaperChartSymbol || 'NIFTY';
+            const cfg = PAPER_DEFAULTS[sym] || PAPER_DEFAULTS.NIFTY;
+            const step = cfg.strikeStep || 50;
+            const atmStrike = Math.round(cfg.cmp / step) * step;
+            const strike = `${atmStrike} ${type}`;
+            const buyPrice = cfg.premium || 120;
+
+            const instSelect = document.getElementById('paperInstrumentSelect');
+            const symSelect = document.getElementById('paperSymbolSelect');
+            const strikeInput = document.getElementById('paperStrikeInput');
+            const buyPriceInput = document.getElementById('paperBuyPriceInput');
+            const lotsInput = document.getElementById('paperLotsInput');
+
+            if (instSelect) instSelect.value = type;
+            if (symSelect) symSelect.value = sym;
+            if (strikeInput) strikeInput.value = strike;
+            if (buyPriceInput) buyPriceInput.value = buyPrice;
+            if (lotsInput) lotsInput.value = lots;
+
+            executePaperTrade();
+        }
+        window.quickChartExecute = quickChartExecute;
+
         function selectPaperSymbol(symKey) {
             const item = PAPER_DEFAULTS[symKey];
             if (!item) return;
@@ -18258,6 +19039,7 @@
 
             closePaperSymbolDropdown();
             updatePaperMarketPrice(false);
+            switchPaperChartSymbol(symKey, false);
         }
         window.selectPaperSymbol = selectPaperSymbol;
 
@@ -18295,7 +19077,6 @@
         // ============================================================
         function openPaperOptionChainModal() {
             const sym = document.getElementById('paperSymbolSelect')?.value || 'NIFTY';
-            const inst = document.getElementById('paperInstrumentSelect')?.value || 'CE';
             const cfg = PAPER_DEFAULTS[sym] || PAPER_DEFAULTS.NIFTY;
 
             const modal = document.getElementById('paperOptionChainModal');
@@ -18310,11 +19091,11 @@
 
             if (statusEl) {
                 if (isMarketCurrentlyLive) {
-                    statusEl.innerHTML = `<span class="sync-dot" style="background:#34d399; box-shadow: 0 0 8px #34d399;"></span> <b style="color: #34d399;">LIVE STREAMING</b>`;
+                    statusEl.innerHTML = `<span class="live-blink-dot" style="display:inline-block; margin-right:4px;"></span> <b style="color: #34d399;">LIVE STREAMING</b>`;
                     statusEl.style.background = 'rgba(16,185,129,0.15)';
                     statusEl.style.border = '1px solid #10b981';
                 } else {
-                    statusEl.innerHTML = `🔴 <b style="color: #fca5a5;">MARKET CLOSED (EOD SNAPSHOT)</b>`;
+                    statusEl.innerHTML = `🔴 <b style="color: #fca5a5;">MARKET CLOSED (EOD SNAPSHOT / PRACTICE SIMULATOR)</b>`;
                     statusEl.style.background = 'rgba(239,68,68,0.15)';
                     statusEl.style.border = '1px solid #ef4444';
                 }
@@ -18323,23 +19104,18 @@
             renderPaperOptionChainTable();
             if (modal) modal.style.display = 'flex';
 
-            // Start Live Auto-Refresher when market is open
+            // Auto-Refresher for Option Chain table
             if (optionChainLiveInterval) clearInterval(optionChainLiveInterval);
-            if (isMarketCurrentlyLive) {
-                optionChainLiveInterval = setInterval(() => {
-                    const activeModal = document.getElementById('paperOptionChainModal');
-                    if (!activeModal || activeModal.style.display === 'none') {
-                        clearInterval(optionChainLiveInterval);
-                        optionChainLiveInterval = null;
-                        return;
-                    }
-                    // Micro-tick on spot price
-                    const tickDelta = (Math.random() - 0.49) * (cfg.cmp * 0.0008);
-                    cfg.cmp = parseFloat((cfg.cmp + tickDelta).toFixed(2));
-                    if (spotEl) spotEl.innerText = `₹${cfg.cmp.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-                    renderPaperOptionChainTable();
-                }, 1600);
-            }
+            optionChainLiveInterval = setInterval(() => {
+                const activeModal = document.getElementById('paperOptionChainModal');
+                if (!activeModal || activeModal.style.display === 'none') {
+                    clearInterval(optionChainLiveInterval);
+                    optionChainLiveInterval = null;
+                    return;
+                }
+                if (spotEl) spotEl.innerText = `₹${cfg.cmp.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+                renderPaperOptionChainTable();
+            }, 1800);
         }
         window.openPaperOptionChainModal = openPaperOptionChainModal;
 
@@ -18555,13 +19331,8 @@
             const targetInput = document.getElementById('paperTargetInput');
 
             if (buyPriceInput) buyPriceInput.value = calculatedPremium.toFixed(2);
-            // Keep SL and Target as 0 (optional) by default
-            if (slInput && (!slInput.value || slInput.value === '')) {
-                slInput.value = '0';
-            }
-            if (targetInput && (!targetInput.value || targetInput.value === '')) {
-                targetInput.value = '0';
-            }
+            if (slInput && (!slInput.value || slInput.value === '')) slInput.value = '0';
+            if (targetInput && (!targetInput.value || targetInput.value === '')) targetInput.value = '0';
 
             updatePaperMarketPrice(true);
         }
@@ -18592,7 +19363,6 @@
                     if (targetInput && (!targetInput.value || targetInput.value === '')) targetInput.value = '0';
                 } else {
                     const strikeRound = Math.round(cfg.cmp / cfg.strikeStep) * cfg.strikeStep;
-                    // Auto populate Strike Price with CALL (CE) or PUT (PE) based on instrument
                     if (strikeInput) strikeInput.value = `${strikeRound} ${inst}`;
                     calculateOptionPriceFromStrike();
                     return;
@@ -18629,6 +19399,17 @@
         window.updatePaperMarketPrice = updatePaperMarketPrice;
 
         function executePaperTrade() {
+            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+                showToast("🔒 Live Paper Trading is a VIP PRO feature after your 30-Day Free Trial! Upgrade to VIP Pro to continue.", "👑");
+                if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
+                return;
+            }
+
+            if (!isMarketCurrentlyLive) {
+                showToast("🛑 MARKET IS CLOSED! Orders are strictly allowed during Live Market Hours (Mon – Fri | 09:15 AM – 03:30 PM IST).", "🔴");
+                return;
+            }
+
             const sym = document.getElementById('paperSymbolSelect')?.value || 'NIFTY';
             const inst = document.getElementById('paperInstrumentSelect')?.value || 'CE';
             const cfg = PAPER_DEFAULTS[sym] || PAPER_DEFAULTS.NIFTY;
@@ -18658,13 +19439,35 @@
 
             localStorage.setItem('paper_trading_capital', (currentCap - requiredMargin).toString());
 
+            // Calculate exact Moneyness & Option Delta at entry
+            const strikeMatch = strike.match(/(\d+(\.\d+)?)/);
+            const numericStrike = strikeMatch ? parseFloat(strikeMatch[1]) : cfg.cmp;
+            const step = cfg.strikeStep || 50;
+
+            let delta = 0.52; // Default ATM Option Delta
+            if (inst === 'EQ' || inst === 'FUT') {
+                delta = 1.0;
+            } else if (inst === 'CE') {
+                const moneyness = (cfg.cmp - numericStrike) / step;
+                delta = Math.max(0.12, Math.min(0.95, 0.52 + (moneyness * 0.10)));
+            } else if (inst === 'PE') {
+                const moneyness = (numericStrike - cfg.cmp) / step;
+                delta = Math.max(0.12, Math.min(0.95, 0.52 + (moneyness * 0.10)));
+            }
+
             const newPos = {
                 id: 'pp_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
                 symbol: sym,
-                instrument: inst,
+                symbolName: cfg.name || sym,
+                instrument: inst, // 'CE', 'PE', 'FUT', 'EQ'
                 strike: strike,
+                numericStrike: numericStrike,
+                entryCmp: cfg.cmp, // Exact Underlying CMP at entry
+                currentCmp: cfg.cmp,
                 buyPrice: buyPrice,
                 currentPrice: buyPrice,
+                delta: delta,
+                step: step,
                 qty: totalQty,
                 lots: lots,
                 lotSize: lotSize,
@@ -18679,9 +19482,9 @@
             localStorage.setItem('paper_active_positions', JSON.stringify(positions));
 
             if (!isMarketCurrentlyLive) {
-                showToast(`🌙 AMO Order Placed: ${strike} (${lots} Lot = ${totalQty} Qty). Market is CLOSED; position recorded at closing price ₹${buyPrice.toFixed(2)}!`, "🟡");
+                showToast(`🌙 Virtual Order Placed: ${strike} (${lots} Lot = ${totalQty} Qty). Sandbox Practice Mode Active @ ₹${buyPrice.toFixed(2)}!`, "🟡");
             } else {
-                showToast(`🚀 Mock Order Executed: ${strike} (${lots} Lot = ${totalQty} Qty @ ₹${buyPrice.toFixed(2)})`, "🟢");
+                showToast(`🚀 Live Mock Order Executed: ${strike} (${lots} Lot = ${totalQty} Qty @ ₹${buyPrice.toFixed(2)})`, "🟢");
             }
             renderPaperTradingDashboard();
             startPaperLtpEngine();
@@ -18724,27 +19527,54 @@
         }
         window.squareOffPaperPosition = squareOffPaperPosition;
 
+        // REAL-TIME PAPER TRADING ENGINE (100% LINKED TO UNDERLYING CMP)
         function startPaperLtpEngine() {
             if (paperLtpInterval) clearInterval(paperLtpInterval);
-            
-            // If the market is closed, DO NOT simulate price fluctuations! Prices remain frozen.
-            if (!isMarketCurrentlyLive) {
-                const positions = getPaperPositions();
-                positions.forEach(p => { p.currentPrice = p.buyPrice; }); // Freeze at exact buy price
-                localStorage.setItem('paper_active_positions', JSON.stringify(positions));
-                renderPaperPositionsList();
-                return;
-            }
 
             paperLtpInterval = setInterval(() => {
                 const positions = getPaperPositions();
                 if (positions.length === 0) return;
 
                 let stateChanged = false;
-                positions.forEach(pos => {
-                    const tickChange = (Math.random() - 0.49) * (pos.buyPrice * 0.015);
-                    pos.currentPrice = Math.max(0.05, parseFloat((pos.currentPrice + tickChange).toFixed(2)));
 
+                // 1. Tick micro-movements on underlying indices for active symbols
+                const activeSymbols = new Set(positions.map(p => p.symbol));
+                activeSymbols.forEach(sym => {
+                    if (PAPER_DEFAULTS[sym]) {
+                        const cfg = PAPER_DEFAULTS[sym];
+                        const rand = (Math.random() - 0.5) * 2; // [-1.0, +1.0] Range, Zero Drift
+                        const tickStep = (cfg.cmp * 0.00045) * rand; // ~10 pts on Nifty, ~25 pts on BankNifty
+                        cfg.cmp = parseFloat(Math.max(0.1, cfg.cmp + tickStep).toFixed(2));
+                    }
+                });
+
+                // 2. Mathematically evaluate option/stock position LTP based on Underlying CMP movement
+                positions.forEach(pos => {
+                    const cfg = PAPER_DEFAULTS[pos.symbol] || PAPER_DEFAULTS.NIFTY;
+                    pos.currentCmp = cfg.cmp;
+                    const cmpDelta = cfg.cmp - (pos.entryCmp || cfg.cmp); // Net points moved by index since entry
+
+                    let newLtp = pos.buyPrice;
+                    const delta = pos.delta || 0.50;
+                    const gamma = 0.0012; // Option gamma acceleration
+                    const spreadNoise = (Math.random() - 0.5) * (pos.buyPrice * 0.003); // Zero-bias bid-ask jitter
+
+                    if (pos.instrument === 'EQ' || pos.instrument === 'FUT') {
+                        // Equity and Futures move 1:1 with underlying
+                        newLtp = pos.buyPrice + cmpDelta;
+                    } else if (pos.instrument === 'CE') {
+                        // CALL OPTION: Index UP -> Profit (+), Index DOWN -> Loss (-)
+                        const premiumMove = (delta * cmpDelta) + (0.5 * gamma * (cmpDelta * cmpDelta) * Math.sign(cmpDelta)) + spreadNoise;
+                        newLtp = pos.buyPrice + premiumMove;
+                    } else if (pos.instrument === 'PE') {
+                        // PUT OPTION: Index DOWN -> Profit (+), Index UP -> Loss (-)
+                        const premiumMove = (-delta * cmpDelta) + (0.5 * gamma * (cmpDelta * cmpDelta) * -Math.sign(cmpDelta)) + spreadNoise;
+                        newLtp = pos.buyPrice + premiumMove;
+                    }
+
+                    pos.currentPrice = Math.max(0.05, parseFloat(newLtp.toFixed(2)));
+
+                    // Evaluate Stop Loss and Target Triggers
                     if (pos.sl && pos.currentPrice <= pos.sl) {
                         squareOffPaperPosition(pos.id, 'Stop-Loss Hit 🛑');
                         stateChanged = true;
@@ -18757,8 +19587,9 @@
                 if (!stateChanged) {
                     localStorage.setItem('paper_active_positions', JSON.stringify(positions));
                     renderPaperPositionsList();
+                    renderPaperChartTradeHud();
                 }
-            }, 1800);
+            }, 1500);
         }
 
         // ============================================================
@@ -18882,54 +19713,11 @@
             if (posCountEl) posCountEl.innerText = `${positions.length} Open Position${positions.length !== 1 ? 's' : ''}`;
             if (winRateEl) winRateEl.innerText = `${winRate}% (${wins}W / ${history.length - wins}L)`;
 
-            // Dynamically Update Market Timings Banner & Order Execution Button
-            const bannerEl = document.getElementById('paperTerminalMarketTimingBanner');
-            const bannerTitle = document.getElementById('paperTimingBannerTitle');
-            const bannerTag = document.getElementById('paperTimingBannerTag');
-            const orderBtn = document.getElementById('paperExecuteOrderBtn');
-
-            if (isMarketCurrentlyLive) {
-                if (bannerEl) {
-                    bannerEl.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.12) 100%)';
-                    bannerEl.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                    bannerEl.style.color = '#6ee7b7';
-                }
-                if (bannerTitle) bannerTitle.innerHTML = `<span class="sync-dot" style="background:#34d399; box-shadow: 0 0 8px #34d399; display: inline-block; margin-right: 4px;"></span> <b style="color: #34d399;">NSE / BSE Live Session Active</b>`;
-                if (bannerTag) {
-                    bannerTag.innerHTML = `🟢 LIVE SESSION`;
-                    bannerTag.style.background = 'rgba(16,185,129,0.25)';
-                    bannerTag.style.borderColor = '#10b981';
-                    bannerTag.style.color = '#34d399';
-                }
-                if (orderBtn) {
-                    orderBtn.innerHTML = `🚀 Execute Live Virtual Buy Order`;
-                    orderBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-                    orderBtn.style.border = 'none';
-                    orderBtn.style.color = '#fff';
-                }
-            } else {
-                if (bannerEl) {
-                    bannerEl.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(185, 28, 28, 0.12) 100%)';
-                    bannerEl.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                    bannerEl.style.color = '#fca5a5';
-                }
-                if (bannerTitle) bannerTitle.innerHTML = `<b style="color: #f87171;">Market is Currently CLOSED</b>`;
-                if (bannerTag) {
-                    bannerTag.innerHTML = `OPENS AT 09:15 AM`;
-                    bannerTag.style.background = 'rgba(239,68,68,0.25)';
-                    bannerTag.style.borderColor = '#ef4444';
-                    bannerTag.style.color = '#fca5a5';
-                }
-                if (orderBtn) {
-                    orderBtn.innerHTML = `🌙 Schedule After-Market Order (AMO) — Market Closed`;
-                    orderBtn.style.background = 'linear-gradient(135deg, #334155 0%, #1e293b 100%)';
-                    orderBtn.style.border = '1.5px solid #ef4444';
-                    orderBtn.style.color = '#fca5a5';
-                }
-            }
-
+            updateMarketSessionStatus();
             renderPaperPositionsList();
             renderPaperHistoryTable();
+            initPaperTradingViewChart(currentPaperChartSymbol);
+            renderPaperChartTradeHud();
             startPaperLtpEngine();
         }
         window.renderPaperTradingDashboard = renderPaperTradingDashboard;
@@ -18964,24 +19752,47 @@
                 const isProfit = pnl >= 0;
                 const pnlColor = isProfit ? '#34d399' : '#f87171';
                 const pnlSign = isProfit ? '+' : '';
-                const isAmo = !isMarketCurrentlyLive;
-                const mtmStatusNote = isAmo ? '<span style="font-size: 9px; opacity: 0.8; color: #fca5a5; margin-left: 4px;">(Market Closed - Price Frozen)</span>' : '';
-                const timingNote = isAmo ? '<div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">⏰ Scheduled for Market Open (09:15 AM IST)</div>' : '';
+                const pctPnl = p.buyPrice > 0 ? (((p.currentPrice - p.buyPrice) / p.buyPrice) * 100).toFixed(1) : '0.0';
+
+                // Underlying Index movement tracking
+                const cfg = PAPER_DEFAULTS[p.symbol] || PAPER_DEFAULTS.NIFTY;
+                const curCmp = p.currentCmp || cfg.cmp;
+                const entryCmp = p.entryCmp || curCmp;
+                const cmpDiff = curCmp - entryCmp;
+                const cmpDiffSign = cmpDiff >= 0 ? '+' : '';
+                const cmpDiffColor = cmpDiff >= 0 ? '#34d399' : '#f87171';
+                const cmpDiffArrow = cmpDiff >= 0 ? '▲' : '▼';
+
+                const instBadge = p.instrument === 'CE' 
+                    ? '<span style="font-size: 9.5px; padding: 2px 6px; border-radius: 4px; background: rgba(16,185,129,0.2); color: #34d399; font-weight: 800; border: 1px solid rgba(16,185,129,0.4);">CALL (CE) 🟢</span>'
+                    : (p.instrument === 'PE' 
+                        ? '<span style="font-size: 9.5px; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #f87171; font-weight: 800; border: 1px solid rgba(239,68,68,0.4);">PUT (PE) 🔴</span>'
+                        : `<span style="font-size: 9.5px; padding: 2px 6px; border-radius: 4px; background: rgba(56,189,248,0.2); color: #38bdf8; font-weight: 800;">${p.instrument}</span>`);
 
                 const slDisplay = p.sl ? `₹${p.sl}` : '<span style="opacity:0.7;">None</span>';
                 const tgtDisplay = p.target ? `₹${p.target}` : '<span style="opacity:0.7;">None</span>';
 
                 html += `
-                    <div class="paper-position-row">
-                        <div>
-                            <div style="font-weight: 800; font-size: 13.5px; color: #fff; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <div class="paper-position-row" style="background: rgba(15, 23, 42, 0.85); border: 1.5px solid ${isProfit ? 'rgba(16,185,129,0.35)' : 'rgba(239,68,68,0.35)'}; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 240px;">
+                            <div style="font-weight: 800; font-size: 13.5px; color: #fff; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                                 <span>${p.strike}</span>
-                                <span style="font-size: 9px; padding: 2px 5px; border-radius: 4px; background: rgba(56,189,248,0.2); color: #38bdf8; font-weight: 900;">${p.lots ? p.lots + ' LOT (' + p.qty + ' QTY)' : p.qty + ' QTY'}</span>
-                                ${isAmo ? '<span style="font-size: 9px; padding: 2px 5px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #fca5a5; font-weight: 900; border: 1px solid rgba(239,68,68,0.4);">🌙 AMO</span>' : ''}
+                                ${instBadge}
+                                <span style="font-size: 9.5px; padding: 2px 6px; border-radius: 4px; background: rgba(56,189,248,0.2); color: #38bdf8; font-weight: 900;">${p.lots ? p.lots + ' LOT (' + p.qty + ' QTY)' : p.qty + ' QTY'}</span>
                             </div>
-                            <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                <span>Buy: <b>₹${p.buyPrice.toFixed(2)}</b></span>
-                                <span>LTP: <b style="color: #fff;">₹${p.currentPrice.toFixed(2)}</b> ${mtmStatusNote}</span>
+
+                            <!-- Live Underlying Index Real-time Tracker -->
+                            <div style="font-size: 11px; color: #94a3b8; margin-top: 5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <span>📊 ${p.symbolName || p.symbol} CMP:</span>
+                                <span style="color: #cbd5e1; font-weight: 700;">₹${entryCmp.toFixed(1)} ➔ <b style="color: #fff;">₹${curCmp.toFixed(1)}</b></span>
+                                <span style="color: ${cmpDiffColor}; font-weight: 800; background: rgba(0,0,0,0.35); padding: 1px 5px; border-radius: 4px;">
+                                    (${cmpDiffArrow} ${cmpDiffSign}${cmpDiff.toFixed(1)} pts)
+                                </span>
+                            </div>
+
+                            <div style="font-size: 11px; color: #cbd5e1; margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span>Entry Buy: <b>₹${p.buyPrice.toFixed(2)}</b></span>
+                                <span>LTP: <b style="color: #fff; font-size: 12px; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px;">₹${p.currentPrice.toFixed(2)}</b></span>
                                 <span onclick="openModifyPaperSlTargetModal('${p.id}')" style="cursor: pointer; background: rgba(239,68,68,0.15); border: 1px dashed rgba(239,68,68,0.5); padding: 2px 6px; border-radius: 4px; color: #fca5a5; font-weight: 700; display: inline-flex; align-items: center; gap: 3px;" title="Click to Modify Stop Loss">
                                     🛑 SL: ${slDisplay} ✏️
                                 </span>
@@ -18989,11 +19800,11 @@
                                     🎯 Tgt: ${tgtDisplay} ✏️
                                 </span>
                             </div>
-                            ${timingNote}
                         </div>
-                        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                            <div style="font-size: 15px; font-weight: 900; color: ${pnlColor};">
-                                ${pnlSign}₹${pnl.toFixed(2)}
+
+                        <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                            <div style="font-size: 16px; font-weight: 900; color: ${pnlColor}; letter-spacing: -0.2px;">
+                                ${pnlSign}₹${pnl.toFixed(2)} <span style="font-size: 11px; font-weight: 800; opacity: 0.9;">(${pnlSign}${pctPnl}%)</span>
                             </div>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <button type="button" onclick="openModifyPaperSlTargetModal('${p.id}')" class="btn btn-sm"
@@ -19012,7 +19823,7 @@
 
             container.innerHTML = html;
             if (mtmEl) {
-                const closedTag = !isMarketCurrentlyLive ? ' (Market Closed)' : '';
+                const closedTag = !isMarketCurrentlyLive ? ' (Market Closed - Practice Mode)' : '';
                 mtmEl.innerText = `MTM: ${totalMtm >= 0 ? '+' : ''}₹${totalMtm.toFixed(2)}${closedTag}`;
                 mtmEl.style.color = totalMtm >= 0 ? '#34d399' : '#f87171';
             }
@@ -19048,15 +19859,40 @@
             tbody.innerHTML = html;
         }
 
-        function resetPaperCapital() {
-            if (confirm("🔄 Reset Virtual Demo Capital back to ₹10,00,000? All active open positions will be closed.")) {
-                localStorage.setItem('paper_trading_capital', '1000000');
-                localStorage.setItem('paper_active_positions', JSON.stringify([]));
-                renderPaperTradingDashboard();
-                showToast("✅ Demo Capital Reset to ₹10,00,000!", "💰");
+        function openPaperResetRefillModal() {
+            const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+            const profileMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+            if (isUserAdmin || profileMobile === '8102241463') {
+                if (confirm("👑 Master Admin Override: Reset Virtual Capital to ₹10,00,000 for free?")) {
+                    confirmAndResetDemoCapital(true);
+                }
+                return;
+            }
+
+            const modal = document.getElementById('paperResetRefillModal');
+            if (modal) {
+                modal.style.cssText = "display: flex !important; position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.88) !important; backdrop-filter: blur(14px) !important; z-index: 9999999 !important; align-items: center; justify-content: center; padding: 20px; overflow-y: auto;";
             }
         }
-        window.resetPaperCapital = resetPaperCapital;
+        window.openPaperResetRefillModal = openPaperResetRefillModal;
+
+        function closePaperResetRefillModal() {
+            const modal = document.getElementById('paperResetRefillModal');
+            if (modal) {
+                modal.style.cssText = "display: none !important;";
+            }
+        }
+        window.closePaperResetRefillModal = closePaperResetRefillModal;
+
+        function confirmAndResetDemoCapital(bypassPayment = false) {
+            localStorage.setItem('paper_trading_capital', '1000000');
+            localStorage.setItem('paper_active_positions', JSON.stringify([]));
+            renderPaperTradingDashboard();
+            closePaperResetRefillModal();
+            showToast("🎉 Fresh ₹10,00,000 Virtual Capital Refilled Successfully!", "💰");
+        }
+        window.confirmAndResetDemoCapital = confirmAndResetDemoCapital;
+        window.resetPaperCapital = openPaperResetRefillModal;
 
         function clearPaperTradeHistory() {
             if (confirm("🗑️ Clear all closed paper trade history logs?")) {
