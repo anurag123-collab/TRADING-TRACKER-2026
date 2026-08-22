@@ -2686,6 +2686,63 @@
         </div>
     </div>
 
+    <!-- ⚡ DEMO LIMIT & PAID PRO FEATURE CONVERSION MODAL -->
+    <div id="demoLimitModal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 9999999; align-items: center; justify-content: center; padding: 20px;">
+        <div
+            style="background: linear-gradient(145deg, #181335 0%, #0d111d 100%); border: 2px solid #8b5cf6; border-radius: 24px; padding: 26px; width: 100%; max-width: 480px; color: white; text-align: center; box-shadow: 0 25px 60px rgba(139, 92, 246, 0.45); max-height: 94vh; overflow-y: auto;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="demoLimitIcon" style="font-size: 26px;">⚡</span>
+                    <span id="demoLimitTitle" style="font-size: 16px; font-weight: 900; color: #c4b5fd; text-transform: uppercase; letter-spacing: 0.5px;">Demo Limit Reached</span>
+                </div>
+                <button onclick="closeDemoLimitModal()" style="background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer;">✖</button>
+            </div>
+
+            <p id="demoLimitMessage" style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5; margin-bottom: 16px; text-align: left;">
+                You have reached the free test limit in Instant Demo Mode. To continue logging unlimited real trades and unlock cloud sync, please create your free account!
+            </p>
+
+            <!-- VALUE PROPOSITION HIGHLIGHTS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; text-align: left;">
+                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 9px 11px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #34d399;">☁️ Cloud Encrypted</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Never lose your trades or notes.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 9px 11px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #38bdf8;">🎁 30-Day Free Trial</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Full 1-month unrestricted access.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 9px 11px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #facc15;">♾️ Unlimited Trades</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Log unlimited F&O, Stock & Crypto.</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 9px 11px;">
+                    <div style="font-size: 11.5px; font-weight: 800; color: #c084fc;">🎮 ₹10L Paper Trading</div>
+                    <div style="font-size: 9.5px; color: #94a3b8;">Practice live market strategies.</div>
+                </div>
+            </div>
+
+            <!-- PRIMARY ACTION BUTTON: CREATE FREE ACCOUNT (10 SECONDS) -->
+            <button type="button" onclick="openSignupFromDemo()" 
+                style="width: 100%; padding: 15px; margin-bottom: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 14px; font-weight: 900; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(16,185,129,0.4); text-transform: uppercase; letter-spacing: 0.5px;">
+                <span>✨</span> <span>Create Free Account in 10s (Save Data)</span> <span>🚀</span>
+            </button>
+
+            <!-- SECONDARY ACTION: VIEW VIP PLANS -->
+            <button type="button" onclick="closeDemoLimitModal(); openVipPaywallModal();" 
+                style="width: 100%; padding: 12px; margin-bottom: 12px; background: linear-gradient(135deg, rgba(234,179,8,0.2) 0%, rgba(202,138,4,0.2) 100%); color: #fde047; border: 1px solid #eab308; border-radius: 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>👑</span> <span>View VIP Pro Lifetime & Yearly Plans</span>
+            </button>
+
+            <button type="button" onclick="closeDemoLimitModal()" 
+                style="background: none; border: none; color: #94a3b8; font-size: 11px; cursor: pointer; text-decoration: underline;">
+                Stay in Demo Mode
+            </button>
+        </div>
+    </div>
+
     <!-- 💰 ₹99 DISCIPLINED CAPITAL REFILL & WALLET RESET MODAL -->
     <div id="paperResetRefillModal"
         style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 9999999; align-items: center; justify-content: center; padding: 20px;">
@@ -2916,6 +2973,16 @@
                 <p
                     style="margin-bottom: 14px; font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">
                     PRO TRADER PORTAL 2026</p>
+
+                <!-- ⚡ INSTANT 1-CLICK DEMO BUTTON -->
+                <div style="margin-bottom: 14px;">
+                    <button type="button" onclick="startInstantDemoSession()"
+                        style="width: 100%; padding: 12px 14px; background: linear-gradient(135deg, rgba(234, 179, 8, 0.22) 0%, rgba(245, 158, 11, 0.32) 100%); border: 1.5px solid #f59e0b; color: #fde047; border-radius: 12px; font-weight: 800; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25); transition: all 0.2s ease;">
+                        <span style="font-size: 16px;">⚡</span>
+                        <span>Try Instant Demo (No Login Required)</span>
+                        <span style="font-size: 9.5px; background: #f59e0b; color: #000; padding: 2px 6px; border-radius: 6px; font-weight: 900;">FREE</span>
+                    </button>
+                </div>
 
                 <!-- LOGIN / SIGNUP TABS -->
                 <div id="authTabsHeader"
@@ -3361,6 +3428,33 @@
                         style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; font-weight: 800; border: none; padding: 7px 16px; border-radius: 10px; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);">
                         👑 Upgrade to VIP Pro
                     </button>
+                </div>
+
+                <!-- ⚡ INSTANT DEMO MODE ACTIVE BANNER -->
+                <div id="demoModeBanner"
+                    style="margin-bottom: 16px; padding: 12px 18px; border-radius: 14px; display: none; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(234, 179, 8, 0.18) 0%, rgba(245, 158, 11, 0.12) 100%); border: 1.5px solid rgba(234, 179, 8, 0.4); box-shadow: 0 4px 20px rgba(0,0,0,0.3); flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 24px;">⚡</span>
+                        <div>
+                            <div style="font-weight: 900; font-size: 13.5px; color: #fde047; display: flex; align-items: center; gap: 6px;">
+                                <span>INSTANT DEMO MODE ACTIVE</span>
+                                <span style="font-size: 10px; background: #f59e0b; color: #000; font-weight: 900; padding: 1px 7px; border-radius: 6px;">PREVIEW</span>
+                            </div>
+                            <div style="font-size: 11px; color: #cbd5e1; margin-top: 2px;">
+                                You are exploring live features & sample trades (+₹50,310 P&L). Create a free account to save your real daily trades!
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button onclick="openSignupFromDemo()" class="btn btn-sm"
+                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 800; border: 1px solid #34d399; padding: 8px 16px; border-radius: 10px; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+                            ✨ Create Free Account & Save Real Trades
+                        </button>
+                        <button onclick="exitDemoMode()" class="btn btn-sm"
+                            style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-weight: 700; padding: 8px 12px; border-radius: 10px; cursor: pointer;">
+                            🚪 Exit Demo
+                        </button>
+                    </div>
                 </div>
 
                 <!-- DASHBOARD TOOLBAR HEADER -->
@@ -8197,6 +8291,12 @@
         }
 
         function checkPasswordLockStatus() {
+            const currentMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
+            const isDemoActive = (localStorage.getItem('is_demo_mode_active') === 'true' || sessionStorage.getItem('is_demo_mode_active') === 'true') && (!currentMobile || currentMobile === 'DEMO-GUEST') && sessionStorage.getItem('session_authenticated') === 'true';
+            if (isDemoActive) {
+                return { requiresPassword: false, reason: 'demo_session' };
+            }
+
             const isRegistered = localStorage.getItem('user_registered') === 'true' || localStorage.getItem('app_user_id');
             const savedUser = localStorage.getItem('logged_user');
             const activeUser = localStorage.getItem('app_user_id') || 'Anurag';
@@ -8691,7 +8791,119 @@
             return null;
         }
 
-        function handleDirectPasswordLogin() {
+        async function autoSyncTradersFromCloud() {
+            try {
+                const endpoints = [
+                    'https://thetradingtracker.com/api/sync-trader-log',
+                    'https://trading-tracker-2026.vercel.app/api/sync-trader-log',
+                    'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb'
+                ];
+                if (window.location.origin && window.location.origin.startsWith('http') && !endpoints.some(u => u.startsWith(window.location.origin))) {
+                    endpoints.unshift(`${window.location.origin}/api/sync-trader-log`);
+                }
+
+                for (const url of endpoints) {
+                    try {
+                        const res = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        let traders = [];
+                        if (Array.isArray(data)) traders = data;
+                        else if (data && Array.isArray(data.traders)) traders = data.traders;
+                        else if (data && data.data && Array.isArray(data.data.traders)) traders = data.data.traders;
+
+                        if (traders && traders.length > 0) {
+                            let localLog = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                            traders.forEach(t => {
+                                if (!t || typeof t !== 'object') return;
+                                const tMob = sanitizeMobile(t.mobile);
+                                const tEm = (t.email || '').trim().toLowerCase();
+                                const existIdx = localLog.findIndex(l => {
+                                    const lMob = sanitizeMobile(l.mobile);
+                                    const lEm = (l.email || '').trim().toLowerCase();
+                                    return (tMob && lMob && tMob === lMob) || (tEm && tEm !== 'n/a' && lEm && lEm !== 'n/a' && tEm === lEm);
+                                });
+                                if (existIdx !== -1) {
+                                    localLog[existIdx] = { ...localLog[existIdx], ...t };
+                                } else {
+                                    localLog.push(t);
+                                }
+                            });
+                            localStorage.setItem('registered_traders_log', JSON.stringify(localLog));
+                            break;
+                        }
+                    } catch (e) { }
+                }
+            } catch (err) {
+                console.warn("autoSyncTradersFromCloud error:", err);
+            }
+        }
+
+        async function fetchGlobalAccount(identifier) {
+            if (!identifier) return null;
+            const inputRaw = identifier.trim();
+            const inputLower = inputRaw.toLowerCase();
+            const inputDigits = sanitizeMobile(inputRaw);
+
+            const endpoints = [
+                'https://thetradingtracker.com/api/sync-trader-log',
+                'https://trading-tracker-2026.vercel.app/api/sync-trader-log',
+                'https://api.restful-api.dev/objects/ff8081819ff5b11001a00fadadf336bb'
+            ];
+            if (window.location.origin && window.location.origin.startsWith('http') && !endpoints.some(u => u.startsWith(window.location.origin))) {
+                endpoints.unshift(`${window.location.origin}/api/sync-trader-log`);
+            }
+
+            for (const url of endpoints) {
+                try {
+                    const res = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    let traders = [];
+                    if (Array.isArray(data)) traders = data;
+                    else if (data && Array.isArray(data.traders)) traders = data.traders;
+                    else if (data && data.data && Array.isArray(data.data.traders)) traders = data.data.traders;
+
+                    if (traders && traders.length > 0) {
+                        let localLog = JSON.parse(localStorage.getItem('registered_traders_log') || '[]');
+                        traders.forEach(t => {
+                            if (!t || typeof t !== 'object') return;
+                            const tMob = sanitizeMobile(t.mobile);
+                            const tEm = (t.email || '').trim().toLowerCase();
+                            const existIdx = localLog.findIndex(l => {
+                                const lMob = sanitizeMobile(l.mobile);
+                                const lEm = (l.email || '').trim().toLowerCase();
+                                return (tMob && lMob && tMob === lMob) || (tEm && tEm !== 'n/a' && lEm && lEm !== 'n/a' && tEm === lEm);
+                            });
+                            if (existIdx !== -1) {
+                                localLog[existIdx] = { ...localLog[existIdx], ...t };
+                            } else {
+                                localLog.push(t);
+                            }
+                        });
+                        localStorage.setItem('registered_traders_log', JSON.stringify(localLog));
+
+                        const found = traders.find(t => {
+                            if (!t) return false;
+                            const mobDigits = sanitizeMobile(t.mobile);
+                            const emLower = (t.email || '').trim().toLowerCase();
+                            const nmLower = (t.name || '').trim().toLowerCase();
+
+                            return (inputDigits && mobDigits && mobDigits === inputDigits) ||
+                                (emLower && emLower === inputLower) ||
+                                (nmLower && nmLower === inputLower);
+                        });
+
+                        if (found) return found;
+                    }
+                } catch (e) {
+                    console.warn("fetchGlobalAccount error:", e);
+                }
+            }
+            return null;
+        }
+
+        async function handleDirectPasswordLogin() {
             let userInput = document.getElementById('loginUser') ? document.getElementById('loginUser').value.trim() : '';
             let passInput = document.getElementById('loginPass') ? document.getElementById('loginPass').value.trim() : '';
 
@@ -8732,6 +8944,12 @@
             }
 
             let account = getUserAccount(targetInput);
+
+            if (!account) {
+                // Live Real-Time Global Cloud Lookup across all devices
+                showToast("🔄 Verifying account with Cloud Database...", "🌐");
+                account = await fetchGlobalAccount(targetInput);
+            }
 
             if (!account) {
                 // If account not found in database or local storage, check if this is the default local session
@@ -8776,6 +8994,11 @@
             }
 
             // SUCCESSFUL LOGIN
+            localStorage.removeItem('is_demo_mode_active');
+            sessionStorage.removeItem('is_demo_mode_active');
+            localStorage.removeItem('demo_trades_added_count');
+            localStorage.removeItem('demo_paper_orders_count');
+
             const userMobClean = account.mobile ? sanitizeMobile(account.mobile) : '';
             try { localStorage.removeItem('user_explicit_logged_out'); } catch (e) { }
             localStorage.setItem('logged_user', account.name || 'Anurag');
@@ -9270,7 +9493,7 @@
             resendOTPCode();
         }
 
-        function verifyOTPAndLogin() {
+        async function verifyOTPAndLogin() {
             const b1 = document.getElementById('otpBox1') ? document.getElementById('otpBox1').value : '';
             const b2 = document.getElementById('otpBox2') ? document.getElementById('otpBox2').value : '';
             const b3 = document.getElementById('otpBox3') ? document.getElementById('otpBox3').value : '';
@@ -9319,12 +9542,36 @@
                         }
                     }
 
+                    if (!account && userInput) {
+                        // Live cloud lookup
+                        account = await fetchGlobalAccount(userInput);
+                    }
+
+                    if (!account && userInput) {
+                        const digits = sanitizeMobile(userInput);
+                        if (digits && digits.length === 10) {
+                            const defaultName = 'Trader ' + digits.slice(-4);
+                            account = {
+                                name: defaultName,
+                                mobile: digits,
+                                email: userInput.includes('@') ? userInput : 'N/A',
+                                password: '123456'
+                            };
+                            localStorage.setItem('app_user_pass_' + digits, '123456');
+                        }
+                    }
+
+                    localStorage.removeItem('is_demo_mode_active');
+                    sessionStorage.removeItem('is_demo_mode_active');
+                    localStorage.removeItem('demo_trades_added_count');
+                    localStorage.removeItem('demo_paper_orders_count');
+
                     if (account) {
                         const userMobClean = account.mobile ? sanitizeMobile(account.mobile) : '';
                         localStorage.setItem('app_user_mobile', account.mobile || '');
                         localStorage.setItem('app_user_email', account.email || 'N/A');
                         localStorage.setItem('trader_full_name', account.name || 'Trader');
-                        localStorage.setItem('app_user_pass', account.password || '12345');
+                        localStorage.setItem('app_user_pass', account.password || '123456');
                         localStorage.setItem('last_login_time', Date.now().toString());
                         localStorage.setItem('user_registered', 'true');
                         localStorage.setItem('logged_user', account.name || 'Trader');
@@ -9389,15 +9636,284 @@
         }
         window.initCurrentTradeDate = initCurrentTradeDate;
 
+        function generateRealisticDemoTrades() {
+            const today = new Date();
+            const formatDate = (daysAgo) => {
+                const d = new Date(today);
+                d.setDate(d.getDate() - daysAgo);
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            };
+
+            return [
+                {
+                    id: 'demo_1',
+                    date: formatDate(0),
+                    index: 'Nifty',
+                    strikePrice: '24300 CE',
+                    type: 'CE',
+                    broker: 'Dhan',
+                    qty: 130,
+                    buyPrice: 145.50,
+                    sellPrice: 285.50,
+                    pnl: 18200,
+                    brokerage: 40,
+                    netPnl: 18160,
+                    strategy: 'Breakout 15m',
+                    setup: 'Bullish Momentum',
+                    tags: ['Discipline', 'Clean Target', 'Trend Follower'],
+                    notes: 'Strong Nifty morning breakout with rising volumes. Exited perfectly at 1:3 RR target.'
+                },
+                {
+                    id: 'demo_2',
+                    date: formatDate(1),
+                    index: 'BankNifty',
+                    strikePrice: '51800 PE',
+                    type: 'PE',
+                    broker: 'Zerodha',
+                    qty: 60,
+                    buyPrice: 320.00,
+                    sellPrice: 728.50,
+                    pnl: 24510,
+                    brokerage: 40,
+                    netPnl: 24470,
+                    strategy: 'CPR Reversal',
+                    setup: 'Bearish Rejection',
+                    tags: ['Big Win', 'Patience', 'Options Buyer'],
+                    notes: 'BankNifty sharp rejection at Daily Resistance. Captured massive 400+ point option explosion!'
+                },
+                {
+                    id: 'demo_3',
+                    date: formatDate(2),
+                    index: 'Sensex',
+                    strikePrice: '80200 CE',
+                    type: 'CE',
+                    broker: 'Dhan',
+                    qty: 40,
+                    buyPrice: 210.00,
+                    sellPrice: 420.00,
+                    pnl: 8400,
+                    brokerage: 40,
+                    netPnl: 8360,
+                    strategy: 'EMA Pullback (9/21)',
+                    setup: 'Trend Follower',
+                    tags: ['Zero FOMO', 'Disciplined Entry'],
+                    notes: 'Clean 9 EMA pullback bounce on Sensex expiry day. Quick scalping with 100% gain.'
+                },
+                {
+                    id: 'demo_4',
+                    date: formatDate(3),
+                    index: 'Stocks',
+                    strikePrice: 'RELIANCE 3000 CE',
+                    type: 'CE',
+                    broker: 'AngelOne',
+                    qty: 250,
+                    buyPrice: 42.00,
+                    sellPrice: 56.40,
+                    pnl: 3600,
+                    brokerage: 40,
+                    netPnl: 3560,
+                    strategy: 'Breakout',
+                    setup: 'Stock Options Momentum',
+                    tags: ['Swing Setup', 'Reliance Breakout'],
+                    notes: 'Reliance intraday volume surge.'
+                },
+                {
+                    id: 'demo_5',
+                    date: formatDate(4),
+                    index: 'FinNifty',
+                    strikePrice: '23400 PE',
+                    type: 'PE',
+                    broker: 'Dhan',
+                    qty: 60,
+                    buyPrice: 180.00,
+                    sellPrice: 110.00,
+                    pnl: -4200,
+                    brokerage: 40,
+                    netPnl: -4240,
+                    strategy: 'Mean Reversion',
+                    setup: 'Counter Trend',
+                    tags: ['Controlled SL', 'Strict Risk Management'],
+                    notes: 'Market reversed against setup; honored strict stop loss immediately with negligible risk.'
+                }
+            ];
+        }
+
+        function buildDemoTradesHtml() {
+            const demoTrades = generateRealisticDemoTrades();
+            let html = '';
+            demoTrades.forEach(t => {
+                const isCE = t.type.includes('CE');
+                const badgeClass = isCE ? 'badge-ce' : 'badge-pe';
+                const pnlClass = t.netPnl >= 0 ? 'profit' : 'loss';
+                const pnlSign = t.netPnl >= 0 ? '+' : '';
+                const lotSize = (t.index === 'BankNifty' ? 30 : (t.index === 'Sensex' ? 20 : (t.index === 'FinNifty' ? 65 : 65)));
+                const lotsCount = Math.max(1, Math.round(t.qty / lotSize));
+                const totalCharges = (t.brokerage || 40) + 40;
+                const govtTax = 40;
+                const tagsHtml = (t.tags || []).map(tag => `<span style="font-size: 8.5px; font-weight: 800; padding: 1px 5px; border-radius: 4px; background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3);">${tag}</span>`).join(' ');
+
+                html += `
+                    <tr data-date="${t.date}" data-index="${t.index}" data-cepe="${t.type}" data-strike="${t.strikePrice}" data-broker="${t.broker}" data-setup="${t.setup}" data-buy="${t.buyPrice}" data-sell="${t.sellPrice}" data-lots="${lotsCount}" data-qtylot="${lotSize}" data-brokerage="${t.brokerage}" data-govtcharges="${govtTax}" data-totalcharges="${totalCharges}" data-grosspnl="${t.pnl}" data-pnl="${t.netPnl}" data-mindset="Disciplined" data-timeframe="15 Min" data-rating="5">
+                        <td data-date="${t.date}">${t.date}</td>
+                        <td><b>${t.index}</b> <span class="badge-tag ${badgeClass}">${t.type}</span><br><span style="font-size: 10px; color: #a5b4fc; font-weight: 700;">🏦 ${t.broker}</span></td>
+                        <td><b style="color: #818cf8;">${t.strikePrice}</b></td>
+                        <td>
+                            <b>${t.setup}</b><br>
+                            <span style="font-size: 10px; color: var(--text-muted);">${t.strategy || 'Price Action'}</span>
+                            <div style="margin-top: 3px; display: flex; gap: 4px; flex-wrap: wrap;">
+                                <span style="font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">Disciplined</span>
+                                ${tagsHtml}
+                            </div>
+                        </td>
+                        <td>₹${t.buyPrice.toFixed(2)} / ₹${t.sellPrice.toFixed(2)}</td>
+                        <td>${t.qty} (${lotsCount}L)</td>
+                        <td>
+                            <span style="font-size: 11px; color: #facc15; font-weight: 700;">₹${t.brokerage.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Brok)</span></span><br>
+                            <span style="font-size: 10px; color: #f43f5e; font-weight: 600;">+ ₹${govtTax.toFixed(2)} <span style="font-size: 9px; color: #94a3b8;">(Tax)</span></span><br>
+                            <span style="font-size: 10px; color: #cbd5e1; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 1px;">Σ ₹${totalCharges.toFixed(2)}</span>
+                        </td>
+                        <td>1:2.5<br><span style="font-size: 10px;">⭐⭐⭐⭐⭐</span></td>
+                        <td class="${pnlClass}" data-pnl="${t.netPnl}">
+                            <b>${pnlSign}₹${t.netPnl.toFixed(2)}</b><br>
+                            <span style="font-size: 9px; color: #94a3b8;">Gross: ${t.pnl >= 0 ? '+' : ''}₹${t.pnl.toFixed(2)}</span>
+                        </td>
+                        <td><span style="color: #38bdf8; font-size: 11px; font-weight: 700;">⚡ Demo Trade</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editTrade(this)">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteTrade(this)">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            return html;
+        }
+
+        function startInstantDemoSession() {
+            // Backup real trades & capital if not already in demo mode
+            const currentTrades = localStorage.getItem('vertical_trades');
+            const isCurrentlyDemo = localStorage.getItem('is_demo_mode_active') === 'true';
+            if (currentTrades && !isCurrentlyDemo && !currentTrades.includes('⚡ Demo Trade')) {
+                localStorage.setItem('real_account_trades_backup', currentTrades);
+            }
+            const currentCapital = localStorage.getItem('initial_capital');
+            if (currentCapital && !isCurrentlyDemo) {
+                localStorage.setItem('real_account_capital_backup', currentCapital);
+            }
+
+            localStorage.setItem('is_demo_mode_active', 'true');
+            sessionStorage.setItem('is_demo_mode_active', 'true');
+            sessionStorage.setItem('session_authenticated', 'true');
+            localStorage.setItem('last_login_time', Date.now().toString());
+
+            // Populate table with realistic sample demo trades
+            const demoHtml = buildDemoTradesHtml();
+            localStorage.setItem('vertical_trades', demoHtml);
+            localStorage.setItem('initial_capital', '100000');
+            localStorage.setItem('total_added_capital', '0');
+            localStorage.setItem('total_withdrawn_capital', '0');
+
+            openDashboardScreen();
+            showToast("⚡ Demo Account Active! Exploring live tools, sample trades & charts.", "🚀");
+        }
+
+        function openSignupFromDemo() {
+            localStorage.removeItem('is_demo_mode_active');
+            sessionStorage.removeItem('is_demo_mode_active');
+            sessionStorage.removeItem('session_authenticated');
+            showLoginScreen({ reason: 'new_device_signup' });
+            switchAuthTab('signup');
+        }
+
+        function openDemoLimitModal(type = 'trade_limit', featureName = '') {
+            const modal = document.getElementById('demoLimitModal');
+            const icon = document.getElementById('demoLimitIcon');
+            const title = document.getElementById('demoLimitTitle');
+            const msg = document.getElementById('demoLimitMessage');
+
+            if (!modal) return;
+
+            if (type === 'trade_limit') {
+                if (icon) icon.innerText = "⚡";
+                if (title) title.innerText = "Demo Trade Limit Reached";
+                if (msg) msg.innerHTML = `You have tested <b>3 custom trades</b> in Instant Demo Mode. To continue logging unlimited daily trades, strategies & auto P&L analytics, create your <b>100% Free Account in 10 seconds</b>!`;
+            } else if (type === 'paper_limit') {
+                if (icon) icon.innerText = "🎮";
+                if (title) title.innerText = "Paper Trading Limit Reached";
+                if (msg) msg.innerHTML = `You have executed <b>3 virtual orders</b> in Instant Demo Mode. To unlock <b>unlimited live paper trading with ₹10,00,000 dummy cash</b>, create your free account now!`;
+            } else if (type === 'paid_feature') {
+                if (icon) icon.innerText = "👑";
+                if (title) title.innerText = "VIP PRO Feature Locked";
+                const fName = featureName ? `<b>${featureName}</b>` : "This Pro feature";
+                if (msg) msg.innerHTML = `${fName} is an exclusive <b>VIP Pro feature</b>. Upgrade to VIP Pro or create your free account to get your 30-Day free trial access!`;
+            } else {
+                if (icon) icon.innerText = "🔒";
+                if (title) title.innerText = "Account Signup Required";
+                if (msg) msg.innerHTML = `This feature requires a registered account. Sign up for free in 10 seconds to save your data permanently with cloud backup.`;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeDemoLimitModal() {
+            const modal = document.getElementById('demoLimitModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function exitDemoMode() {
+            localStorage.removeItem('is_demo_mode_active');
+            sessionStorage.removeItem('is_demo_mode_active');
+            localStorage.removeItem('demo_trades_added_count');
+            localStorage.removeItem('demo_paper_orders_count');
+
+            // Restore real account trades if backup is available
+            const realBackup = localStorage.getItem('real_account_trades_backup');
+            if (realBackup !== null) {
+                localStorage.setItem('vertical_trades', realBackup);
+                localStorage.removeItem('real_account_trades_backup');
+            } else {
+                localStorage.removeItem('vertical_trades');
+            }
+
+            const capBackup = localStorage.getItem('real_account_capital_backup');
+            if (capBackup !== null) {
+                localStorage.setItem('initial_capital', capBackup);
+                localStorage.removeItem('real_account_capital_backup');
+            }
+
+            const isMasterAdmin = (localStorage.getItem('is_user_admin') === 'true' || sanitizeMobile(localStorage.getItem('app_user_mobile') || '') === '8102241463');
+
+            if (isMasterAdmin) {
+                localStorage.setItem('trader_full_name', 'Anurag Patel');
+                localStorage.setItem('app_user_id', 'Anurag Patel');
+                localStorage.setItem('app_user_mobile', '8102241463');
+                localStorage.setItem('app_user_email', 'anuragpatel4u00.ap@gmail.com');
+                openDashboardScreen();
+                showToast("👑 Returned to Master Admin Account (Anurag Patel)!", "🛡️");
+            } else if (localStorage.getItem('user_registered') === 'true') {
+                openDashboardScreen();
+                showToast("✅ Returned to your Real Account!", "👤");
+            } else {
+                sessionStorage.removeItem('session_authenticated');
+                showLoginScreen({ reason: 'user_logged_out' });
+                showToast("🚪 Exited Demo Mode.", "ℹ️");
+            }
+        }
+
         function openDashboardScreen() {
             const currentMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
             const currentEmail = (localStorage.getItem('app_user_email') || '').toLowerCase().trim();
             const currentName = (localStorage.getItem('trader_full_name') || '').toLowerCase().trim();
+            const currentUserId = (localStorage.getItem('app_user_id') || '').toLowerCase().trim();
             const lockedDb = JSON.parse(localStorage.getItem('locked_traders_db') || '[]');
 
-            const isMasterAdminAccount = (currentMobile === '8102241463' || currentEmail === 'anuragpatel4u00.ap@gmail.com');
+            const isMasterAdminAccount = (currentMobile === '8102241463' || currentEmail === 'anuragpatel4u00.ap@gmail.com' || currentName.includes('anurag') || currentUserId.includes('anurag') || localStorage.getItem('is_user_admin') === 'true');
 
-            if (!isMasterAdminAccount) {
+            const isDemoMode = (localStorage.getItem('is_demo_mode_active') === 'true' || sessionStorage.getItem('is_demo_mode_active') === 'true');
+
+            if (!isMasterAdminAccount && !isDemoMode) {
                 const isLocked = (currentMobile && lockedDb.includes(currentMobile)) ||
                     (currentEmail && lockedDb.includes(currentEmail)) ||
                     (currentName && lockedDb.includes(currentName));
@@ -9417,13 +9933,52 @@
             const sideUser = document.getElementById('sidebarUserName');
             const loginTitleHeader = document.getElementById('loginTitleHeader');
 
-            const traderName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
-            const traderMobile = localStorage.getItem('app_user_mobile') || 'N/A';
-            const traderEmail = localStorage.getItem('app_user_email') || 'N/A';
+            const demoBanner = document.getElementById('demoModeBanner');
+            if (demoBanner) {
+                demoBanner.style.display = isDemoMode ? 'flex' : 'none';
+                const demoActionContainer = demoBanner.querySelector('div:last-child');
+                if (demoActionContainer) {
+                    if (isMasterAdminAccount) {
+                        demoActionContainer.innerHTML = `
+                            <button onclick="exitDemoMode()" class="btn btn-sm"
+                                style="background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: #000; font-weight: 800; border: none; padding: 8px 16px; border-radius: 10px; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);">
+                                👑 Exit Demo & Return to Admin Account
+                            </button>
+                        `;
+                    } else {
+                        demoActionContainer.innerHTML = `
+                            <button onclick="openSignupFromDemo()" class="btn btn-sm"
+                                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; font-weight: 800; border: 1px solid #34d399; padding: 8px 16px; border-radius: 10px; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);">
+                                ✨ Create Free Account & Save Real Trades
+                            </button>
+                            <button onclick="exitDemoMode()" class="btn btn-sm"
+                                style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; font-weight: 700; padding: 8px 12px; border-radius: 10px; cursor: pointer;">
+                                🚪 Exit Demo
+                            </button>
+                        `;
+                    }
+                }
+            }
+
+            let traderName = localStorage.getItem('trader_full_name') || localStorage.getItem('app_user_id') || 'Trader';
+            if (isDemoMode) {
+                traderName = isMasterAdminAccount ? 'Anurag Patel (Demo View)' : 'Guest Trader (Demo)';
+            } else if (isMasterAdminAccount && (traderName === 'Guest Trader (Demo)' || !traderName || traderName === 'Trader')) {
+                traderName = 'Anurag Patel';
+                localStorage.setItem('trader_full_name', 'Anurag Patel');
+                localStorage.setItem('app_user_id', 'Anurag Patel');
+                localStorage.setItem('app_user_mobile', '8102241463');
+                localStorage.setItem('app_user_email', 'anuragpatel4u00.ap@gmail.com');
+            }
+
+            const traderMobile = isDemoMode ? 'DEMO-GUEST' : (localStorage.getItem('app_user_mobile') || 'N/A');
+            const traderEmail = isDemoMode ? 'demo@tradingtracker.com' : (localStorage.getItem('app_user_email') || 'N/A');
             const traderKey = localStorage.getItem('app_active_key') || 'FREE-TRIAL';
 
             // Auto-log active user connection into Admin Traders Log
-            logUserRegistrationToAdmin(traderName, traderMobile, traderEmail, traderKey);
+            if (!isDemoMode) {
+                logUserRegistrationToAdmin(traderName, traderMobile, traderEmail, traderKey);
+            }
 
             try { localStorage.removeItem('user_explicit_logged_out'); } catch (e) { }
             document.documentElement.classList.remove('auth-locked');
@@ -9442,7 +9997,7 @@
             const settingsName = document.getElementById('settingsProfileName');
             const settingsMob = document.getElementById('settingsProfileMobile');
             if (settingsName) settingsName.innerText = traderName;
-            if (settingsMob) settingsMob.innerText = `Mobile: ${localStorage.getItem('app_user_mobile') || 'N/A'}`;
+            if (settingsMob) settingsMob.innerText = isDemoMode ? 'Demo Account (Preview)' : `Mobile: ${localStorage.getItem('app_user_mobile') || 'N/A'}`;
 
             // Enforce Strict VIP Paywall Lock for Public Users!
             checkVipAccessStatus();
@@ -9470,7 +10025,9 @@
                 try { renderSecurityStatusInfo(); } catch (e) { console.error(e); }
                 try { loadCustomBrokerLinks(); } catch (e) { console.error(e); }
                 try { loadAdSenseConfig(); } catch (e) { console.error(e); }
-                try { fetchUserTradesFromCloud(); } catch (e) { console.error(e); }
+                if (!isDemoMode) {
+                    try { fetchUserTradesFromCloud(); } catch (e) { console.error(e); }
+                }
             }, 30);
         }
 
@@ -9796,6 +10353,14 @@
         }
 
         function saveTrade() {
+            const isDemoUser = (localStorage.getItem('is_demo_mode_active') === 'true') && (sanitizeMobile(localStorage.getItem('app_user_mobile') || '') === 'DEMO-GUEST' || !localStorage.getItem('app_user_mobile')) && localStorage.getItem('is_user_admin') !== 'true';
+            if (isDemoUser) {
+                const demoTradesCount = parseInt(localStorage.getItem('demo_trades_added_count') || '0', 10);
+                if (demoTradesCount >= 3) {
+                    openDemoLimitModal('trade_limit');
+                    return;
+                }
+            }
 
             const date = document.getElementById('tradeDate').value;
             const index = document.getElementById('indexName').value;
@@ -9999,6 +10564,10 @@
             });
 
             saveToLocalStorage();
+            if (localStorage.getItem('is_demo_mode_active') === 'true') {
+                const cur = parseInt(localStorage.getItem('demo_trades_added_count') || '0', 10);
+                localStorage.setItem('demo_trades_added_count', (cur + 1).toString());
+            }
             updateSummaryCards();
             filterTradeTable();
             try { initCurrentTradeDate(true); } catch (e) { }
@@ -14146,8 +14715,10 @@
             }
             const profileMobile = sanitizeMobile(localStorage.getItem('app_user_mobile') || '');
             const profileEmail = (localStorage.getItem('app_user_email') || '').toLowerCase().trim();
+            const profileName = (localStorage.getItem('trader_full_name') || '').toLowerCase().trim();
+            const profileUserId = (localStorage.getItem('app_user_id') || '').toLowerCase().trim();
 
-            const isMasterAdmin = (profileMobile === '8102241463' || profileEmail === 'anuragpatel4u00.ap@gmail.com');
+            const isMasterAdmin = (profileMobile === '8102241463' || profileEmail === 'anuragpatel4u00.ap@gmail.com' || profileName.includes('anurag') || profileUserId.includes('anurag') || localStorage.getItem('is_user_admin') === 'true');
 
             if (isMasterAdmin) {
                 localStorage.setItem('is_user_admin', 'true');
@@ -14155,6 +14726,15 @@
                 localStorage.setItem('app_vip_duration_years', '99');
                 if (!localStorage.getItem('app_active_key')) {
                     localStorage.setItem('app_active_key', 'TT2026-MASTER-ADMIN-ANURAG');
+                }
+                const isDemoActive = (localStorage.getItem('is_demo_mode_active') === 'true' || sessionStorage.getItem('is_demo_mode_active') === 'true');
+                if (!isDemoActive) {
+                    if (localStorage.getItem('trader_full_name') === 'Guest Trader (Demo)' || !localStorage.getItem('trader_full_name')) {
+                        localStorage.setItem('trader_full_name', 'Anurag Patel');
+                        localStorage.setItem('app_user_id', 'Anurag Patel');
+                        localStorage.setItem('app_user_mobile', '8102241463');
+                        localStorage.setItem('app_user_email', 'anuragpatel4u00.ap@gmail.com');
+                    }
                 }
             } else {
                 // Anyone else is strictly NOT Admin!
@@ -14251,10 +14831,17 @@
             }
             autoUnlockMasterAdminAccess();
             syncUserVipStatusFromLog();
-            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
+
             const isUserAdmin = localStorage.getItem('is_user_admin') === 'true';
+            if (isUserAdmin) return true;
+
+            if (localStorage.getItem('is_demo_mode_active') === 'true') {
+                return false;
+            }
+
+            const isVipUnlocked = localStorage.getItem('app_vip_unlocked') === 'true';
             const trial = getTrialStatusInfo();
-            return isVipUnlocked || isUserAdmin || !trial.isExpired;
+            return isVipUnlocked || !trial.isExpired;
         }
 
         function checkVipAccessStatus() {
@@ -18516,10 +19103,17 @@
         window.updateMarketSessionStatus = updateMarketSessionStatus;
 
         function simulateMarketMicroTicks() {
-            // Realistic unbiased Gaussian-like random walk (Mean = 0.0)
+            // Strictly FREEZE Indian equity/F&O prices when Market is Closed (Weekends & After Hours)
+            // Only 24/7 global crypto assets (e.g. Bitcoin) update outside regular market hours.
             Object.keys(marketBasePrices).forEach(k => {
                 const item = marketBasePrices[k];
-                // Random value strictly centered at 0: (Math.random() - 0.5)
+                const isCrypto = (k === 'btc');
+
+                if (!isMarketCurrentlyLive && !isCrypto) {
+                    return; // Keep exact Friday / EOD Close static price!
+                }
+
+                // Realistic unbiased Gaussian-like random walk (Mean = 0.0)
                 const randSpread = (Math.random() - 0.5) * 2; // Range [-1.0, +1.0]
                 const deltaPct = randSpread * 0.035;
                 const change = item.price * (deltaPct / 100);
@@ -19502,7 +20096,14 @@
         window.updatePaperMarketPrice = updatePaperMarketPrice;
 
         function executePaperTrade() {
-            if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
+            const isDemoUser = (localStorage.getItem('is_demo_mode_active') === 'true') && (sanitizeMobile(localStorage.getItem('app_user_mobile') || '') === 'DEMO-GUEST' || !localStorage.getItem('app_user_mobile')) && localStorage.getItem('is_user_admin') !== 'true';
+            if (isDemoUser) {
+                const paperOrdersCount = parseInt(localStorage.getItem('demo_paper_orders_count') || '0', 10);
+                if (paperOrdersCount >= 3) {
+                    openDemoLimitModal('paper_limit');
+                    return;
+                }
+            } else if (typeof isProUnlocked === 'function' && !isProUnlocked()) {
                 showToast("🔒 Live Paper Trading is a VIP PRO feature after your 30-Day Free Trial! Upgrade to VIP Pro to continue.", "👑");
                 if (typeof openVipPaywallModal === 'function') openVipPaywallModal();
                 return;
@@ -19583,6 +20184,11 @@
             const positions = getPaperPositions();
             positions.unshift(newPos);
             localStorage.setItem('paper_active_positions', JSON.stringify(positions));
+
+            if (localStorage.getItem('is_demo_mode_active') === 'true') {
+                const curOrders = parseInt(localStorage.getItem('demo_paper_orders_count') || '0', 10);
+                localStorage.setItem('demo_paper_orders_count', (curOrders + 1).toString());
+            }
 
             if (!isMarketCurrentlyLive) {
                 showToast(`🌙 Virtual Order Placed: ${strike} (${lots} Lot = ${totalQty} Qty). Sandbox Practice Mode Active @ ₹${buyPrice.toFixed(2)}!`, "🟡");
@@ -21132,6 +21738,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             try { initTheme(); } catch (e) { }
             try { initSidebarState(); } catch (e) { }
+            try { autoUnlockMasterAdminAccess(); } catch (e) { }
 
             let isExplicitLoggedOut = false;
             let isSessionAuth = false;
@@ -21151,9 +21758,9 @@
                 openDashboardScreen();
             }
 
-            autoUnlockMasterAdminAccess();
             checkVipAccessStatus();
             syncProfileAvatar();
+            try { autoSyncTradersFromCloud(); } catch (e) { }
 
             // Immediate Critical First Paint
             try { initCurrentTradeDate(false); } catch (e) { }
@@ -21181,6 +21788,7 @@
 
             // Network Online / Offline Auto-Reconnect Listener
             window.addEventListener('online', () => {
+                try { autoSyncTradersFromCloud(); } catch (e) { }
                 showToast("📡 Internet Restored! Syncing trades to Cloud...", "🟢");
                 try { syncUserTradesToCloud(); } catch (e) { }
             });

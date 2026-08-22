@@ -184,16 +184,25 @@ const server = http.createServer((req, res) => {
                 name: "Anurag Patel (Master Admin)",
                 mobile: "8102241463",
                 email: "anuragpatel4u00.ap@gmail.com",
-                password: "******",
+                password: "1234569",
                 active_key: "TT2026-MASTER-ADMIN-ANURAG",
                 trial_status: "👑 Master Admin",
+                last_login: new Date().toLocaleString()
+            },
+            {
+                name: "Trader 8451",
+                mobile: "9329888451",
+                email: "N/A",
+                password: "123456",
+                active_key: "FREE-TRIAL",
+                trial_status: "🎁 Free Trial",
                 last_login: new Date().toLocaleString()
             },
             {
                 name: "Trader 5625",
                 mobile: "8825255625",
                 email: "N/A",
-                password: "******",
+                password: "1234569",
                 active_key: "FREE-TRIAL",
                 trial_status: "🎁 Free Trial",
                 last_login: new Date().toLocaleString()

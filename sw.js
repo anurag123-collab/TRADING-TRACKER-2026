@@ -1,5 +1,5 @@
 // Service Worker for Trading Tracker 2026 - Ultra-Fast PWA & Instant Updates
-const CACHE_NAME = 'trading-tracker-v2.9.9-' + Date.now();
+const CACHE_NAME = 'trading-tracker-v3.0.0-' + Date.now();
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
