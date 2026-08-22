@@ -1,17 +1,14 @@
 {
-  "name": "trading-traker-2026",
+  "name": "trading-tracker-2026",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Trading Tracker 2026 Web and Android App",
   "scripts": {
-    "build": "node -e \"const fs=require('fs'); ['index.html','privacy-policy.html','terms.html','disclaimer.html','about.html','contact.html','blog.html','manifest.json','sw.js','profile-data.js','qrcode.min.js','profile.jpg','profile.ico','favicon.ico','version.json'].forEach(f=>{if(fs.existsSync(f)) fs.copyFileSync(f,'www/'+f)}); console.log('✅ Synced web assets to www/ directory!');\"",
-    "sync-www": "npm run build && npx cap sync",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "sync-assets": "node -e \"const fs=require('fs'); ['index.html','privacy-policy.html','terms.html','disclaimer.html','about.html','contact.html','blog.html','manifest.json','sw.js','profile-data.js','qrcode.min.js','profile.jpg','profile.ico','favicon.ico','version.json'].forEach(f=>{if(fs.existsSync(f)) fs.copyFileSync(f,'www/'+f)}); console.log('✅ Synced web assets to www/ directory!');\"",
+    "sync-www": "npm run sync-assets && npx cap sync"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anurag Patel",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@capacitor/android": "^8.5.0",
     "@capacitor/cli": "^8.5.0",

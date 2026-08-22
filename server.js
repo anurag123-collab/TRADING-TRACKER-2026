@@ -367,8 +367,11 @@ const server = http.createServer((req, res) => {
                     const tradeRecord = {
                         userId: cleanId,
                         tradesHtml: payload.tradesHtml || '',
+                        encryptedPayload: payload.encryptedPayload || '',
                         tradesCount: payload.tradesCount || 0,
                         capital: payload.capital || null,
+                        depositHistory: payload.depositHistory || null,
+                        withdrawalHistory: payload.withdrawalHistory || null,
                         updatedAt: new Date().toISOString()
                     };
 

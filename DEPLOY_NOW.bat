@@ -9,10 +9,20 @@ echo.
 echo Please wait... Deploying to Vercel...
 echo.
 cd /d "d:\TRADING TRAKER 2026"
-npx vercel --prod --yes
+call npx vercel --prod --yes
 echo.
-echo ============================================
-echo   DONE! Check https://thetradingtracker.com
-echo ============================================
+if %ERRORLEVEL% NEQ 0 (
+    color 0C
+    echo.
+    echo ============================================
+    echo   DEPLOY ENCOUNTERED AN ISSUE!
+    echo   Please check the message above.
+    echo ============================================
+) else (
+    echo.
+    echo ============================================
+    echo   SUCCESS! Website is Live!
+    echo ============================================
+)
 echo.
 pause
