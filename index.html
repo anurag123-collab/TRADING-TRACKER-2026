@@ -21368,18 +21368,18 @@
 
         var PAPER_DEFAULTS = {
             // Major Indices (Official 2026 Contract Sizes)
-            NIFTY: { name: 'NIFTY 50', cmp: 24090.80, lotSize: 65, strikeStep: 50, premium: 135, category: 'INDEX' },
-            BANKNIFTY: { name: 'BANK NIFTY', cmp: 50920.40, lotSize: 30, strikeStep: 100, premium: 320, category: 'INDEX' },
-            FINNIFTY: { name: 'FINNIFTY', cmp: 23840.10, lotSize: 65, strikeStep: 50, premium: 110, category: 'INDEX' },
-            MIDCPNIFTY: { name: 'MIDCPNIFTY', cmp: 12850.30, lotSize: 120, strikeStep: 25, premium: 95, category: 'INDEX' },
-            SENSEX: { name: 'SENSEX (BSE)', cmp: 79050.25, lotSize: 20, strikeStep: 100, premium: 280, category: 'INDEX' },
-            BANKEX: { name: 'BANKEX (BSE)', cmp: 58240.00, lotSize: 30, strikeStep: 100, premium: 290, category: 'INDEX' },
-            NIFTYNXT50: { name: 'NIFTY NEXT 50', cmp: 68500.00, lotSize: 25, strikeStep: 50, premium: 210, category: 'INDEX' },
+            NIFTY: { name: 'NIFTY 50', cmp: 24090.85, lotSize: 65, strikeStep: 50, premium: 145.25, category: 'INDEX' },
+            BANKNIFTY: { name: 'BANK NIFTY', cmp: 57509.95, lotSize: 30, strikeStep: 100, premium: 380, category: 'INDEX' },
+            FINNIFTY: { name: 'FINNIFTY', cmp: 24650.00, lotSize: 65, strikeStep: 50, premium: 130, category: 'INDEX' },
+            MIDCPNIFTY: { name: 'MIDCPNIFTY', cmp: 13150.00, lotSize: 120, strikeStep: 25, premium: 95, category: 'INDEX' },
+            SENSEX: { name: 'SENSEX (BSE)', cmp: 76933.59, lotSize: 20, strikeStep: 100, premium: 420, category: 'INDEX' },
+            BANKEX: { name: 'BANKEX (BSE)', cmp: 64250.00, lotSize: 30, strikeStep: 100, premium: 380, category: 'INDEX' },
+            NIFTYNXT50: { name: 'NIFTY NEXT 50', cmp: 72450.00, lotSize: 25, strikeStep: 50, premium: 310, category: 'INDEX' },
 
             // 🪙 24/7 Real-Time Crypto Assets
             BTCUSDT: { name: 'BITCOIN / USDT', cmp: 96450.00, lotSize: 1, strikeStep: 100, premium: 850, category: 'CRYPTO', isCrypto: true, wsPair: 'btcusdt' },
-            ETHUSDT: { name: 'ETHEREUM / USDT', cmp: 2650.00, lotSize: 1, strikeStep: 25, premium: 85, category: 'CRYPTO', isCrypto: true, wsPair: 'ethusdt' },
-            SOLUSDT: { name: 'SOLANA / USDT', cmp: 154.20, lotSize: 5, strikeStep: 5, premium: 12, category: 'CRYPTO', isCrypto: true, wsPair: 'solusdt' },
+            ETHUSDT: { name: 'ETHEREUM / USDT', cmp: 2680.00, lotSize: 1, strikeStep: 25, premium: 85, category: 'CRYPTO', isCrypto: true, wsPair: 'ethusdt' },
+            SOLUSDT: { name: 'SOLANA / USDT', cmp: 158.40, lotSize: 5, strikeStep: 5, premium: 12, category: 'CRYPTO', isCrypto: true, wsPair: 'solusdt' },
             BNBUSDT: { name: 'BNB / USDT', cmp: 585.00, lotSize: 2, strikeStep: 10, premium: 22, category: 'CRYPTO', isCrypto: true, wsPair: 'bnbusdt' },
             DOGEUSDT: { name: 'DOGECOIN / USDT', cmp: 0.108, lotSize: 1000, strikeStep: 0.01, premium: 0.012, category: 'CRYPTO', isCrypto: true, wsPair: 'dogeusdt' },
             XRPUSDT: { name: 'XRP / USDT', cmp: 0.585, lotSize: 200, strikeStep: 0.05, premium: 0.045, category: 'CRYPTO', isCrypto: true, wsPair: 'xrpusdt' },
@@ -21387,25 +21387,25 @@
 
             // Top F&O Stocks (Official Lot Sizes)
             RELIANCE: { name: 'RELIANCE', cmp: 1265.40, lotSize: 250, strikeStep: 10, premium: 24, category: 'STOCK' },
-            HDFCBANK: { name: 'HDFC BANK', cmp: 1642.10, lotSize: 550, strikeStep: 10, premium: 24, category: 'STOCK' },
-            ICICIBANK: { name: 'ICICI BANK', cmp: 1228.60, lotSize: 700, strikeStep: 10, premium: 19, category: 'STOCK' },
-            INFY: { name: 'INFOSYS', cmp: 1845.00, lotSize: 400, strikeStep: 20, premium: 32, category: 'STOCK' },
-            TCS: { name: 'TCS', cmp: 4230.50, lotSize: 175, strikeStep: 50, premium: 65, category: 'STOCK' },
+            HDFCBANK: { name: 'HDFC BANK', cmp: 1645.20, lotSize: 550, strikeStep: 10, premium: 24, category: 'STOCK' },
+            ICICIBANK: { name: 'ICICI BANK', cmp: 1230.40, lotSize: 700, strikeStep: 10, premium: 19, category: 'STOCK' },
+            INFY: { name: 'INFOSYS', cmp: 1855.00, lotSize: 400, strikeStep: 20, premium: 32, category: 'STOCK' },
+            TCS: { name: 'TCS', cmp: 4245.00, lotSize: 175, strikeStep: 50, premium: 65, category: 'STOCK' },
             TATAMOTORS: { name: 'TATA MOTORS', cmp: 982.00, lotSize: 575, strikeStep: 10, premium: 18, category: 'STOCK' },
-            SBIN: { name: 'STATE BANK OF INDIA', cmp: 815.20, lotSize: 750, strikeStep: 10, premium: 14, category: 'STOCK' },
-            BHARTIARTL: { name: 'BHARTI AIRTEL', cmp: 1560.00, lotSize: 475, strikeStep: 20, premium: 26, category: 'STOCK' },
-            LT: { name: 'LARSEN & TOUBRO', cmp: 3620.00, lotSize: 150, strikeStep: 50, premium: 55, category: 'STOCK' },
-            ITC: { name: 'ITC LIMITED', cmp: 488.50, lotSize: 1600, strikeStep: 5, premium: 8.5, category: 'STOCK' },
-            AXISBANK: { name: 'AXIS BANK', cmp: 1140.00, lotSize: 625, strikeStep: 10, premium: 21, category: 'STOCK' },
-            KOTAKBANK: { name: 'KOTAK MAHINDRA BANK', cmp: 1750.00, lotSize: 400, strikeStep: 20, premium: 28, category: 'STOCK' },
-            BAJFINANCE: { name: 'BAJAJ FINANCE', cmp: 6850.00, lotSize: 125, strikeStep: 50, premium: 110, category: 'STOCK' },
+            SBIN: { name: 'STATE BANK OF INDIA', cmp: 818.50, lotSize: 750, strikeStep: 10, premium: 14, category: 'STOCK' },
+            BHARTIARTL: { name: 'BHARTI AIRTEL', cmp: 1565.00, lotSize: 475, strikeStep: 20, premium: 26, category: 'STOCK' },
+            LT: { name: 'LARSEN & TOUBRO', cmp: 3625.00, lotSize: 150, strikeStep: 50, premium: 55, category: 'STOCK' },
+            ITC: { name: 'ITC LIMITED', cmp: 490.50, lotSize: 1600, strikeStep: 5, premium: 8.5, category: 'STOCK' },
+            AXISBANK: { name: 'AXIS BANK', cmp: 1180.00, lotSize: 625, strikeStep: 10, premium: 21, category: 'STOCK' },
+            KOTAKBANK: { name: 'KOTAK MAHINDRA BANK', cmp: 1810.00, lotSize: 400, strikeStep: 20, premium: 28, category: 'STOCK' },
+            BAJFINANCE: { name: 'BAJAJ FINANCE', cmp: 6920.00, lotSize: 125, strikeStep: 50, premium: 110, category: 'STOCK' },
             BAJAJFINSV: { name: 'BAJAJ FINSERV', cmp: 1820.00, lotSize: 500, strikeStep: 20, premium: 30, category: 'STOCK' },
-            MARUTI: { name: 'MARUTI SUZUKI', cmp: 12400.00, lotSize: 50, strikeStep: 100, premium: 190, category: 'STOCK' },
+            MARUTI: { name: 'MARUTI SUZUKI', cmp: 12450.00, lotSize: 50, strikeStep: 100, premium: 190, category: 'STOCK' },
             SUNPHARMA: { name: 'SUN PHARMA', cmp: 1780.00, lotSize: 350, strikeStep: 20, premium: 29, category: 'STOCK' },
             TATASTEEL: { name: 'TATA STEEL', cmp: 154.50, lotSize: 5500, strikeStep: 2, premium: 4.5, category: 'STOCK' },
             TITAN: { name: 'TITAN COMPANY', cmp: 3420.00, lotSize: 175, strikeStep: 50, premium: 52, category: 'STOCK' },
             ASIANPAINT: { name: 'ASIAN PAINTS', cmp: 2950.00, lotSize: 200, strikeStep: 20, premium: 45, category: 'STOCK' },
-            ADANIENT: { name: 'ADANI ENTERPRISES', cmp: 2980.00, lotSize: 300, strikeStep: 50, premium: 58, category: 'STOCK' },
+            ADANIENT: { name: 'ADANI ENTERPRISES', cmp: 3120.00, lotSize: 300, strikeStep: 50, premium: 58, category: 'STOCK' },
             ADANIPORTS: { name: 'ADANI PORTS', cmp: 1390.00, lotSize: 400, strikeStep: 20, premium: 25, category: 'STOCK' },
             WIPRO: { name: 'WIPRO', cmp: 540.00, lotSize: 1500, strikeStep: 5, premium: 11, category: 'STOCK' },
             HCLTECH: { name: 'HCL TECH', cmp: 1760.00, lotSize: 350, strikeStep: 20, premium: 31, category: 'STOCK' },
@@ -21454,19 +21454,19 @@
         // 📈 FEATURE 2: ADVANCED TRADINGVIEW LIGHTWEIGHT CHARTS™ ENGINE
         // ============================================================
         const LWC_ASSETS = {
-            NIFTY: { name: 'NIFTY 50', basePrice: 24090.80, tickSize: 0.05, lotSize: 65, currency: '₹', isCrypto: false },
-            BANKNIFTY: { name: 'BANK NIFTY', basePrice: 50920.40, tickSize: 0.05, lotSize: 30, currency: '₹', isCrypto: false },
-            FINNIFTY: { name: 'FINNIFTY', basePrice: 23840.10, tickSize: 0.05, lotSize: 65, currency: '₹', isCrypto: false },
-            SENSEX: { name: 'SENSEX', basePrice: 79050.25, tickSize: 0.05, lotSize: 20, currency: '₹', isCrypto: false },
+            NIFTY: { name: 'NIFTY 50', basePrice: 24091.00, tickSize: 0.05, lotSize: 65, currency: '₹', isCrypto: false },
+            BANKNIFTY: { name: 'BANK NIFTY', basePrice: 57509.00, tickSize: 0.05, lotSize: 30, currency: '₹', isCrypto: false },
+            FINNIFTY: { name: 'FINNIFTY', basePrice: 24650.00, tickSize: 0.05, lotSize: 65, currency: '₹', isCrypto: false },
+            SENSEX: { name: 'SENSEX', basePrice: 76933.59, tickSize: 0.05, lotSize: 20, currency: '₹', isCrypto: false },
             BTCUSDT: { name: 'BITCOIN / USDT', basePrice: 96450.00, tickSize: 0.01, lotSize: 1, currency: '$', isCrypto: true, wsPair: 'btcusdt' },
-            ETHUSDT: { name: 'ETHEREUM / USDT', basePrice: 2650.00, tickSize: 0.01, lotSize: 1, currency: '$', isCrypto: true, wsPair: 'ethusdt' },
-            SOLUSDT: { name: 'SOLANA / USDT', basePrice: 154.20, tickSize: 0.01, lotSize: 5, currency: '$', isCrypto: true, wsPair: 'solusdt' },
+            ETHUSDT: { name: 'ETHEREUM / USDT', basePrice: 2680.00, tickSize: 0.01, lotSize: 1, currency: '$', isCrypto: true, wsPair: 'ethusdt' },
+            SOLUSDT: { name: 'SOLANA / USDT', basePrice: 158.40, tickSize: 0.01, lotSize: 5, currency: '$', isCrypto: true, wsPair: 'solusdt' },
             BNBUSDT: { name: 'BNB / USDT', basePrice: 585.00, tickSize: 0.01, lotSize: 2, currency: '$', isCrypto: true, wsPair: 'bnbusdt' },
             DOGEUSDT: { name: 'DOGECOIN / USDT', basePrice: 0.108, tickSize: 0.0001, lotSize: 1000, currency: '$', isCrypto: true, wsPair: 'dogeusdt' },
             XRPUSDT: { name: 'XRP / USDT', basePrice: 0.585, tickSize: 0.0001, lotSize: 200, currency: '$', isCrypto: true, wsPair: 'xrpusdt' },
             GOLD: { name: 'GOLD (XAU/USD)', basePrice: 2750.50, tickSize: 0.01, lotSize: 1, currency: '$', isCrypto: false },
             RELIANCE: { name: 'RELIANCE IND', basePrice: 1265.40, tickSize: 0.05, lotSize: 250, currency: '₹', isCrypto: false },
-            HDFCBANK: { name: 'HDFC BANK', basePrice: 1642.10, tickSize: 0.05, lotSize: 550, currency: '₹', isCrypto: false }
+            HDFCBANK: { name: 'HDFC BANK', basePrice: 1645.20, tickSize: 0.05, lotSize: 550, currency: '₹', isCrypto: false }
         };
 
         let currentLwcSymbolKey = 'NIFTY';
@@ -23238,25 +23238,25 @@
         let isMarketCurrentlyLive = false;
 
         const marketBasePrices = {
-            nifty: { price: 24090.80, chg: -84.30, pct: -0.35, name: 'NIFTY 50', prefix: '₹' },
-            banknifty: { price: 50920.40, chg: -214.60, pct: -0.42, name: 'BANK NIFTY', prefix: '₹' },
-            sensex: { price: 79050.25, chg: -380.50, pct: -0.48, name: 'SENSEX', prefix: '₹' },
-            finnifty: { price: 23840.10, chg: -72.40, pct: -0.30, name: 'FINNIFTY', prefix: '₹' },
-            midcap: { price: 12850.30, chg: -32.10, pct: -0.25, name: 'MIDCPNIFTY', prefix: '₹' },
+            nifty: { price: 24090.85, chg: -116.90, pct: -0.48, name: 'NIFTY 50', prefix: '₹' },
+            banknifty: { price: 57509.95, chg: -273.80, pct: -0.47, name: 'BANK NIFTY', prefix: '₹' },
+            sensex: { price: 76933.59, chg: -539.35, pct: -0.70, name: 'SENSEX', prefix: '₹' },
+            finnifty: { price: 24650.00, chg: -72.40, pct: -0.30, name: 'FINNIFTY', prefix: '₹' },
+            midcap: { price: 13150.00, chg: -32.10, pct: -0.25, name: 'MIDCPNIFTY', prefix: '₹' },
             reliance: { price: 1265.40, chg: 12.20, pct: 0.97, name: 'RELIANCE', prefix: '₹' },
-            hdfcbank: { price: 1642.10, chg: -12.40, pct: -0.75, name: 'HDFC BANK', prefix: '₹' },
-            icicibank: { price: 1228.60, chg: 8.50, pct: 0.70, name: 'ICICI BANK', prefix: '₹' },
-            infy: { price: 1845.00, chg: -22.10, pct: -1.18, name: 'INFOSYS', prefix: '₹' },
-            tcs: { price: 4230.50, chg: 15.00, pct: 0.36, name: 'TCS', prefix: '₹' },
+            hdfcbank: { price: 1645.20, chg: -12.40, pct: -0.75, name: 'HDFC BANK', prefix: '₹' },
+            icicibank: { price: 1230.40, chg: 8.50, pct: 0.70, name: 'ICICI BANK', prefix: '₹' },
+            infy: { price: 1855.00, chg: -22.10, pct: -1.18, name: 'INFOSYS', prefix: '₹' },
+            tcs: { price: 4245.00, chg: 15.00, pct: 0.36, name: 'TCS', prefix: '₹' },
             tatamotors: { price: 982.00, chg: 11.40, pct: 1.17, name: 'TATA MOTORS', prefix: '₹' },
-            sbin: { price: 815.20, chg: -6.30, pct: -0.77, name: 'SBI', prefix: '₹' },
-            airtel: { price: 1560.00, chg: 14.00, pct: 0.91, name: 'BHARTI AIRTEL', prefix: '₹' },
-            lt: { price: 3620.00, chg: -18.00, pct: -0.49, name: 'L&T', prefix: '₹' },
-            itc: { price: 488.50, chg: 2.10, pct: 0.43, name: 'ITC', prefix: '₹' },
-            vix: { price: 13.25, chg: 0.35, pct: 2.71, name: 'INDIA VIX', prefix: '' },
+            sbin: { price: 818.50, chg: -6.30, pct: -0.77, name: 'SBI', prefix: '₹' },
+            airtel: { price: 1565.00, chg: 14.00, pct: 0.91, name: 'BHARTI AIRTEL', prefix: '₹' },
+            lt: { price: 3625.00, chg: -18.00, pct: -0.49, name: 'L&T', prefix: '₹' },
+            itc: { price: 490.50, chg: 2.10, pct: 0.43, name: 'ITC', prefix: '₹' },
+            vix: { price: 13.80, chg: 0.35, pct: 2.71, name: 'INDIA VIX', prefix: '' },
             usdinr: { price: 86.85, chg: 0.05, pct: 0.06, name: 'USD/INR', prefix: '₹' },
-            crude: { price: 6320.00, chg: -45.00, pct: -0.71, name: 'CRUDE OIL', prefix: '₹' },
-            gold: { price: 86420.00, chg: 450.00, pct: 0.52, name: 'GOLD (10g)', prefix: '₹' },
+            crude: { price: 6420.00, chg: -45.00, pct: -0.71, name: 'CRUDE OIL', prefix: '₹' },
+            gold: { price: 75450.00, chg: 450.00, pct: 0.52, name: 'GOLD (10g)', prefix: '₹' },
             btc: { price: 96450.00, chg: 1250.00, pct: 1.31, name: 'BITCOIN', prefix: '$' }
         };
 
@@ -23265,25 +23265,53 @@
             if (typeof PAPER_DEFAULTS === 'undefined') return;
             const keyMap = {
                 nifty: 'NIFTY',
+                NIFTY: 'NIFTY',
                 banknifty: 'BANKNIFTY',
+                BANKNIFTY: 'BANKNIFTY',
                 sensex: 'SENSEX',
+                SENSEX: 'SENSEX',
                 finnifty: 'FINNIFTY',
+                FINNIFTY: 'FINNIFTY',
                 midcap: 'MIDCPNIFTY',
+                MIDCPNIFTY: 'MIDCPNIFTY',
+                BANKEX: 'BANKEX',
+                NIFTYNXT50: 'NIFTYNXT50',
+                NIFTYIT: 'NIFTYIT',
                 reliance: 'RELIANCE',
+                RELIANCE: 'RELIANCE',
                 hdfcbank: 'HDFCBANK',
+                HDFCBANK: 'HDFCBANK',
                 icicibank: 'ICICIBANK',
+                ICICIBANK: 'ICICIBANK',
                 infy: 'INFY',
+                INFY: 'INFY',
                 tcs: 'TCS',
+                TCS: 'TCS',
                 tatamotors: 'TATAMOTORS',
+                TATAMOTORS: 'TATAMOTORS',
                 sbin: 'SBIN',
+                SBIN: 'SBIN',
                 airtel: 'BHARTIARTL',
+                BHARTIARTL: 'BHARTIARTL',
                 lt: 'LT',
-                itc: 'ITC'
+                LT: 'LT',
+                itc: 'ITC',
+                ITC: 'ITC',
+                btc: 'BTCUSDT',
+                BTCUSDT: 'BTCUSDT',
+                ETHUSDT: 'ETHUSDT',
+                SOLUSDT: 'SOLUSDT',
+                GOLD: 'GOLD',
+                gold: 'GOLD'
             };
             Object.keys(keyMap).forEach(mk => {
                 const pk = keyMap[mk];
-                if (marketBasePrices[mk] && PAPER_DEFAULTS[pk]) {
-                    PAPER_DEFAULTS[pk].cmp = marketBasePrices[mk].price;
+                const src = marketBasePrices[mk] || (marketBasePrices[mk.toLowerCase()] ? marketBasePrices[mk.toLowerCase()] : null);
+                if (src && PAPER_DEFAULTS[pk] && src.price > 0) {
+                    PAPER_DEFAULTS[pk].cmp = src.price;
+                    if (typeof LWC_ASSETS !== 'undefined' && LWC_ASSETS[pk]) {
+                        LWC_ASSETS[pk].basePrice = src.price;
+                    }
                 }
             });
         }
@@ -23296,10 +23324,20 @@
                     const json = await res.json();
                     if (json && json.success && json.data) {
                         Object.keys(json.data).forEach(k => {
-                            if (marketBasePrices[k] && json.data[k].price) {
-                                marketBasePrices[k].price = json.data[k].price;
-                                marketBasePrices[k].chg = json.data[k].chg;
-                                marketBasePrices[k].pct = json.data[k].pct;
+                            const symData = json.data[k];
+                            const lowerK = k.toLowerCase();
+                            if (symData && symData.price) {
+                                if (!marketBasePrices[lowerK]) {
+                                    marketBasePrices[lowerK] = { name: symData.name || k, prefix: symData.prefix || '₹' };
+                                }
+                                marketBasePrices[lowerK].price = symData.price;
+                                marketBasePrices[lowerK].chg = symData.chg || 0;
+                                marketBasePrices[lowerK].pct = symData.pct || 0;
+                                marketBasePrices[k] = marketBasePrices[lowerK];
+
+                                if (PAPER_DEFAULTS[k]) {
+                                    PAPER_DEFAULTS[k].cmp = symData.price;
+                                }
                             }
                         });
                         syncMarketPricesToPaperDefaults();
@@ -23321,6 +23359,7 @@
                         marketBasePrices.btc.price = curPrice;
                         marketBasePrices.btc.chg = priceChg;
                         marketBasePrices.btc.pct = pctChg;
+                        if (PAPER_DEFAULTS.BTCUSDT) PAPER_DEFAULTS.BTCUSDT.cmp = curPrice;
                         renderMarketTickers();
                     }
                 }
@@ -24770,6 +24809,10 @@
                 }
             }
 
+            if (typeof fetchLiveMarketQuotes === 'function') {
+                fetchLiveMarketQuotes();
+            }
+
             renderPaperOptionChainTable();
             if (modal) modal.style.display = 'flex';
 
@@ -24788,6 +24831,16 @@
         }
         window.openPaperOptionChainModal = openPaperOptionChainModal;
 
+        function normCDF(x) {
+            const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+            const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+            const sign = (x < 0) ? -1 : 1;
+            const absX = Math.abs(x);
+            const t = 1.0 / (1.0 + p * absX);
+            const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX);
+            return 0.5 * (1.0 + sign * y);
+        }
+
         function renderPaperOptionChainTable() {
             const tbody = document.getElementById('paperOptionChainTableBody');
             if (!tbody) return;
@@ -24796,10 +24849,18 @@
             const cfg = PAPER_DEFAULTS[sym] || PAPER_DEFAULTS.NIFTY;
             const cmp = cfg.cmp;
             const step = cfg.strikeStep || 50;
-            const baseAtmPremium = cfg.premium || 100;
 
             const atmStrike = Math.round(cmp / step) * step;
             const rowsCount = 8; // 8 strikes above and 8 strikes below ATM (total 17 strikes)
+
+            const forwardBasis = 0.00315;
+            const F = cmp * (1.0 + forwardBasis);
+            const baseIv = (sym === 'BANKNIFTY' ? 0.125 : (sym === 'SENSEX' ? 0.098 : 0.0929));
+            const daysLeft = 6;
+            const T = daysLeft / 365.0;
+            const r = 0.065;
+            const discount = Math.exp(-r * T);
+            const sqrtT = Math.sqrt(T);
 
             let html = '';
 
@@ -24807,39 +24868,34 @@
                 const strike = atmStrike + (i * step);
                 const isAtm = strike === atmStrike;
 
-                // CALL CALCULATIONS
-                let callPrice = 0;
+                // CALL CALCULATIONS (DHAN BLACK-76 MODEL)
+                const moneyness = (F - strike) / cmp;
+                const ceSigma = Math.max(0.06, Math.min(0.35, baseIv * (0.935 + 0.08 * moneyness)));
+                const d1 = (Math.log(F / strike) + 0.5 * ceSigma * ceSigma * T) / (ceSigma * sqrtT);
+                const d2 = d1 - ceSigma * sqrtT;
+                let callPrice = discount * (F * normCDF(d1) - strike * normCDF(d2));
+                const callIntrinsic = Math.max(0, cmp - strike);
+                callPrice = Math.max(callIntrinsic + 0.05, callPrice);
+                callPrice = parseFloat(callPrice.toFixed(2));
+
                 let callOi = (Math.abs(Math.sin(strike * 0.005) * 45) + 30 + (i * 1.5)).toFixed(1);
                 let callChg = isAtm ? '+12.4%' : (i < 0 ? '+18.2%' : '-15.8%');
                 let callChgColor = i <= 0 ? '#34d399' : '#f87171';
                 const isCallItm = strike < cmp;
 
-                if (strike <= cmp) {
-                    const intrinsic = cmp - strike;
-                    const itmDist = (cmp - strike) / step;
-                    callPrice = intrinsic + Math.max(15, baseAtmPremium * Math.exp(-itmDist * 0.15));
-                } else {
-                    const otmDist = (strike - cmp) / step;
-                    callPrice = baseAtmPremium * Math.exp(-otmDist * 0.55);
-                }
-                callPrice = Math.max(0.50, Math.round(callPrice * 20) / 20);
+                // PUT CALCULATIONS (DHAN BLACK-76 MODEL)
+                const peSigma = Math.max(0.05, Math.min(0.30, baseIv * (0.678 - 0.18 * moneyness)));
+                const p1 = (Math.log(F / strike) + 0.5 * peSigma * peSigma * T) / (peSigma * sqrtT);
+                const p2 = p1 - peSigma * sqrtT;
+                let putPrice = discount * (strike * normCDF(-p2) - F * normCDF(-p1));
+                const putIntrinsic = Math.max(0, strike - cmp);
+                putPrice = Math.max(putIntrinsic + 0.05, putPrice);
+                putPrice = parseFloat(putPrice.toFixed(2));
 
-                // PUT CALCULATIONS
-                let putPrice = 0;
                 let putOi = (Math.abs(Math.cos(strike * 0.005) * 45) + 30 - (i * 1.5)).toFixed(1);
                 let putChg = isAtm ? '-8.2%' : (i > 0 ? '+15.4%' : '-22.1%');
                 let putChgColor = i >= 0 ? '#34d399' : '#f87171';
                 const isPutItm = strike > cmp;
-
-                if (strike >= cmp) {
-                    const intrinsic = strike - cmp;
-                    const itmDist = (strike - cmp) / step;
-                    putPrice = intrinsic + Math.max(15, baseAtmPremium * Math.exp(-itmDist * 0.15));
-                } else {
-                    const otmDist = (cmp - strike) / step;
-                    putPrice = baseAtmPremium * Math.exp(-otmDist * 0.55);
-                }
-                putPrice = Math.max(0.50, Math.round(putPrice * 20) / 20);
 
                 // Styling for ITM, ATM, OTM
                 const callRowBg = isCallItm ? 'background: rgba(234,179,8,0.08);' : '';
@@ -24970,30 +25026,32 @@
             const step = cfg.strikeStep || 50;
 
             let calculatedPremium = 0;
+            const baseIv = (sym === 'BANKNIFTY' ? 0.125 : (sym === 'SENSEX' ? 0.098 : 0.0929));
+            const forwardBasis = 0.00315;
+            const F = cmp * (1.0 + forwardBasis);
+            const T = 6.0 / 365.0;
+            const r = 0.065;
+            const discount = Math.exp(-r * T);
+            const sqrtT = Math.sqrt(T);
+            const moneyness = (F - enteredStrike) / cmp;
 
             if (isCall) {
-                if (enteredStrike <= cmp) {
-                    const intrinsic = cmp - enteredStrike;
-                    const itmDistanceSteps = (cmp - enteredStrike) / step;
-                    const timeValue = Math.max(15, baseAtmPremium * Math.exp(-itmDistanceSteps * 0.15));
-                    calculatedPremium = intrinsic + timeValue;
-                } else {
-                    const otmDistanceSteps = (enteredStrike - cmp) / step;
-                    calculatedPremium = baseAtmPremium * Math.exp(-otmDistanceSteps * 0.55);
-                }
+                const ceSigma = Math.max(0.06, Math.min(0.35, baseIv * (0.935 + 0.08 * moneyness)));
+                const d1 = (Math.log(F / enteredStrike) + 0.5 * ceSigma * ceSigma * T) / (ceSigma * sqrtT);
+                const d2 = d1 - ceSigma * sqrtT;
+                calculatedPremium = discount * (F * normCDF(d1) - enteredStrike * normCDF(d2));
+                const intrinsic = Math.max(0, cmp - enteredStrike);
+                calculatedPremium = Math.max(intrinsic + 0.05, calculatedPremium);
             } else {
-                if (enteredStrike >= cmp) {
-                    const intrinsic = enteredStrike - cmp;
-                    const itmDistanceSteps = (enteredStrike - cmp) / step;
-                    const timeValue = Math.max(15, baseAtmPremium * Math.exp(-itmDistanceSteps * 0.15));
-                    calculatedPremium = intrinsic + timeValue;
-                } else {
-                    const otmDistanceSteps = (cmp - enteredStrike) / step;
-                    calculatedPremium = baseAtmPremium * Math.exp(-otmDistanceSteps * 0.55);
-                }
+                const peSigma = Math.max(0.05, Math.min(0.30, baseIv * (0.678 - 0.18 * moneyness)));
+                const p1 = (Math.log(F / enteredStrike) + 0.5 * peSigma * peSigma * T) / (peSigma * sqrtT);
+                const p2 = p1 - peSigma * sqrtT;
+                calculatedPremium = discount * (enteredStrike * normCDF(-p2) - F * normCDF(-p1));
+                const intrinsic = Math.max(0, enteredStrike - cmp);
+                calculatedPremium = Math.max(intrinsic + 0.05, calculatedPremium);
             }
 
-            calculatedPremium = Math.max(0.50, Math.round(calculatedPremium * 20) / 20);
+            calculatedPremium = Math.max(0.05, parseFloat(calculatedPremium.toFixed(2)));
 
             const buyPriceInput = document.getElementById('paperBuyPriceInput');
             const slInput = document.getElementById('paperSlInput');

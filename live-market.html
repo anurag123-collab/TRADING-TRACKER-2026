@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Market | Trading Tracker 2026</title>
+    <meta name="description" content="Real-time NIFTY, BANKNIFTY, SENSEX live prices and options chain - Trading Tracker 2026">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #0f1629;
+            --bg-card: #131d35;
+            --bg-card-hover: #1a2640;
+            --bg-table-header: #0d1628;
+            --border: #1e2d4a;
+            --border-light: #243352;
+            --text-primary: #e8edf8;
+            --text-secondary: #8899bb;
+            --text-muted: #4d6080;
+            --green: #00d4a0;
+            --green-dark: #00b888;
+            --green-bg: rgba(0, 212, 160, 0.08);
+            --red: #ff4d6d;
+            --red-dark: #e03058;
+            --red-bg: rgba(255, 77, 109, 0.08);
+            --blue: #4d8fff;
+            --blue-dark: #2563eb;
+            --blue-bg: rgba(77, 143, 255, 0.1);
+            --yellow: #fbbf24;
+            --purple: #a78bfa;
+            --orange: #fb923c;
+            --accent: #4d8fff;
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(--text-primary); min-height:100vh; overflow-x:hidden; }
+
+        /* HEADER */
+        .header { background:var(--bg-secondary); border-bottom:1px solid var(--border); padding:0 24px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+        .logo { font-size:18px; font-weight:800; background:linear-gradient(135deg,#4d8fff,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .nav-tabs { display:flex; gap:4px; margin-left:16px; }
+        .nav-tab { padding:6px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; border:none; background:transparent; color:var(--text-secondary); transition:all 0.2s; text-decoration:none; }
+        .nav-tab:hover { background:var(--bg-card); color:var(--text-primary); }
+        .nav-tab.active { background:var(--blue-bg); color:var(--blue); }
+        .header-left { display:flex; align-items:center; }
+        .header-right { display:flex; align-items:center; gap:16px; }
+        .live-badge { display:flex; align-items:center; gap:6px; padding:4px 12px; background:var(--green-bg); border:1px solid rgba(0,212,160,0.3); border-radius:20px; font-size:11px; font-weight:600; color:var(--green); letter-spacing:0.5px; }
+        .live-dot { width:7px; height:7px; background:var(--green); border-radius:50%; animation:pulse-green 1.5s infinite; }
+        .time-display { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-secondary); background:var(--bg-card); padding:4px 12px; border-radius:8px; border:1px solid var(--border); }
+        .setup-btn { display:flex; align-items:center; gap:6px; padding:6px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:var(--text-secondary); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+        .setup-btn:hover { border-color:var(--blue); color:var(--blue); }
+        .back-to-app { padding:6px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:var(--text-secondary); font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; transition:all 0.2s; }
+        .back-to-app:hover { border-color:var(--blue); color:var(--blue); }
+
+        /* TOKEN MODAL */
+        .token-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+        .token-modal.show { display:flex; }
+        .token-box { background:var(--bg-card); border:1px solid var(--border-light); border-radius:20px; padding:32px; width:480px; box-shadow:var(--shadow-lg); }
+        .token-box h2 { font-size:22px; font-weight:700; margin-bottom:8px; background:linear-gradient(135deg,#4d8fff,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .token-box p { font-size:13px; color:var(--text-secondary); margin-bottom:24px; }
+        .input-group { margin-bottom:16px; }
+        .input-group label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; letter-spacing:0.5px; }
+        .input-group input { width:100%; background:var(--bg-secondary); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:13px; font-family:'JetBrains Mono',monospace; color:var(--text-primary); outline:none; transition:border-color 0.2s; }
+        .input-group input:focus { border-color:var(--blue); }
+        .token-steps { background:var(--bg-secondary); border-radius:10px; padding:14px; margin-bottom:20px; border-left:3px solid var(--blue); }
+        .token-steps p { color:var(--text-secondary); font-size:12px; line-height:1.9; margin-bottom:0; }
+        .token-steps a { color:var(--blue); text-decoration:none; }
+        .btn { padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; }
+        .btn-primary { background:linear-gradient(135deg,#2563eb,#4d8fff); color:white; width:100%; padding:13px; }
+        .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(77,143,255,0.4); }
+        .btn-secondary { background:var(--bg-secondary); color:var(--text-secondary); border:1px solid var(--border); }
+
+        /* INDEX TICKER BAR */
+        .ticker-bar { background:var(--bg-secondary); border-bottom:1px solid var(--border); padding:0 24px; display:flex; gap:0; overflow-x:auto; scrollbar-width:none; }
+        .ticker-bar::-webkit-scrollbar { display:none; }
+        .ticker-item { display:flex; flex-direction:column; padding:12px 28px; border-right:1px solid var(--border); cursor:pointer; transition:background 0.2s; min-width:150px; position:relative; }
+        .ticker-item:hover { background:var(--bg-card); }
+        .ticker-item.selected { background:var(--bg-card); }
+        .ticker-item.selected::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--blue); }
+        .ticker-name { font-size:11px; font-weight:600; color:var(--text-secondary); letter-spacing:0.5px; margin-bottom:4px; }
+        .ticker-price { font-size:18px; font-weight:700; font-family:'JetBrains Mono',monospace; color:var(--text-primary); letter-spacing:-0.5px; }
+        .ticker-change { font-size:11px; font-weight:600; margin-top:2px; display:flex; align-items:center; gap:4px; }
+        .ticker-change.up { color:var(--green); }
+        .ticker-change.down { color:var(--red); }
+
+        /* FLASH */
+        @keyframes flash-up { 0%{background:rgba(0,212,160,0.3)} 100%{background:transparent} }
+        @keyframes flash-down { 0%{background:rgba(255,77,109,0.3)} 100%{background:transparent} }
+        .flash-up { animation:flash-up 0.5s ease-out; }
+        .flash-down { animation:flash-down 0.5s ease-out; }
+        @keyframes pulse-green { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+        /* MAIN LAYOUT */
+        .main-layout { display:grid; grid-template-columns:270px 1fr; height:calc(100vh - 120px); overflow:hidden; }
+        .left-panel { background:var(--bg-secondary); border-right:1px solid var(--border); overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+        .panel-section { padding:14px 16px; border-bottom:1px solid var(--border); }
+        .panel-title { font-size:10px; font-weight:600; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+
+        /* INDEX DETAIL */
+        .index-detail-card { background:var(--bg-card); border-radius:12px; padding:16px; border:1px solid var(--border); }
+        .index-detail-name { font-size:12px; color:var(--text-secondary); font-weight:600; margin-bottom:6px; }
+        .index-detail-price { font-size:28px; font-weight:800; font-family:'JetBrains Mono',monospace; letter-spacing:-1px; margin-bottom:6px; }
+        .index-detail-change { font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; margin-bottom:16px; }
+        .ohlc-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .ohlc-item { background:var(--bg-secondary); border-radius:8px; padding:8px 10px; }
+        .ohlc-label { font-size:10px; color:var(--text-muted); font-weight:600; letter-spacing:0.5px; margin-bottom:2px; }
+        .ohlc-value { font-size:13px; font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--text-primary); }
+
+        /* EXPIRY */
+        .expiry-select { display:flex; flex-wrap:wrap; gap:6px; }
+        .expiry-chip { padding:5px 12px; border-radius:20px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text-secondary); transition:all 0.2s; }
+        .expiry-chip:hover { border-color:var(--blue); color:var(--blue); }
+        .expiry-chip.active { background:var(--blue); color:white; border-color:var(--blue); }
+
+        /* STATS */
+        .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .stat-item { background:var(--bg-card); border-radius:8px; padding:10px; border:1px solid var(--border); text-align:center; }
+        .stat-label { font-size:10px; color:var(--text-muted); font-weight:600; letter-spacing:0.5px; }
+        .stat-value { font-size:14px; font-weight:700; font-family:'JetBrains Mono',monospace; margin-top:3px; }
+
+        /* OI BARS */
+        .oi-bars { display:flex; flex-direction:column; gap:8px; }
+        .oi-bar-label { font-size:10px; color:var(--text-secondary); margin-bottom:3px; display:flex; justify-content:space-between; }
+        .oi-bar-track { background:var(--bg-card); border-radius:4px; height:6px; overflow:hidden; }
+        .oi-bar-fill { height:100%; border-radius:4px; transition:width 0.5s ease; }
+        .oi-bar-fill.call { background:linear-gradient(90deg,#ff4d6d,#ff6b35); }
+        .oi-bar-fill.put { background:linear-gradient(90deg,#00d4a0,#4d8fff); }
+
+        /* RIGHT PANEL */
+        .right-panel { overflow:hidden; display:flex; flex-direction:column; position:relative; }
+        .chain-header { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--bg-secondary); }
+        .chain-title { font-size:15px; font-weight:700; }
+        .chain-subtitle { font-size:12px; color:var(--text-muted); margin-top:2px; }
+        .chain-controls { display:flex; gap:8px; align-items:center; }
+        .refresh-btn { display:flex; align-items:center; gap:6px; padding:7px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:var(--text-secondary); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+        .refresh-btn:hover { border-color:var(--blue); color:var(--blue); }
+        .auto-refresh-toggle { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); }
+        .toggle-switch { position:relative; width:36px; height:20px; }
+        .toggle-switch input { opacity:0; width:0; height:0; }
+        .toggle-slider { position:absolute; inset:0; background:var(--bg-card); border:1px solid var(--border); border-radius:20px; cursor:pointer; transition:0.3s; }
+        .toggle-slider::after { content:''; position:absolute; width:14px; height:14px; left:2px; top:2px; background:var(--text-muted); border-radius:50%; transition:0.3s; }
+        .toggle-switch input:checked + .toggle-slider { background:var(--blue); border-color:var(--blue); }
+        .toggle-switch input:checked + .toggle-slider::after { transform:translateX(16px); background:white; }
+
+        /* COUNTDOWN */
+        .countdown-ring { width:32px; height:32px; position:relative; }
+        .countdown-ring svg { transform:rotate(-90deg); }
+        .countdown-ring circle { fill:none; stroke-width:3; stroke-linecap:round; }
+        .countdown-track { stroke:var(--border); }
+        .countdown-fill { stroke:var(--blue); stroke-dasharray:75.4; stroke-dashoffset:0; transition:stroke-dashoffset 1s linear; }
+        .countdown-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:var(--blue); }
+
+        /* OPTION CHAIN TABLE */
+        .chain-table-wrap { flex:1; overflow:auto; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+        table { width:100%; border-collapse:collapse; font-size:12px; }
+        thead { position:sticky; top:0; z-index:10; background:var(--bg-table-header); }
+        thead tr:first-child th { padding:10px 8px 4px; font-size:10px; font-weight:700; letter-spacing:0.8px; color:var(--text-muted); text-transform:uppercase; }
+        thead tr.sub-header th { padding:4px 8px 10px; font-size:10px; font-weight:600; color:var(--text-secondary); border-bottom:1px solid var(--border); }
+        .th-call { color:var(--red) !important; }
+        .th-put { color:var(--green) !important; }
+        .th-strike { color:var(--yellow) !important; text-align:center; }
+        tbody tr { border-bottom:1px solid rgba(30,45,74,0.5); transition:background 0.15s; cursor:pointer; }
+        tbody tr:hover { background:var(--bg-card-hover); }
+        td { padding:8px 8px; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:500; white-space:nowrap; }
+        .td-oi { text-align:right; position:relative; }
+        .td-oi-l { text-align:left; }
+        .oi-bg-bar { position:absolute; top:0; bottom:0; background:rgba(255,77,109,0.08); right:0; transition:width 0.5s ease; }
+        .oi-bg-bar.put { background:rgba(0,212,160,0.08); left:0; right:auto; }
+        .td-ltp { text-align:center; }
+        .td-ltp.call { color:var(--red); font-weight:700; }
+        .td-ltp.put { color:var(--green); font-weight:700; }
+        .td-chg { text-align:center; font-size:11px; }
+        .td-chg.up { color:var(--green); }
+        .td-chg.down { color:var(--red); }
+        .td-iv { text-align:center; color:var(--purple); }
+        .td-vol { text-align:center; color:var(--text-secondary); }
+        .td-strike { text-align:center; font-weight:700; font-size:12px; padding:8px 12px; position:relative; background:rgba(10,14,26,0.4); }
+        .td-strike.atm { background:rgba(251,191,36,0.1); color:var(--yellow); }
+        .td-strike.atm::before { content:'ATM'; position:absolute; top:0; right:2px; font-size:7px; color:var(--yellow); font-weight:800; letter-spacing:0.5px; }
+        .row-itm-call { background:rgba(255,77,109,0.03); }
+        .row-itm-put { background:rgba(0,212,160,0.03); }
+        .row-selected { outline:1px solid var(--blue) !important; }
+
+        /* LOADING */
+        .loading-overlay { display:none; position:absolute; inset:0; background:rgba(10,14,26,0.7); align-items:center; justify-content:center; z-index:50; backdrop-filter:blur(4px); }
+        .loading-overlay.show { display:flex; }
+        .spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        /* TOAST */
+        .toast-container { position:fixed; bottom:24px; right:24px; z-index:999; display:flex; flex-direction:column; gap:8px; }
+        .toast { padding:12px 18px; border-radius:10px; font-size:13px; font-weight:500; display:flex; align-items:center; gap:8px; animation:slideUp 0.3s ease; box-shadow:var(--shadow); max-width:380px; }
+        .toast.error { background:#1a0a12; border:1px solid var(--red); color:var(--red); }
+        .toast.success { background:#0a1a12; border:1px solid var(--green); color:var(--green); }
+        .toast.info { background:var(--bg-card); border:1px solid var(--border); color:var(--text-primary); }
+        @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+        /* PAPER TRADE BAR */
+        .paper-trade-bar { background:var(--bg-secondary); border-top:1px solid var(--border); padding:10px 20px; display:flex; gap:12px; align-items:center; }
+        .pt-label { font-size:11px; font-weight:700; color:var(--text-muted); letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap; }
+        .pt-selected-strike { font-size:12px; font-weight:600; font-family:'JetBrains Mono',monospace; color:var(--text-primary); background:var(--bg-card); padding:6px 14px; border-radius:8px; border:1px solid var(--border); min-width:220px; }
+        .pt-qty-input { width:65px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:13px; font-family:'JetBrains Mono',monospace; color:var(--text-primary); text-align:center; outline:none; }
+        .btn-buy { padding:7px 20px; background:linear-gradient(135deg,#059669,#00d4a0); color:white; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+        .btn-buy:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,212,160,0.4); }
+        .btn-sell { padding:7px 20px; background:linear-gradient(135deg,#dc2626,#ff4d6d); color:white; border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+        .btn-sell:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(255,77,109,0.4); }
+
+        /* NO DATA */
+        .no-data { display:flex; flex-direction:column; align-items:center; justify-content:center; height:300px; gap:12px; color:var(--text-muted); }
+        .no-data p { font-size:14px; }
+
+        @media (max-width:900px) { .main-layout{grid-template-columns:1fr;} .left-panel{display:none;} }
+    </style>
+</head>
+<body>
+
+<!-- TOKEN SETUP MODAL -->
+<div class="token-modal show" id="tokenModal">
+    <div class="token-box">
+        <h2>🔐 Dhan API Setup</h2>
+        <p>Real-time NIFTY/BANKNIFTY data ke liye Dhan API token configure karo — bilkul FREE!</p>
+        <div class="token-steps">
+            <p>
+                1️⃣ <a href="https://login.dhan.co" target="_blank">login.dhan.co</a> pe login karo<br>
+                2️⃣ Profile → API Access → <strong>Client ID</strong> copy karo<br>
+                3️⃣ <a href="https://api.dhan.co" target="_blank">api.dhan.co</a> → "Generate Token" click karo<br>
+                4️⃣ <strong>Access Token</strong> (200+ characters) yahan paste karo
+            </p>
+        </div>
+        <div class="input-group">
+            <label>DHAN CLIENT ID</label>
+            <input type="text" id="inputClientId" placeholder="e.g. 1100000000" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <label>ACCESS TOKEN (JWT — 200+ characters)</label>
+            <input type="text" id="inputToken" placeholder="eyJhbGciOiJIUzUxMiJ9..." autocomplete="off">
+        </div>
+        <button class="btn btn-primary" onclick="saveToken()">✅ Connect to Live Market</button>
+        <div style="text-align:center; margin-top:12px;">
+            <button class="btn btn-secondary" onclick="useDemoMode()" style="width:100%">🎮 Demo Mode (No API — Simulated Live Data)</button>
+        </div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="header-left">
+        <div class="logo">📈 Trading Tracker</div>
+        <nav class="nav-tabs">
+            <a href="/" class="nav-tab">Dashboard</a>
+            <a href="/live-market.html" class="nav-tab active">Live Market</a>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="live-badge"><div class="live-dot"></div><span id="liveLabel">LIVE</span></div>
+        <div class="time-display" id="clockDisplay">--:--:--</div>
+        <button class="setup-btn" onclick="document.getElementById('tokenModal').classList.add('show')">⚙️ API Setup</button>
+        <a href="/" class="back-to-app">← App</a>
+    </div>
+</header>
+
+<!-- INDEX TICKER BAR -->
+<div class="ticker-bar">
+    <div class="ticker-item selected" id="tick-NIFTY" onclick="selectIndex('NIFTY')">
+        <div class="ticker-name">NIFTY 50</div>
+        <div class="ticker-price" id="price-NIFTY">—</div>
+        <div class="ticker-change" id="chg-NIFTY">—</div>
+    </div>
+    <div class="ticker-item" id="tick-BANKNIFTY" onclick="selectIndex('BANKNIFTY')">
+        <div class="ticker-name">BANK NIFTY</div>
+        <div class="ticker-price" id="price-BANKNIFTY">—</div>
+        <div class="ticker-change" id="chg-BANKNIFTY">—</div>
+    </div>
+    <div class="ticker-item" id="tick-FINNIFTY" onclick="selectIndex('FINNIFTY')">
+        <div class="ticker-name">FIN NIFTY</div>
+        <div class="ticker-price" id="price-FINNIFTY">—</div>
+        <div class="ticker-change" id="chg-FINNIFTY">—</div>
+    </div>
+    <div class="ticker-item" id="tick-MIDCPNIFTY" onclick="selectIndex('MIDCPNIFTY')">
+        <div class="ticker-name">MIDCAP NIFTY</div>
+        <div class="ticker-price" id="price-MIDCPNIFTY">—</div>
+        <div class="ticker-change" id="chg-MIDCPNIFTY">—</div>
+    </div>
+    <div class="ticker-item" id="tick-SENSEX" onclick="selectIndex('SENSEX')">
+        <div class="ticker-name">SENSEX</div>
+        <div class="ticker-price" id="price-SENSEX">—</div>
+        <div class="ticker-change" id="chg-SENSEX">—</div>
+    </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+        <div class="panel-section">
+            <div class="panel-title">Index Overview</div>
+            <div class="index-detail-card">
+                <div class="index-detail-name" id="detail-name">NIFTY 50</div>
+                <div class="index-detail-price" id="detail-price" style="color:var(--green)">—</div>
+                <div class="index-detail-change" id="detail-change" style="color:var(--green)">—</div>
+                <div class="ohlc-grid">
+                    <div class="ohlc-item"><div class="ohlc-label">OPEN</div><div class="ohlc-value" id="ohlc-open">—</div></div>
+                    <div class="ohlc-item"><div class="ohlc-label">PREV CLOSE</div><div class="ohlc-value" id="ohlc-prev">—</div></div>
+                    <div class="ohlc-item" style="border-left:2px solid var(--green)"><div class="ohlc-label">HIGH</div><div class="ohlc-value" id="ohlc-high" style="color:var(--green)">—</div></div>
+                    <div class="ohlc-item" style="border-left:2px solid var(--red)"><div class="ohlc-label">LOW</div><div class="ohlc-value" id="ohlc-low" style="color:var(--red)">—</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-section">
+            <div class="panel-title">Expiry</div>
+            <div class="expiry-select" id="expirySelect"><div style="color:var(--text-muted);font-size:12px">Loading...</div></div>
+        </div>
+        <div class="panel-section">
+            <div class="panel-title">Option Stats</div>
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-label">CALL OI</div><div class="stat-value" id="stat-call-oi" style="color:var(--red)">—</div></div>
+                <div class="stat-item"><div class="stat-label">PUT OI</div><div class="stat-value" id="stat-put-oi" style="color:var(--green)">—</div></div>
+                <div class="stat-item"><div class="stat-label">PCR</div><div class="stat-value" id="stat-pcr" style="color:var(--blue)">—</div></div>
+                <div class="stat-item"><div class="stat-label">MAX PAIN</div><div class="stat-value" id="stat-maxpain" style="color:var(--yellow)">—</div></div>
+            </div>
+        </div>
+        <div class="panel-section">
+            <div class="panel-title">Top OI Strikes</div>
+            <div class="oi-bars" id="oiBars"><div style="color:var(--text-muted);font-size:12px">Loading...</div></div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+        <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+        <div class="chain-header">
+            <div>
+                <div class="chain-title" id="chainTitle">NIFTY Options Chain</div>
+                <div class="chain-subtitle" id="chainSubtitle">Last updated: —</div>
+            </div>
+            <div class="chain-controls">
+                <div class="auto-refresh-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoRefreshToggle" checked onchange="toggleAutoRefresh()">
+                        <div class="toggle-slider"></div>
+                    </label>
+                    <span>Auto (30s)</span>
+                    <div class="countdown-ring">
+                        <svg viewBox="0 0 28 28"><circle class="countdown-track" cx="14" cy="14" r="12"/><circle class="countdown-fill" id="countdownCircle" cx="14" cy="14" r="12"/></svg>
+                        <div class="countdown-text" id="countdownText">30</div>
+                    </div>
+                </div>
+                <button class="refresh-btn" onclick="refreshChain()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                    Refresh
+                </button>
+            </div>
+        </div>
+        <div class="chain-table-wrap">
+            <div class="no-data" id="noDataState">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <p>API token configure karo ya Demo mode use karo</p>
+            </div>
+            <table id="optionChainTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th colspan="5" class="th-call" style="text-align:center;padding:10px 0 4px;font-size:12px;letter-spacing:1px;border-right:1px solid var(--border);">📉 CALLS (CE)</th>
+                        <th rowspan="2" class="th-strike" style="width:90px;background:rgba(251,191,36,0.05);">STRIKE</th>
+                        <th colspan="5" class="th-put" style="text-align:center;padding:10px 0 4px;font-size:12px;letter-spacing:1px;border-left:1px solid var(--border);">📈 PUTS (PE)</th>
+                    </tr>
+                    <tr class="sub-header">
+                        <th class="th-call" style="text-align:right;">OI (L)</th>
+                        <th class="th-call" style="text-align:right;">Δ OI</th>
+                        <th class="th-call" style="text-align:right;">Vol</th>
+                        <th class="th-call" style="text-align:right;">IV%</th>
+                        <th class="th-call" style="text-align:right;border-right:1px solid var(--border);">LTP ₹</th>
+                        <th class="th-put" style="text-align:left;border-left:1px solid var(--border);">LTP ₹</th>
+                        <th class="th-put" style="text-align:left;">IV%</th>
+                        <th class="th-put" style="text-align:left;">Vol</th>
+                        <th class="th-put" style="text-align:left;">Δ OI</th>
+                        <th class="th-put" style="text-align:left;">OI (L)</th>
+                    </tr>
+                </thead>
+                <tbody id="chainTbody"></tbody>
+            </table>
+        </div>
+        <!-- Paper Trade Bar -->
+        <div class="paper-trade-bar">
+            <div class="pt-label">📋 Paper Trade:</div>
+            <div class="pt-selected-strike" id="selectedStrikeDisplay">Click kisi bhi strike pe select karo</div>
+            <input type="number" class="pt-qty-input" id="ptQty" value="1" min="1" title="Lots">
+            <button class="btn-buy" onclick="paperTrade('BUY')">BUY CE</button>
+            <button class="btn-sell" onclick="paperTrade('SELL')">SELL PE</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ============================================================
+//  TRADING TRACKER 2026 — Live Market Engine
+//  Real-time Index + Options Chain via Dhan API v2
+//  NEW: Uses /api/dhan-live (JWT token, batch index quotes, 1s refresh)
+// ============================================================
+
+const LIVE_API    = '/api/dhan-live';        // Dhan (option chain)
+const PULSE_API   = '/api/market-pulse';     // Yahoo Finance — FREE index prices
+const LEGACY_API  = '/api/dhan-market-data'; // Legacy fallback
+
+// Pre-fill saved credentials
+const _savedCid = localStorage.getItem('dhan_client_id')  || '1104389319';
+const _savedTok = localStorage.getItem('dhan_access_token') || 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyUmVnaW9uIjoiUjEiLCJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzg3OTM5Njg2LCJpYXQiOjE3ODc4NTMyODYsInRva2VuQ29uc3VtZXJUeXBlIjoiU0VMRiIsIndlYmhvb2tVcmwiOiIiLCJkaGFuQ2xpZW50SWQiOiIxMTA0Mzg5MzE5In0.Yv-qLN1M3mN4EHkLs34OIxZmwPO2b_x5KlrpQmJfWMrSY8BsuVTWdLQXqcNPCWLFO0hnocqV8scbh9oFXdkN1w';
+
+let CONFIG = { clientId: _savedCid, accessToken: _savedTok, isDemoMode: false };
+
+let STATE = {
+    selectedIndex: 'NIFTY',
+    selectedExpiry: '',
+    availableExpiries: [],
+    priceCache: {},
+    tickerInterval: null,    // 1-second live ticker
+    countdownTimer: null,
+    countdownVal: 30,
+    selectedStrike: null,
+    lastTickerFetch: 0
+};
+
+const INDEX_NAMES = { NIFTY:'NIFTY 50', BANKNIFTY:'BANK NIFTY', FINNIFTY:'FIN NIFTY', MIDCPNIFTY:'MIDCAP NIFTY', SENSEX:'SENSEX' };
+const INDEX_LOT  = { NIFTY:75, BANKNIFTY:30, FINNIFTY:65, MIDCPNIFTY:75, SENSEX:20 };
+const DEMO_BASE  = { NIFTY:25150, BANKNIFTY:53800, FINNIFTY:24600, MIDCPNIFTY:12800, SENSEX:82000 };
+const demoOffset = {};
+
+// Map market-pulse response to standard format
+function normalizeIndexData(sym, d) {
+    if (!d) return null;
+    return {
+        success: true, symbol: sym,
+        price:     d.price    || d.ltp   || 0,
+        open:      d.open     || 0,
+        high:      d.high     || 0,
+        low:       d.low      || 0,
+        prevClose: d.prevClose|| d.prev  || 0,
+        change:    d.chg      || d.change|| 0,
+        change_pct:d.pct      || d.change_pct || 0
+    };
+}
+
+// ---- CLOCK ----
+function updateClock() {
+    const n=new Date(), h=String(n.getHours()).padStart(2,'0'), m=String(n.getMinutes()).padStart(2,'0'), s=String(n.getSeconds()).padStart(2,'0');
+    document.getElementById('clockDisplay').textContent = h+':'+m+':'+s;
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ---- TOKEN ----
+function saveToken() {
+    const c = document.getElementById('inputClientId').value.trim();
+    const t = document.getElementById('inputToken').value.trim();
+    if (!c || !t) { showToast('Client ID aur Access Token dono required hain!','error'); return; }
+    if (t.length < 50) { showToast('Token valid nahi lagta. JWT format chahiye (200+ chars)','error'); return; }
+    CONFIG.clientId=c; CONFIG.accessToken=t; CONFIG.isDemoMode=false;
+    localStorage.setItem('dhan_client_id',c); localStorage.setItem('dhan_access_token',t);
+    document.getElementById('tokenModal').classList.remove('show');
+    document.getElementById('liveLabel').textContent='LIVE';
+    showToast('✅ Dhan API connected! Live data load ho raha hai...','success');
+    initMarket();
+}
+
+function useDemoMode() {
+    CONFIG.isDemoMode=true; CONFIG.clientId='DEMO'; CONFIG.accessToken='DEMO';
+    document.getElementById('tokenModal').classList.remove('show');
+    document.getElementById('liveLabel').textContent='DEMO';
+    showToast('🎮 Demo Mode active — Simulated real-time data','info');
+    initMarket();
+}
+
+// ---- AUTO-LOAD SAVED CREDENTIALS ----
+(function(){
+    const id=localStorage.getItem('dhan_client_id') || '1104389319';
+    const tk=localStorage.getItem('dhan_access_token') || CONFIG.accessToken;
+    if(id && tk){
+        CONFIG.clientId=id; CONFIG.accessToken=tk;
+        document.getElementById('inputClientId').value=id;
+        document.getElementById('inputToken').value=tk;
+        document.getElementById('tokenModal').classList.remove('show');
+        initMarket();
+    } else {
+        // Pre-fill the fields with defaults
+        document.getElementById('inputClientId').value = CONFIG.clientId || '';
+        document.getElementById('inputToken').value    = CONFIG.accessToken || '';
+    }
+})();
+
+// ---- INIT ----
+function initMarket() {
+    loadAllIndexPrices();
+    loadOptionChain();
+    startAutoRefresh();
+    startLiveTicker(); // 🆕 1-second index ticker
+}
+
+// ---- DEMO DATA ----
+function getDemoPrice(sym) {
+    if(!demoOffset[sym]) demoOffset[sym]=0;
+    demoOffset[sym]+=(Math.random()-0.49)*6;
+    const p=DEMO_BASE[sym]+demoOffset[sym], pc=DEMO_BASE[sym]-50, chg=p-pc;
+    return { success:true, symbol:sym, price:+p.toFixed(2), open:DEMO_BASE[sym]-30, high:p+80, low:p-100, prevClose:pc, change:+chg.toFixed(2), change_pct:+((chg/pc)*100).toFixed(2) };
+}
+
+function genDemoChain(sym, spot) {
+    const step = sym==='BANKNIFTY'?100:sym==='SENSEX'?200:50;
+    const atm = Math.round(spot/step)*step;
+    const strikes=[];
+    for(let i=-15;i<=15;i++) strikes.push(atm+i*step);
+    const expiries=[];
+    const now=new Date();
+    for(let w=0;w<4;w++) {
+        const d=new Date(now);
+        d.setDate(d.getDate()+((4-d.getDay()+7)%7)+w*7);
+        expiries.push(d.toISOString().slice(0,10));
+    }
+    if(!STATE.availableExpiries.length) STATE.availableExpiries=expiries;
+    if(!STATE.selectedExpiry) STATE.selectedExpiry=expiries[0];
+    const chain=strikes.map(st=>{
+        const d=spot-st, cItm=d>0, dist=Math.abs(d);
+        const cP=Math.max(0.5,cItm?d+20+Math.random()*15:Math.max(1,120-dist*0.7+Math.random()*12));
+        const pP=Math.max(0.5,!cItm?-d+20+Math.random()*15:Math.max(1,120-dist*0.7+Math.random()*12));
+        const cOI=Math.floor((cItm?70000:180000+dist*12)*(0.8+Math.random()*0.4));
+        const pOI=Math.floor((!cItm?70000:180000+dist*12)*(0.8+Math.random()*0.4));
+        return {
+            strike:st, isATM:Math.abs(st-atm)<step/2,
+            callLTP:+cP.toFixed(1), callIV:+(20+Math.random()*10+(dist/spot)*100).toFixed(1), callOI:cOI, callOIChg:Math.floor((Math.random()-0.4)*15000), callVol:Math.floor(cOI*0.15),
+            putLTP:+pP.toFixed(1),  putIV:+(20+Math.random()*10+(dist/spot)*100).toFixed(1),  putOI:pOI,  putOIChg:Math.floor((Math.random()-0.4)*15000),  putVol:Math.floor(pOI*0.15)
+        };
+    });
+    return { strikes:chain, spotPrice:spot, expiries };
+}
+
+// ---- LOAD ALL PRICES (market-pulse = Yahoo Finance FREE) ----
+async function loadAllIndexPrices() {
+    if (CONFIG.isDemoMode) {
+        for (const sym of ['NIFTY','BANKNIFTY','FINNIFTY','MIDCPNIFTY','SENSEX']) {
+            const data = getDemoPrice(sym);
+            updateTickerUI(sym, data);
+            if (sym === STATE.selectedIndex) updateDetailPanel(data);
+            STATE.priceCache[sym] = data;
+        }
+        return;
+    }
+    try {
+        // FREE Yahoo Finance market feed — no subscription needed!
+        const r = await fetch(PULSE_API);
+        const resp = await r.json();
+        if (!resp.success || !resp.data) return;
+        const md = resp.data;
+        for (const sym of ['NIFTY','BANKNIFTY','FINNIFTY','MIDCPNIFTY','SENSEX']) {
+            const raw = md[sym];
+            if (!raw || !raw.price) continue;
+            const data = normalizeIndexData(sym, raw);
+            if (data) {
+                updateTickerUI(sym, data);
+                if (sym === STATE.selectedIndex) updateDetailPanel(data);
+                STATE.priceCache[sym] = data;
+            }
+        }
+        STATE.lastTickerFetch = Date.now();
+    } catch(e) {
+        console.warn('loadAllIndexPrices error:', e.message);
+    }
+}
+
+// 🆕 1-SECOND LIVE TICKER — Real prices from Yahoo Finance every 3s
+function startLiveTicker() {
+    if (STATE.tickerInterval) clearInterval(STATE.tickerInterval);
+    STATE.tickerInterval = setInterval(async () => {
+        if (CONFIG.isDemoMode) {
+            for (const sym of ['NIFTY','BANKNIFTY','FINNIFTY','MIDCPNIFTY','SENSEX']) {
+                const data = getDemoPrice(sym);
+                updateTickerUI(sym, data);
+                if (sym === STATE.selectedIndex) updateDetailPanel(data);
+                STATE.priceCache[sym] = data;
+            }
+            return;
+        }
+        // Throttle: poll every 3 seconds (Yahoo Finance cache = 3s)
+        if (Date.now() - STATE.lastTickerFetch < 3000) return;
+        try {
+            const r = await fetch(PULSE_API);
+            const resp = await r.json();
+            if (!resp.success || !resp.data) return;
+            const md = resp.data;
+            for (const sym of ['NIFTY','BANKNIFTY','FINNIFTY','MIDCPNIFTY','SENSEX']) {
+                const raw = md[sym];
+                if (!raw || !raw.price) continue;
+                const data = normalizeIndexData(sym, raw);
+                if (data) { updateTickerUI(sym, data); if(sym===STATE.selectedIndex) updateDetailPanel(data); STATE.priceCache[sym]=data; }
+            }
+            STATE.lastTickerFetch = Date.now();
+        } catch(e) { /* silent */ }
+    }, 1000);
+}
+
+function updateTickerUI(sym,data) {
+    const prev=(STATE.priceCache[sym]||{}).price||0;
+    const p=data.price||0, chg=data.change||0, pct=data.change_pct||0, up=chg>=0;
+    const pEl=document.getElementById('price-'+sym), cEl=document.getElementById('chg-'+sym);
+    if(pEl && p>0) {
+        pEl.textContent=p.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+        cEl.innerHTML=(up?'▲':'▼')+' '+Math.abs(chg).toFixed(2)+' ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';
+        cEl.className='ticker-change '+(up?'up':'down');
+        if(prev && prev!==p) { const fc=p>prev?'flash-up':'flash-down'; pEl.classList.remove('flash-up','flash-down'); void pEl.offsetWidth; pEl.classList.add(fc); }
+    }
+}
+
+function updateDetailPanel(data) {
+    const p=data.price||0, chg=data.change||0, pct=data.change_pct||0, up=chg>=0;
+    const fmt=v=>v>0?v.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}):'—';
+    document.getElementById('detail-name').textContent=INDEX_NAMES[STATE.selectedIndex];
+    const dp=document.getElementById('detail-price'); dp.textContent=fmt(p); dp.style.color=up?'var(--green)':'var(--red)';
+    const dc=document.getElementById('detail-change'); dc.innerHTML=(up?'▲':'▼')+' '+Math.abs(chg).toFixed(2)+' ('+(pct>=0?'+':'')+pct.toFixed(2)+'%)'; dc.style.color=up?'var(--green)':'var(--red)';
+    document.getElementById('ohlc-open').textContent=fmt(data.open);
+    document.getElementById('ohlc-prev').textContent=fmt(data.prevClose);
+    document.getElementById('ohlc-high').textContent=fmt(data.high);
+    document.getElementById('ohlc-low').textContent=fmt(data.low);
+}
+
+// ---- LOAD OPTION CHAIN (NSE India FREE API) ----
+async function loadOptionChain() {
+    document.getElementById('loadingOverlay').classList.add('show');
+    document.getElementById('noDataState').style.display='none';
+    try {
+        let chainData;
+        if(CONFIG.isDemoMode) {
+            const sp=(STATE.priceCache[STATE.selectedIndex]||{}).price||DEMO_BASE[STATE.selectedIndex];
+            chainData=genDemoChain(STATE.selectedIndex,sp);
+            await new Promise(r=>setTimeout(r,350));
+        } else {
+            // 🆕 NSE India FREE API — Real option chain data!
+            const params = new URLSearchParams({ symbol: STATE.selectedIndex });
+            const r = await fetch(`/api/nse-option-chain?${params}`);
+            const raw = await r.json();
+            if (raw.success && raw.strikes && raw.strikes.length > 0) {
+                // NSE response is already in our format
+                if (raw.expiries && raw.expiries.length) {
+                    STATE.availableExpiries = raw.expiries;
+                    if (!STATE.selectedExpiry) STATE.selectedExpiry = raw.expiries[0];
+                }
+                chainData = {
+                    strikes: raw.strikes,
+                    spotPrice: raw.spot || 0,
+                    expiries: raw.expiries || []
+                };
+            } else {
+                // Fallback to demo if NSE fails (market closed / blocked)
+                console.warn('NSE option chain failed, using demo:', raw.error);
+                const sp=(STATE.priceCache[STATE.selectedIndex]||{}).price||DEMO_BASE[STATE.selectedIndex];
+                chainData=genDemoChain(STATE.selectedIndex,sp);
+                showToast('⚠️ NSE data unavailable (market closed?). Demo data shown.','info');
+            }
+        }
+        if(chainData&&chainData.strikes&&chainData.strikes.length) {
+            renderExpiries(chainData.expiries||STATE.availableExpiries);
+            renderChain(chainData.strikes, chainData.spotPrice);
+            updateStats(chainData.strikes);
+            const src = CONFIG.isDemoMode ? 'Demo' : 'NSE India (Live)';
+            document.getElementById('chainSubtitle').textContent='Last updated: '+new Date().toLocaleTimeString('en-IN')+' | Source: '+src;
+            document.getElementById('optionChainTable').style.display='table';
+        } else { document.getElementById('noDataState').style.display='flex'; }
+    } catch(e) {
+        console.error('Option chain error:', e);
+        // Graceful fallback to demo
+        const sp=(STATE.priceCache[STATE.selectedIndex]||{}).price||DEMO_BASE[STATE.selectedIndex];
+        const chainData=genDemoChain(STATE.selectedIndex,sp);
+        renderExpiries(chainData.expiries);
+        renderChain(chainData.strikes, chainData.spotPrice);
+        updateStats(chainData.strikes);
+        document.getElementById('optionChainTable').style.display='table';
+        showToast('⚠️ NSE unavailable: '+e.message+'. Demo data shown.','error');
+    } finally { document.getElementById('loadingOverlay').classList.remove('show'); }
+}
+
+
+function parseDhanChain(raw) {
+    try {
+        // Handle new /api/dhan-live response format
+        if (raw.strikes && Array.isArray(raw.strikes)) {
+            // Already parsed by new endpoint
+            const expiries = raw.expiries || [];
+            if(expiries.length && !STATE.availableExpiries.length) STATE.availableExpiries = expiries;
+            if(!STATE.selectedExpiry && expiries.length) STATE.selectedExpiry = expiries[0];
+            const spot = raw.underlying || 0;
+            return { expiries, spotPrice: spot, strikes: raw.strikes.map(r => ({
+                strike: r.strike_price || r.strikePrice || r.strike || 0,
+                callLTP: r.call?.last_price ?? r.CE?.lastPrice ?? 0,
+                callIV:  r.call?.implied_volatility ?? r.CE?.impliedVolatility ?? 0,
+                callOI:  r.call?.open_interest ?? r.CE?.openInterest ?? 0,
+                callOIChg: r.call?.change_in_oi ?? r.CE?.changeinOpenInterest ?? 0,
+                callVol: r.call?.volume ?? r.CE?.totalTradedVolume ?? 0,
+                putLTP:  r.put?.last_price ?? r.PE?.lastPrice ?? 0,
+                putIV:   r.put?.implied_volatility ?? r.PE?.impliedVolatility ?? 0,
+                putOI:   r.put?.open_interest ?? r.PE?.openInterest ?? 0,
+                putOIChg:r.put?.change_in_oi ?? r.PE?.changeinOpenInterest ?? 0,
+                putVol:  r.put?.volume ?? r.PE?.totalTradedVolume ?? 0
+            })) };
+        }
+        // Legacy format fallback
+        const d=raw.data||raw;
+        const expiries=d.expiry_list||d.expiryList||d.expiries||[];
+        if(expiries.length&&!STATE.availableExpiries.length) STATE.availableExpiries=expiries;
+        if(!STATE.selectedExpiry&&expiries.length) STATE.selectedExpiry=expiries[0];
+        const spot=d.last_price||d.spot_price||d.underlyingPrice||raw.underlying||0;
+        const oc=d.option_chain||d.optionData||d.data||[];
+        if(!Array.isArray(oc)) return {strikes:[],spotPrice:spot,expiries};
+        return {
+            expiries, spotPrice:spot,
+            strikes: oc.map(r=>({ strike:r.strike_price||r.strikePrice||r.strike||0, callLTP:r.call?.last_price??r.CE?.lastPrice??0, callIV:r.call?.implied_volatility??r.CE?.impliedVolatility??0, callOI:r.call?.open_interest??r.CE?.openInterest??0, callOIChg:r.call?.change_in_oi??r.CE?.changeinOpenInterest??0, callVol:r.call?.volume??r.CE?.totalTradedVolume??0, putLTP:r.put?.last_price??r.PE?.lastPrice??0, putIV:r.put?.implied_volatility??r.PE?.impliedVolatility??0, putOI:r.put?.open_interest??r.PE?.openInterest??0, putOIChg:r.put?.change_in_oi??r.PE?.changeinOpenInterest??0, putVol:r.put?.volume??r.PE?.totalTradedVolume??0 }))
+        };
+    } catch(e){ console.error(e); return null; }
+}
+
+// ---- EXPIRY RENDER ----
+function renderExpiries(exps) {
+    if(!exps||!exps.length) return;
+    document.getElementById('expirySelect').innerHTML=exps.slice(0,6).map(e=>`<div class="expiry-chip ${e===STATE.selectedExpiry?'active':''}" onclick="selectExpiry('${e}')">${fmtDate(e)}</div>`).join('');
+}
+function fmtDate(s) { try{ return new Date(s).toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }catch{return s;} }
+function selectExpiry(e) { STATE.selectedExpiry=e; loadOptionChain(); }
+
+// ---- CHAIN RENDER ----
+function renderChain(strikes, spot) {
+    if(!strikes||!strikes.length) return;
+    const tb=document.getElementById('chainTbody');
+    const maxC=Math.max(...strikes.map(s=>s.callOI||0));
+    const maxP=Math.max(...strikes.map(s=>s.putOI||0));
+    const fP=v=>v>0?v.toFixed(2):'—';
+    const fO=v=>v>=100000?(v/100000).toFixed(1)+'L':v>=1000?(v/1000).toFixed(1)+'K':v.toString();
+    const fI=v=>v>0?v.toFixed(1)+'%':'—';
+    tb.innerHTML=strikes.map(s=>{
+        const isATM=s.isATM||(spot&&Math.abs(s.strike-spot)<(STATE.selectedIndex==='BANKNIFTY'?60:STATE.selectedIndex==='SENSEX'?120:30));
+        const cItm=spot&&s.strike<spot, pItm=spot&&s.strike>spot;
+        const cW=maxC>0?((s.callOI/maxC)*85).toFixed(1):0;
+        const pW=maxP>0?((s.putOI/maxP)*85).toFixed(1):0;
+        return `<tr class="${cItm?'row-itm-call':pItm?'row-itm-put':''}" onclick="selectStrike(${s.strike},${s.callLTP},${s.putLTP},this)">
+            <td class="td-oi" style="text-align:right;position:relative;"><div class="oi-bg-bar" style="width:${cW}%"></div><span style="position:relative;">${fO(s.callOI)}</span></td>
+            <td class="td-chg ${s.callOIChg>=0?'up':'down'}" style="text-align:right;">${s.callOIChg>=0?'+':''}${fO(Math.abs(s.callOIChg))}</td>
+            <td class="td-vol" style="text-align:right;">${fO(s.callVol)}</td>
+            <td class="td-iv" style="text-align:right;">${fI(s.callIV)}</td>
+            <td class="td-ltp call" style="border-right:1px solid var(--border);text-align:right;">${fP(s.callLTP)}</td>
+            <td class="td-strike ${isATM?'atm':''}">${s.strike.toLocaleString('en-IN')}</td>
+            <td class="td-ltp put" style="border-left:1px solid var(--border);text-align:left;">${fP(s.putLTP)}</td>
+            <td class="td-iv" style="text-align:left;">${fI(s.putIV)}</td>
+            <td class="td-vol" style="text-align:left;">${fO(s.putVol)}</td>
+            <td class="td-chg ${s.putOIChg>=0?'up':'down'}" style="text-align:left;">${s.putOIChg>=0?'+':''}${fO(Math.abs(s.putOIChg))}</td>
+            <td class="td-oi" style="text-align:left;position:relative;"><div class="oi-bg-bar put" style="width:${pW}%"></div><span style="position:relative;">${fO(s.putOI)}</span></td>
+        </tr>`;
+    }).join('');
+    // Scroll to ATM
+    setTimeout(()=>{ const atm=tb.querySelector('.atm'); if(atm) atm.scrollIntoView({block:'center',behavior:'smooth'}); },200);
+}
+
+// ---- STATS ----
+function updateStats(strikes) {
+    if(!strikes||!strikes.length) return;
+    let totC=0,totP=0;
+    strikes.forEach(s=>{totC+=s.callOI||0; totP+=s.putOI||0;});
+    const pcr=totC>0?(totP/totC).toFixed(2):'—';
+    // Max Pain
+    let minPain=Infinity,mpStrike=0;
+    strikes.forEach(s=>{
+        let cp=0,pp=0;
+        strikes.forEach(o=>{ if(o.strike<s.strike)cp+=(s.strike-o.strike)*(o.callOI||0); if(o.strike>s.strike)pp+=(o.strike-s.strike)*(o.putOI||0); });
+        const tp=cp+pp; if(tp<minPain){minPain=tp;mpStrike=s.strike;}
+    });
+    document.getElementById('stat-call-oi').textContent=fL(totC);
+    document.getElementById('stat-put-oi').textContent=fL(totP);
+    document.getElementById('stat-pcr').textContent=pcr;
+    document.getElementById('stat-maxpain').textContent=mpStrike.toLocaleString('en-IN');
+    // Top OI bars
+    const top=[...strikes].sort((a,b)=>b.callOI-a.callOI).slice(0,5);
+    const mx=top[0]?.callOI||1;
+    document.getElementById('oiBars').innerHTML=top.map(s=>`<div class="oi-bar-item"><div class="oi-bar-label"><span>${s.strike.toLocaleString('en-IN')}</span><span>C:${fL(s.callOI)} P:${fL(s.putOI)}</span></div><div class="oi-bar-track"><div class="oi-bar-fill call" style="width:${((s.callOI/mx)*100).toFixed(0)}%"></div></div></div>`).join('');
+}
+function fL(v){return v>=10000000?(v/10000000).toFixed(1)+'Cr':v>=100000?(v/100000).toFixed(1)+'L':v>=1000?(v/1000).toFixed(0)+'K':v.toString();}
+
+// ---- INDEX SELECT ----
+function selectIndex(sym) {
+    STATE.selectedIndex=sym; STATE.availableExpiries=[]; STATE.selectedExpiry='';
+    document.querySelectorAll('.ticker-item').forEach(t=>t.classList.remove('selected'));
+    document.getElementById('tick-'+sym).classList.add('selected');
+    document.getElementById('chainTitle').textContent=INDEX_NAMES[sym]+' Options Chain';
+    if(STATE.priceCache[sym]) updateDetailPanel(STATE.priceCache[sym]);
+    loadOptionChain(); loadAllIndexPrices();
+}
+
+// ---- STRIKE SELECT ----
+function selectStrike(strike,cLTP,pLTP,row) {
+    STATE.selectedStrike={strike,callLTP:cLTP,putLTP:pLTP};
+    const exp=STATE.selectedExpiry?(' | Exp:'+fmtDate(STATE.selectedExpiry)):'';
+    document.getElementById('selectedStrikeDisplay').textContent=STATE.selectedIndex+' '+strike+' CE:₹'+cLTP+' | PE:₹'+pLTP+exp;
+    document.querySelectorAll('#chainTbody tr').forEach(r=>r.style.outline='none');
+    row.style.outline='1px solid var(--blue)';
+}
+
+// ---- PAPER TRADE ----
+function paperTrade(action) {
+    if(!STATE.selectedStrike){showToast('Pehle koi strike select karo','error');return;}
+    const qty=parseInt(document.getElementById('ptQty').value)||1;
+    const lot=INDEX_LOT[STATE.selectedIndex]||50;
+    const {strike,callLTP,putLTP}=STATE.selectedStrike;
+    const isBuyCE=action==='BUY';
+    const price=isBuyCE?callLTP:putLTP, type=isBuyCE?'CE':'PE';
+    const totalCost=price*qty*lot;
+    const trade={symbol:`${STATE.selectedIndex} ${strike} ${type}`,action,price,qty:qty*lot,lots:qty,totalCost,timestamp:new Date().toISOString(),type:'PAPER',expiry:STATE.selectedExpiry};
+    const ex=JSON.parse(localStorage.getItem('paper_trades')||'[]');
+    ex.unshift(trade);
+    localStorage.setItem('paper_trades',JSON.stringify(ex.slice(0,100)));
+    showToast(`✅ Paper ${action}: ${trade.symbol} @ ₹${price} × ${qty*lot} = ₹${totalCost.toLocaleString('en-IN')}`,'success');
+}
+
+// ---- AUTO REFRESH ----
+function startAutoRefresh() {
+    if(STATE.countdownTimer) clearInterval(STATE.countdownTimer);
+    STATE.countdownVal=30; updateCountdown();
+    STATE.countdownTimer=setInterval(()=>{
+        STATE.countdownVal--; updateCountdown();
+        if(STATE.countdownVal<=0){ STATE.countdownVal=30; loadAllIndexPrices(); loadOptionChain(); }
+    },1000);
+}
+function toggleAutoRefresh(){
+    if(document.getElementById('autoRefreshToggle').checked) startAutoRefresh();
+    else if(STATE.countdownTimer){clearInterval(STATE.countdownTimer);STATE.countdownTimer=null;}
+}
+function updateCountdown(){
+    const pct=STATE.countdownVal/30, offset=75.4*(1-pct);
+    document.getElementById('countdownCircle').style.strokeDashoffset=offset;
+    document.getElementById('countdownText').textContent=STATE.countdownVal;
+}
+function refreshChain(){ STATE.countdownVal=30; updateCountdown(); loadAllIndexPrices(); loadOptionChain(); showToast('🔄 Refreshing...','info'); }
+
+// ---- TOAST ----
+function showToast(msg,type='info'){
+    const c=document.getElementById('toastContainer'), t=document.createElement('div');
+    t.className='toast '+type; t.textContent=msg; c.appendChild(t);
+    setTimeout(()=>t.remove(),5000);
+}
+
+// ---- MARKET HOURS ----
+(function(){
+    const n=new Date(), tot=n.getHours()*60+n.getMinutes();
+    const open=tot>=9*60+15&&tot<=15*60+30, wd=n.getDay()>=1&&n.getDay()<=5;
+    if(!open||!wd){
+        document.getElementById('liveLabel').textContent=wd?'AFTER HOURS':'CLOSED';
+        document.querySelector('.live-dot').style.background='var(--yellow)';
+    }
+})();
+</script>
+</body>
+</html>

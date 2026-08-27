@@ -71,6 +71,87 @@ const server = http.createServer((req, res) => {
     }
 
     // ============================================================
+    // API ROUTE: POST/GET /api/dhan-market-data — Official Dhan Live Feed
+    // ============================================================
+    if ((cleanUrl === '/api/dhan-market-data' || cleanUrl === '/api/dhan-option-chain') && (req.method === 'POST' || req.method === 'GET')) {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try {
+                req.body = body ? JSON.parse(body) : {};
+            } catch(e) { req.body = {}; }
+            
+            const dhanMarketHandler = require('./api/dhan-market-data');
+            const customRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                    res.writeHead(code, { 'Content-Type': 'application/json' });
+                    return {
+                        json: (obj) => res.end(JSON.stringify(obj)),
+                        end: () => res.end()
+                    };
+                }
+            };
+            return dhanMarketHandler(req, customRes);
+        });
+        return;
+    }
+
+    // ============================================================
+    // API ROUTE: GET/POST /api/dhan-live — Real-Time Index LTP + Option Chain (NEW)
+    // Uses new JWT access token, 1-second cache, Dhan v2/marketfeed/quote
+    // ============================================================
+    if (cleanUrl === '/api/dhan-live' && (req.method === 'GET' || req.method === 'POST' || req.method === 'OPTIONS')) {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try { req.body = body ? JSON.parse(body) : {}; } catch(e) { req.body = {}; }
+
+            try { delete require.cache[require.resolve('./api/dhan-live')]; } catch(e) {}
+            const dhanLiveHandler = require('./api/dhan-live');
+            const customRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                    res.writeHead(code, { 'Content-Type': 'application/json' });
+                    return {
+                        json: (obj) => res.end(JSON.stringify(obj)),
+                        end: () => res.end()
+                    };
+                }
+            };
+            return dhanLiveHandler(req, customRes);
+        });
+        return;
+    }
+
+    // ============================================================
+    // API ROUTE: GET /api/nse-option-chain — NSE India Real Option Chain (FREE)
+    // Source: NSE India official data, server-side session proxy
+    // ============================================================
+    if (cleanUrl === '/api/nse-option-chain' && (req.method === 'GET' || req.method === 'OPTIONS')) {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try { req.body = body ? JSON.parse(body) : {}; } catch(e) { req.body = {}; }
+            const nseHandler = require('./api/nse-option-chain');
+            const customRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                    res.writeHead(code, { 'Content-Type': 'application/json' });
+                    return {
+                        json: (obj) => res.end(JSON.stringify(obj)),
+                        end: () => res.end()
+                    };
+                }
+            };
+            return nseHandler(req, customRes);
+        });
+        return;
+    }
+
+
+
+    // ============================================================
     // API ROUTE: POST /api/send-otp — Real SMS via 2Factor.in DLT Approved Template
     // ============================================================
     if (cleanUrl === '/api/send-otp' && req.method === 'POST') {
