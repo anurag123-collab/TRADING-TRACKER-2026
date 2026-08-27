@@ -21,8 +21,8 @@ can = canvas.Canvas(packet, pagesize=(width, height))
 can.setFillColorRGB(0.05, 0.05, 0.05)
 
 # 1. Company Information
-can.setFont("Helvetica-Bold", 9.5)
-can.drawString(370, 719.6, "Trading Tracker 2026")
+can.setFont("Helvetica-Bold", 8.8)
+can.drawString(335, 719.6, "Trading Tracker Technologies (UDYAM-BR-24-0058008)")
 
 # 2. Company Address (Clean 2-line official address)
 can.setFont("Helvetica", 8.2)

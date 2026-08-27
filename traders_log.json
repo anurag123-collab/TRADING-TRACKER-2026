@@ -1,34 +1,23 @@
 [
   {
+    "name": "Trader 5625",
+    "mobile": "8825255625",
+    "email": "N/A",
+    "password": "1234569",
+    "active_key": "FREE-TRIAL",
+    "trial_status": "🎁 Free Trial (15d Left)",
+    "last_login": "8/24/2026 01:10 AM",
+    "is_locked": false,
+    "is_vip": false
+  },
+  {
     "name": "Anurag Patel (Master Admin)",
     "mobile": "8102241463",
     "email": "anuragpatel4u00.ap@gmail.com",
     "password": "1234569",
     "active_key": "TT2026-MASTER-ADMIN-ANURAG",
     "trial_status": "👑 Master Admin",
-    "last_login": "8/23/2026 12:15 AM",
-    "is_locked": false,
-    "is_vip": false
-  },
-  {
-    "name": "Trader 8451",
-    "mobile": "9329888451",
-    "email": "N/A",
-    "password": "1234569",
-    "active_key": "TT2026-MASTER-ADMIN-ANURAG",
-    "trial_status": "🎁 Free Trial (16d Left)",
-    "last_login": "8/22/2026 11:51 PM",
-    "is_locked": false,
-    "is_vip": false
-  },
-  {
-    "name": "Trader 5625",
-    "mobile": "8825255625",
-    "email": "N/A",
-    "password": "1234569",
-    "active_key": "TT2026-MASTER-ADMIN-ANURAG",
-    "trial_status": "🎁 Free Trial (16d Left)",
-    "last_login": "8/22/2026 11:50 PM",
+    "last_login": "8/27/2026 10:13 PM",
     "is_locked": false,
     "is_vip": false
   }

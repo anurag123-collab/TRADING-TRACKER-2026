@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Trading Tracker 2026 Web and Android App",
   "scripts": {
-    "sync-assets": "node -e \"const fs=require('fs'); ['index.html','privacy-policy.html','terms.html','disclaimer.html','about.html','contact.html','blog.html','manifest.json','sw.js','profile-data.js','qrcode.min.js','profile.jpg','profile.ico','favicon.ico','version.json'].forEach(f=>{if(fs.existsSync(f)) fs.copyFileSync(f,'www/'+f)}); console.log('✅ Synced web assets to www/ directory!');\"",
+    "sync-assets": "node -e \"const fs=require('fs'); ['index.html','tradingview_super_scalper.html','privacy-policy.html','terms.html','disclaimer.html','about.html','contact.html','blog.html','manifest.json','sw.js','profile-data.js','qrcode.min.js','profile.jpg','profile.ico','favicon.ico','version.json'].forEach(f=>{if(fs.existsSync(f)) fs.copyFileSync(f,'www/'+f)}); console.log('✅ Synced web assets to www/ directory!');\"",
     "sync-www": "npm run sync-assets && npx cap sync"
   },
   "keywords": [],

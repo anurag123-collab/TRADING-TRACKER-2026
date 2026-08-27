@@ -52,6 +52,25 @@ const server = http.createServer((req, res) => {
     }
 
     // ============================================================
+    // API ROUTE: GET /api/chart-history — Live Real OHLC Candles & LTP
+    // ============================================================
+    if (cleanUrl === '/api/chart-history' && req.method === 'GET') {
+        try { delete require.cache[require.resolve('./api/chart-history')]; } catch(e) {}
+        const chartHistoryHandler = require('./api/chart-history');
+        const customRes = {
+            setHeader: (k, v) => res.setHeader(k, v),
+            status: (code) => {
+                res.writeHead(code, { 'Content-Type': 'application/json' });
+                return {
+                    json: (obj) => res.end(JSON.stringify(obj)),
+                    end: () => res.end()
+                };
+            }
+        };
+        return chartHistoryHandler(req, customRes);
+    }
+
+    // ============================================================
     // API ROUTE: POST /api/send-otp — Real SMS via 2Factor.in DLT Approved Template
     // ============================================================
     if (cleanUrl === '/api/send-otp' && req.method === 'POST') {
@@ -127,20 +146,29 @@ const server = http.createServer((req, res) => {
     }
 
     // ============================================================
-    // API ROUTE: /api/user-profile (GET & POST) — Disk Persistence for Credentials & Mobile
+    // API ROUTE: /api/user-profile (GET & POST) — User-Scoped Profile & Credentials Sync
     // ============================================================
     if (cleanUrl === '/api/user-profile') {
-        const CREDENTIALS_FILE = path.join(PUBLIC_DIR, 'user_credentials.json');
+        const PROFILES_FILE = path.join(PUBLIC_DIR, 'user_profiles_db.json');
+
+        const sanitizeMobDigits = (m) => String(m || '').replace(/[^0-9]/g, '').slice(-10);
 
         if (req.method === 'GET') {
-            let profileData = {};
-            if (fs.existsSync(CREDENTIALS_FILE)) {
-                try {
-                    profileData = JSON.parse(fs.readFileSync(CREDENTIALS_FILE, 'utf-8'));
-                } catch (e) {}
+            const queryParams = new URLSearchParams(rawUrl.includes('?') ? rawUrl.split('?')[1] : '');
+            const targetMob = sanitizeMobDigits(queryParams.get('mobile') || '');
+
+            let profilesDb = {};
+            if (fs.existsSync(PROFILES_FILE)) {
+                try { profilesDb = JSON.parse(fs.readFileSync(PROFILES_FILE, 'utf-8')); } catch (e) {}
             }
+
+            if (targetMob && profilesDb[targetMob]) {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ success: true, profile: profilesDb[targetMob] }));
+            }
+
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ success: true, profile: profileData }));
+            return res.end(JSON.stringify({ success: true, profile: null }));
         }
 
         if (req.method === 'POST') {
@@ -149,11 +177,19 @@ const server = http.createServer((req, res) => {
             req.on('end', () => {
                 try {
                     const payload = JSON.parse(body || '{}');
-                    let existing = {};
-                    if (fs.existsSync(CREDENTIALS_FILE)) {
-                        try { existing = JSON.parse(fs.readFileSync(CREDENTIALS_FILE, 'utf-8')); } catch(e) {}
+                    const cleanMob = sanitizeMobDigits(payload.mobile || '');
+
+                    if (!cleanMob) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ success: false, error: 'Mobile number required' }));
                     }
 
+                    let profilesDb = {};
+                    if (fs.existsSync(PROFILES_FILE)) {
+                        try { profilesDb = JSON.parse(fs.readFileSync(PROFILES_FILE, 'utf-8')); } catch(e) {}
+                    }
+
+                    let existing = profilesDb[cleanMob] || {};
                     if (payload.mobile) existing.mobile = payload.mobile;
                     if (payload.password) existing.password = payload.password;
                     if (payload.userId) existing.userId = payload.userId;
@@ -161,7 +197,8 @@ const server = http.createServer((req, res) => {
                     if (payload.email) existing.email = payload.email;
                     existing.updatedAt = new Date().toISOString();
 
-                    fs.writeFileSync(CREDENTIALS_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+                    profilesDb[cleanMob] = existing;
+                    fs.writeFileSync(PROFILES_FILE, JSON.stringify(profilesDb, null, 2), 'utf-8');
 
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ success: true, profile: existing }));
@@ -187,24 +224,6 @@ const server = http.createServer((req, res) => {
                 password: "1234569",
                 active_key: "TT2026-MASTER-ADMIN-ANURAG",
                 trial_status: "👑 Master Admin",
-                last_login: new Date().toLocaleString()
-            },
-            {
-                name: "Trader 8451",
-                mobile: "9329888451",
-                email: "N/A",
-                password: "123456",
-                active_key: "FREE-TRIAL",
-                trial_status: "🎁 Free Trial",
-                last_login: new Date().toLocaleString()
-            },
-            {
-                name: "Trader 5625",
-                mobile: "8825255625",
-                email: "N/A",
-                password: "1234569",
-                active_key: "FREE-TRIAL",
-                trial_status: "🎁 Free Trial",
                 last_login: new Date().toLocaleString()
             }
         ];
@@ -492,6 +511,9 @@ const server = http.createServer((req, res) => {
         } else {
             res.writeHead(200, { 
                 'Content-Type': contentType,
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': '*'
             });
