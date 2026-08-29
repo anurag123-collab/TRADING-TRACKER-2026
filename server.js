@@ -55,7 +55,6 @@ const server = http.createServer((req, res) => {
     // API ROUTE: GET /api/chart-history — Live Real OHLC Candles & LTP
     // ============================================================
     if (cleanUrl === '/api/chart-history' && req.method === 'GET') {
-        try { delete require.cache[require.resolve('./api/chart-history')]; } catch(e) {}
         const chartHistoryHandler = require('./api/chart-history');
         const customRes = {
             setHeader: (k, v) => res.setHeader(k, v),
@@ -551,6 +550,179 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    // ============================================================
+    // API ROUTE: /api/dhan-live (GET & POST) — Real-Time Live Feed & Option Chain
+    // ============================================================
+    if (cleanUrl === '/api/dhan-live') {
+        try {
+            const dhanLiveHandler = require('./api/dhan-live.js');
+            // Adapt Node http req/res to serverless handler
+            res.status = function(code) { this.statusCode = code; return this; };
+            res.json = function(data) {
+                this.writeHead(this.statusCode || 200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+                this.end(JSON.stringify(data));
+                return this;
+            };
+            if (req.method === 'POST') {
+                let body = '';
+                req.on('data', chunk => { body += chunk; });
+                req.on('end', () => {
+                    try { req.body = JSON.parse(body || '{}'); } catch(e) { req.body = {}; }
+                    dhanLiveHandler(req, res);
+                });
+            } else {
+                dhanLiveHandler(req, res);
+            }
+        } catch (e) {
+            res.writeHead(500, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+            res.end(JSON.stringify({ success: false, error: e.message }));
+        }
+        return;
+    }
+
+    // ============================================================
+    // API ROUTE: /api/dhan-option-chain (GET & POST) — Official Dhan Real-Time Option Chain Feed
+    // ============================================================
+    if (cleanUrl === '/api/dhan-option-chain') {
+        const DEFAULT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyUmVnaW9uIjoiUjEiLCJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzg3OTM5Njg2LCJpYXQiOjE3ODc4NTMyODYsInRva2VuQ29uc3VtZXJUeXBlIjoiU0VMRiIsIndlYmhvb2tVcmwiOiIiLCJkaGFuQ2xpZW50SWQiOiIxMTA0Mzg5MzE5In0.Yv-qLN1M3mN4EHkLs34OIxZmwPO2b_x5KlrpQmJfWMrSY8BsuVTWdLQXqcNPCWLFO0hnocqV8scbh9oFXdkN1w';
+        const DEFAULT_CLIENT_ID = '1104389319';
+
+        const DHAN_SCRIP_MAP = {
+            NIFTY: { id: 13, seg: 'IDX_I' },
+            'NIFTY 50': { id: 13, seg: 'IDX_I' },
+            BANKNIFTY: { id: 25, seg: 'IDX_I' },
+            'BANK NIFTY': { id: 25, seg: 'IDX_I' },
+            FINNIFTY: { id: 27, seg: 'IDX_I' },
+            MIDCPNIFTY: { id: 288, seg: 'IDX_I' },
+            SENSEX: { id: 51, seg: 'IDX_I' },
+            BANKEX: { id: 104, seg: 'IDX_I' }
+        };
+
+        const executeDhanOptionChain = async (sym, exp, token, clientId) => {
+            const symKey = (sym || 'NIFTY').toUpperCase().replace(/[^A-Z0-9]/g, '');
+            const scripConfig = DHAN_SCRIP_MAP[symKey] || DHAN_SCRIP_MAP.NIFTY;
+
+            const useToken = token || DEFAULT_TOKEN;
+            const useClientId = clientId || DEFAULT_CLIENT_ID;
+
+            // 1. Get Expiry List if expiry not provided
+            let activeExpiry = exp;
+            let expiryList = [];
+            try {
+                const expPostData = JSON.stringify({ UnderlyingScrip: scripConfig.id, UnderlyingSeg: scripConfig.seg });
+                const expRes = await new Promise((resolve) => {
+                    const r = https.request('https://api.dhan.co/v2/optionchain/expirylist', {
+                        method: 'POST',
+                        headers: {
+                            'access-token': useToken,
+                            'client-id': useClientId,
+                            'Content-Type': 'application/json',
+                            'Content-Length': Buffer.byteLength(expPostData)
+                        },
+                        timeout: 5000
+                    }, (res) => {
+                        let b = '';
+                        res.on('data', c => b += c);
+                        res.on('end', () => {
+                            try { resolve(JSON.parse(b)); } catch(e) { resolve(null); }
+                        });
+                    });
+                    r.on('error', () => resolve(null));
+                    r.write(expPostData);
+                    r.end();
+                });
+
+                if (expRes && expRes.data && Array.isArray(expRes.data) && expRes.data.length > 0) {
+                    expiryList = expRes.data;
+                    if (!activeExpiry || !expiryList.includes(activeExpiry)) {
+                        activeExpiry = expiryList[0];
+                    }
+                }
+            } catch(e) {}
+
+            if (!activeExpiry) activeExpiry = '2026-09-01';
+
+            // 2. Fetch Full Option Chain
+            const ocPostData = JSON.stringify({ UnderlyingScrip: scripConfig.id, UnderlyingSeg: scripConfig.seg, Expiry: activeExpiry });
+            return new Promise((resolve) => {
+                const req = https.request('https://api.dhan.co/v2/optionchain', {
+                    method: 'POST',
+                    headers: {
+                        'access-token': useToken,
+                        'client-id': useClientId,
+                        'Content-Type': 'application/json',
+                        'Content-Length': Buffer.byteLength(ocPostData)
+                    },
+                    timeout: 8000
+                }, (res) => {
+                    let b = '';
+                    res.on('data', c => b += c);
+                    res.on('end', () => {
+                        try {
+                            const parsed = JSON.parse(b);
+                            if (parsed.status === 'success' && parsed.data) {
+                                resolve({
+                                    success: true,
+                                    symbol: symKey,
+                                    spot: parsed.data.last_price,
+                                    expiry: activeExpiry,
+                                    expiries: expiryList,
+                                    oc: parsed.data.oc
+                                });
+                            } else {
+                                resolve({ success: false, error: parsed.data || parsed.remarks || 'Dhan OC failed', raw: parsed });
+                            }
+                        } catch (e) {
+                            resolve({ success: false, error: e.message, raw: b.slice(0, 300) });
+                        }
+                    });
+                });
+                req.on('error', (e) => resolve({ success: false, error: e.message }));
+                req.write(ocPostData);
+                req.end();
+            });
+        };
+
+        if (req.method === 'GET') {
+            const queryParams = new URLSearchParams(rawUrl.includes('?') ? rawUrl.split('?')[1] : '');
+            const sym = queryParams.get('symbol') || 'NIFTY';
+            const exp = queryParams.get('expiry') || '';
+            const token = req.headers['access-token'] || queryParams.get('token') || '';
+            const clientId = req.headers['client-id'] || queryParams.get('clientId') || '';
+
+            executeDhanOptionChain(sym, exp, token, clientId).then(result => {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-store'
+                });
+                res.end(JSON.stringify(result));
+            });
+            return;
+        } else if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+                let payload = {};
+                try { payload = JSON.parse(body || '{}'); } catch(e) {}
+                const sym = payload.symbol || 'NIFTY';
+                const exp = payload.expiry || '';
+                const token = payload.accessToken || req.headers['access-token'] || '';
+                const clientId = payload.clientId || req.headers['client-id'] || '';
+
+                executeDhanOptionChain(sym, exp, token, clientId).then(result => {
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Cache-Control': 'no-store'
+                    });
+                    res.end(JSON.stringify(result));
+                });
+            });
+            return;
+        }
+    }
+
     if (cleanUrl === '/') cleanUrl = '/index.html';
 
     // Direct match for APK download requests
@@ -584,17 +756,19 @@ const server = http.createServer((req, res) => {
 
     const ext = path.extname(filePath).toLowerCase();
     const contentType = mimeTypes[ext] || 'application/octet-stream';
+    const isChartingLib = cleanUrl.includes('/charting_library/') || cleanUrl.includes('/datafeeds/');
 
     fs.readFile(filePath, (err, content) => {
         if (err) {
             res.writeHead(404, { 'Content-Type': 'text/html' });
             res.end('<h1>404 Not Found</h1>', 'utf-8');
         } else {
+            const cacheHeader = isChartingLib 
+                ? 'public, max-age=86400, immutable' 
+                : 'no-cache, no-store, must-revalidate';
             res.writeHead(200, { 
                 'Content-Type': contentType,
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                'Pragma': 'no-cache',
-                'Expires': '0',
+                'Cache-Control': cacheHeader,
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': '*'
             });
