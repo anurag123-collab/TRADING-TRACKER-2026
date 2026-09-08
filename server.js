@@ -124,6 +124,32 @@ const server = http.createServer((req, res) => {
     }
 
     // ============================================================
+    // API ROUTE: GET/POST /api/dhan-autologin — TOTP Live & Auto-Refresh
+    // ============================================================
+    if (cleanUrl === '/api/dhan-autologin' && (req.method === 'GET' || req.method === 'POST' || req.method === 'OPTIONS')) {
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            try { req.body = body ? JSON.parse(body) : {}; } catch(e) { req.body = {}; }
+
+            try { delete require.cache[require.resolve('./api/dhan-autologin')]; } catch(e) {}
+            const dhanAutoLoginHandler = require('./api/dhan-autologin');
+            const customRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                    res.writeHead(code, { 'Content-Type': 'application/json' });
+                    return {
+                        json: (obj) => res.end(JSON.stringify(obj)),
+                        end: () => res.end()
+                    };
+                }
+            };
+            return dhanAutoLoginHandler(req, customRes);
+        });
+        return;
+    }
+
+    // ============================================================
     // API ROUTE: GET /api/nse-option-chain — NSE India Real Option Chain (FREE)
     // Source: NSE India official data, server-side session proxy
     // ============================================================
@@ -295,125 +321,26 @@ const server = http.createServer((req, res) => {
     // API ROUTE: /api/sync-trader-log (GET & POST) — Registered Traders Log Sync & Disk Persistence
     // ============================================================
     if (cleanUrl === '/api/sync-trader-log') {
-        const TRADERS_FILE = path.join(PUBLIC_DIR, 'traders_log.json');
-        let defaultList = [
-            {
-                name: "Anurag Patel (Master Admin)",
-                mobile: "8102241463",
-                email: "anuragpatel4u00.ap@gmail.com",
-                password: "1234569",
-                active_key: "TT2026-MASTER-ADMIN-ANURAG",
-                trial_status: "👑 Master Admin",
-                last_login: new Date().toLocaleString()
+        const syncTraderLogHandler = require('./api/sync-trader-log');
+        let body = '';
+        req.on('data', chunk => { body += chunk.toString(); });
+        req.on('end', () => {
+            if (body) {
+                try { req.body = JSON.parse(body); } catch (e) { req.body = body; }
             }
-        ];
-
-        let tradersList = [...defaultList];
-
-        if (fs.existsSync(TRADERS_FILE)) {
-            try {
-                const fileData = JSON.parse(fs.readFileSync(TRADERS_FILE, 'utf-8'));
-                if (Array.isArray(fileData) && fileData.length > 0) {
-                    tradersList = fileData;
-                }
-            } catch (e) {}
-        }
-
-        const sanitizeMobDigits = (m) => String(m || '').replace(/[^0-9]/g, '').slice(-10);
-
-        const mergeLocalTraders = (base, incoming) => {
-            let res = Array.isArray(base) ? [...base] : [];
-            const items = Array.isArray(incoming) ? incoming : [incoming];
-
-            items.forEach(entry => {
-                if (!entry || typeof entry !== 'object') return;
-                const trMob = entry.mobile || 'N/A';
-                const trMobDigits = sanitizeMobDigits(trMob);
-                const trName = entry.name || 'Trader';
-                const trEmail = (entry.email || 'N/A').trim().toLowerCase();
-
-                if (trMobDigits === '' && trName === 'Trader' && trEmail === 'n/a') return;
-
-                let rawKey = entry.active_key || 'FREE-TRIAL';
-                if (rawKey === 'TT2026-VIP-917660' && trMobDigits !== '8102241463') {
-                    rawKey = 'FREE-TRIAL';
-                }
-
-                const existingIdx = res.findIndex(t => {
-                    const tMobDigits = sanitizeMobDigits(t.mobile);
-                    const tEmail = (t.email || '').trim().toLowerCase();
-                    const tName = (t.name || '').trim().toLowerCase();
-
-                    return (trMobDigits && tMobDigits && trMobDigits === tMobDigits) ||
-                           (trEmail && trEmail !== 'n/a' && tEmail && tEmail !== 'n/a' && trEmail === tEmail) ||
-                           (trName && trName !== 'Trader' && tName === trName.toLowerCase());
-                });
-
-                if (existingIdx !== -1) {
-                    const old = res[existingIdx];
-                    const newPass = (entry.password && entry.password !== '******') ? entry.password : old.password;
-                    res[existingIdx] = {
-                        ...old,
-                        name: (trName && trName !== 'Trader') ? trName : old.name,
-                        mobile: (trMob && trMob !== 'N/A') ? trMob : old.mobile,
-                        email: (trEmail && trEmail !== 'n/a') ? entry.email : old.email,
-                        password: newPass || '12345',
-                        active_key: (rawKey && rawKey !== 'FREE-TRIAL') ? rawKey : old.active_key,
-                        trial_status: entry.trial_status || old.trial_status || '🎁 Free Trial',
-                        last_login: entry.last_login || new Date().toLocaleString(),
-                        is_locked: entry.is_locked !== undefined ? entry.is_locked : (old.is_locked || false),
-                        is_vip: entry.is_vip !== undefined ? entry.is_vip : (old.is_vip || false)
+            const customRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                    res.writeHead(code, { 'Content-Type': 'application/json' });
+                    return {
+                        json: (obj) => res.end(JSON.stringify(obj)),
+                        end: () => res.end()
                     };
-                } else {
-                    res.unshift({
-                        name: trName,
-                        mobile: trMob,
-                        email: entry.email || 'N/A',
-                        password: (entry.password && entry.password !== '******') ? entry.password : '12345',
-                        active_key: rawKey,
-                        trial_status: entry.trial_status || '🎁 Free Trial',
-                        last_login: entry.last_login || new Date().toLocaleString(),
-                        is_locked: entry.is_locked || false,
-                        is_vip: entry.is_vip || false
-                    });
                 }
-            });
-
-            const hasAdmin = res.some(t => sanitizeMobDigits(t.mobile) === '8102241463');
-            if (!hasAdmin) res.push(defaultList[0]);
-
-            return res;
-        };
-
-        tradersList = mergeLocalTraders(defaultList, tradersList);
-
-        if (req.method === 'GET') {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ success: true, count: tradersList.length, traders: tradersList }));
-        }
-
-        if (req.method === 'POST' || req.method === 'PUT') {
-            let body = '';
-            req.on('data', chunk => { body += chunk.toString(); });
-            req.on('end', () => {
-                try {
-                    let parsed = JSON.parse(body || '{}');
-                    const incoming = Array.isArray(parsed) ? parsed : (parsed.traders || parsed);
-                    tradersList = mergeLocalTraders(tradersList, incoming);
-
-                    try {
-                        fs.writeFileSync(TRADERS_FILE, JSON.stringify(tradersList, null, 2), 'utf-8');
-                    } catch (e) {}
-
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    return res.end(JSON.stringify({ success: true, count: tradersList.length, traders: tradersList }));
-                } catch (e) {
-                    res.writeHead(400, { 'Content-Type': 'application/json' });
-                    return res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload' }));
-                }
-            });
-            return;
-        }
+            };
+            return syncTraderLogHandler(req, customRes);
+        });
+        return;
     }
 
     // ============================================================
@@ -427,6 +354,7 @@ const server = http.createServer((req, res) => {
 
         const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
         const rawUserId = urlObj.searchParams.get('user_id') || urlObj.searchParams.get('mobile') || urlObj.searchParams.get('email');
+        const MASTER_ALIASES = ['8102241463', 'anuragpatelmasteradmin', 'anuragpatel', 'anuragpatel4u00_ap_gmail_com', 'anuragpatel40_ap_gmail_com'];
 
         if (req.method === 'GET') {
             if (!rawUserId) {
@@ -434,14 +362,25 @@ const server = http.createServer((req, res) => {
                 return res.end(JSON.stringify({ success: false, error: 'user_id parameter is required' }));
             }
             const cleanId = String(rawUserId).replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
-            const userFile = path.join(USER_TRADES_DIR, `trades_${cleanId}.json`);
+            let candidateFiles = [path.join(USER_TRADES_DIR, `trades_${cleanId}.json`)];
+            if (MASTER_ALIASES.includes(cleanId)) {
+                candidateFiles = [
+                    path.join(USER_TRADES_DIR, `trades_8102241463.json`),
+                    path.join(USER_TRADES_DIR, `trades_anuragpatelmasteradmin.json`),
+                    path.join(USER_TRADES_DIR, `trades_${cleanId}.json`)
+                ];
+            }
 
-            if (fs.existsSync(userFile)) {
-                try {
-                    const data = JSON.parse(fs.readFileSync(userFile, 'utf-8'));
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    return res.end(JSON.stringify({ success: true, exists: true, ...data }));
-                } catch (e) {}
+            for (const userFile of candidateFiles) {
+                if (fs.existsSync(userFile)) {
+                    try {
+                        const data = JSON.parse(fs.readFileSync(userFile, 'utf-8'));
+                        if (data && (data.tradesHtml || data.tradesCount > 0)) {
+                            res.writeHead(200, { 'Content-Type': 'application/json' });
+                            return res.end(JSON.stringify({ success: true, exists: true, ...data }));
+                        }
+                    } catch (e) {}
+                }
             }
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -461,8 +400,6 @@ const server = http.createServer((req, res) => {
                     }
 
                     const cleanId = String(targetUser).replace(/[^a-zA-Z0-9_-]/g, '').toLowerCase();
-                    const userFile = path.join(USER_TRADES_DIR, `trades_${cleanId}.json`);
-
                     const tradeRecord = {
                         userId: cleanId,
                         tradesHtml: payload.tradesHtml || '',
@@ -474,7 +411,18 @@ const server = http.createServer((req, res) => {
                         updatedAt: new Date().toISOString()
                     };
 
-                    fs.writeFileSync(userFile, JSON.stringify(tradeRecord, null, 2), 'utf-8');
+                    const targetFiles = [path.join(USER_TRADES_DIR, `trades_${cleanId}.json`)];
+                    if (MASTER_ALIASES.includes(cleanId)) {
+                        targetFiles.push(path.join(USER_TRADES_DIR, `trades_8102241463.json`));
+                        targetFiles.push(path.join(USER_TRADES_DIR, `trades_anuragpatelmasteradmin.json`));
+                    }
+
+                    const uniqueFiles = Array.from(new Set(targetFiles));
+                    for (const f of uniqueFiles) {
+                        try {
+                            fs.writeFileSync(f, JSON.stringify(tradeRecord, null, 2), 'utf-8');
+                        } catch (err) {}
+                    }
 
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ success: true, message: 'Trades safely synced', ...tradeRecord }));
@@ -723,7 +671,64 @@ const server = http.createServer((req, res) => {
         }
     }
 
+    // ============================================================
+    // API ROUTE: /api/cloud-db (GET, POST, PUT) — Enterprise Cloud Database Gateway
+    // ============================================================
+    if (cleanUrl === '/api/cloud-db') {
+        const cloudDbHandler = require('./api/cloud-db.js');
+        res.status = function(code) { this.statusCode = code; return this; };
+        res.json = function(data) {
+            this.writeHead(this.statusCode || 200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+            this.end(JSON.stringify(data));
+            return this;
+        };
+
+        if (req.method === 'POST' || req.method === 'PUT') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+                try { req.body = JSON.parse(body || '{}'); } catch (e) { req.body = {}; }
+                cloudDbHandler(req, res);
+            });
+        } else {
+            cloudDbHandler(req, res);
+        }
+        return;
+    }
+
+    // ============================================================
+    // API ROUTE: /api/leaderboard (GET & POST) — Central All-India Leaderboard
+    // ============================================================
+    if (cleanUrl === '/api/leaderboard') {
+        const leaderboardHandler = require('./api/leaderboard.js');
+        res.status = function(code) { this.statusCode = code; return this; };
+        res.json = function(data) {
+            this.writeHead(this.statusCode || 200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+            this.end(JSON.stringify(data));
+            return this;
+        };
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+                try { req.body = JSON.parse(body || '{}'); } catch (e) { req.body = {}; }
+                leaderboardHandler(req, res);
+            });
+        } else {
+            leaderboardHandler(req, res);
+        }
+        return;
+    }
+
     if (cleanUrl === '/') cleanUrl = '/index.html';
+
+    // 🔒 SECURITY FIREWALL: Block public access to sensitive system, user data and credentials
+    const sensitivePatterns = ['credentials', 'traders_log.json', 'user_data', '.env', 'schema.sql'];
+    if (sensitivePatterns.some(p => cleanUrl.toLowerCase().includes(p))) {
+        res.writeHead(403, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: '403 Forbidden: Access to this file is restricted' }));
+    }
 
     // Direct match for APK download requests
     if (cleanUrl.toLowerCase().includes('.apk')) {

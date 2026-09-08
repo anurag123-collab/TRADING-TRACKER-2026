@@ -1,1 +1,7 @@
 .vercel
+node_modules/
+*credentials*.json
+user_data/
+traders_log.json
+.env
+*.log

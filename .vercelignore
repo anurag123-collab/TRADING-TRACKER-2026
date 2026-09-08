@@ -7,4 +7,8 @@ node_modules/
 *.log
 *.apk
 server.js
+dhan_credentials.json
+user_credentials.json
+user_data/
+traders_log.json
 
