@@ -1,5 +1,18 @@
 [
   {
+    "name": "Trader 5625",
+    "mobile": "8825255625",
+    "email": "N/A",
+    "password": "76bb536fa4a0fd4f6006864aeedf4cdfcfe70b66741e2d2531323462e92c2404",
+    "active_key": "FREE-TRIAL",
+    "trial_status": "🔒 Expired (Blocked)",
+    "last_login": "9/9/2026 03:43 PM",
+    "is_locked": false,
+    "is_vip": false,
+    "current_session_token": "st_f7db321912398fe436d6b0dcb40df0a8acef42f3114483d9",
+    "active_device_id": "dev_4ahd2pir_mtq1h81r"
+  },
+  {
     "name": "Trader 8451",
     "mobile": "9329888451",
     "email": "N/A",
@@ -13,29 +26,16 @@
     "active_device_id": ""
   },
   {
-    "name": "Trader 5625",
-    "mobile": "8825255625",
-    "email": "N/A",
-    "password": "76bb536fa4a0fd4f6006864aeedf4cdfcfe70b66741e2d2531323462e92c2404",
-    "active_key": "FREE-TRIAL",
-    "trial_status": "🎁 Free Trial (0d Left)",
-    "last_login": "9/8/2026 09:09 AM",
-    "is_locked": false,
-    "is_vip": false,
-    "current_session_token": "st_155b29a1df1df72e97bf7fea3b2fe3da1d9dfee485f96165",
-    "active_device_id": "dev_4ahd2pir_mtq1h81r"
-  },
-  {
     "name": "Anurag Patel (Master Admin)",
     "mobile": "8102241463",
     "email": "anuragpatel4u00.ap@gmail.com",
-    "password": "76bb536fa4a0fd4f6006864aeedf4cdfcfe70b66741e2d2531323462e92c2404",
+    "password": "fad31629c4055d79e72a93f2894e868ab6a7bd7fa464787077acb91e92390bf0",
     "active_key": "TT2026-MASTER-ADMIN-ANURAG",
     "trial_status": "👑 Master Admin",
-    "last_login": "07/09/2026 19:14",
+    "last_login": "9/9/2026 03:45 PM",
     "is_locked": false,
     "is_vip": false,
-    "current_session_token": "st_91be1138a2f9d383815a7aa55d0cda2892b67c31fabb49e9",
+    "current_session_token": "st_07701f928745be674c642ae479c459f781c92ac54aa350ef",
     "active_device_id": "dev_4ahd2pir_mtq1h81r"
   }
 ]
