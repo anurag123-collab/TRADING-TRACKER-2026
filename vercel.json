@@ -1,0 +1,285 @@
+{
+  "version": 2,
+  "cleanUrls": false,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "tradingview_super_scalper.html", "use": "@vercel/static" },
+    { "src": "privacy-policy.html", "use": "@vercel/static" },
+    { "src": "terms.html", "use": "@vercel/static" },
+    { "src": "disclaimer.html", "use": "@vercel/static" },
+    { "src": "about.html", "use": "@vercel/static" },
+    { "src": "contact.html", "use": "@vercel/static" },
+    { "src": "blog.html", "use": "@vercel/static" },
+    { "src": "charting_library/**", "use": "@vercel/static" },
+    { "src": "datafeeds/**", "use": "@vercel/static" },
+    { "src": "ads.txt", "use": "@vercel/static" },
+    { "src": "robots.txt", "use": "@vercel/static" },
+    { "src": "sitemap.xml", "use": "@vercel/static" },
+    { "src": "manifest.json", "use": "@vercel/static" },
+    { "src": "google0bf3624461f65d7b.html", "use": "@vercel/static" },
+    { "src": "profile-data.js", "use": "@vercel/static" },
+    { "src": "qrcode.min.js", "use": "@vercel/static" },
+    { "src": "profile.jpg", "use": "@vercel/static" },
+    { "src": "profile.ico", "use": "@vercel/static" },
+    { "src": "favicon.ico", "use": "@vercel/static" },
+    { "src": "clean_pro_terminal_final.jpg", "use": "@vercel/static" },
+    { "src": "final_perfect_super_scalper_terminal.jpg", "use": "@vercel/static" },
+    { "src": "original_super_scalper_terminal.jpg", "use": "@vercel/static" },
+    { "src": "pro_scalper_terminal_with_lots.jpg", "use": "@vercel/static" },
+    { "src": "tradingview_preview.jpg", "use": "@vercel/static" },
+    { "src": "version.json", "use": "@vercel/static" },
+    { "src": "sw.js", "use": "@vercel/static" },
+    { "src": "api/send-otp.js", "use": "@vercel/node" },
+    { "src": "api/sync-trader-log.js", "use": "@vercel/node" },
+    { "src": "api/sync-user-trades.js", "use": "@vercel/node" },
+    { "src": "api/dhan-sync.js", "use": "@vercel/node" },
+    { "src": "api/user-profile.js", "use": "@vercel/node" },
+    { "src": "api/market-pulse.js", "use": "@vercel/node" },
+    { "src": "api/chart-history.js", "use": "@vercel/node" },
+    { "src": "api/cloud-db.js", "use": "@vercel/node" },
+    { "src": "api/leaderboard.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    {
+      "src": "/api/chart-history",
+      "dest": "/api/chart-history.js",
+      "methods": ["GET", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/dhan-sync",
+      "dest": "/api/dhan-sync.js",
+      "methods": ["POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, access-token, client-id"
+      }
+    },
+    {
+      "src": "/api/sync-user-trades",
+      "dest": "/api/sync-user-trades.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/user-profile",
+      "dest": "/api/user-profile.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/sync-trader-log",
+      "dest": "/api/sync-trader-log.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/send-otp",
+      "dest": "/api/send-otp.js",
+      "methods": ["POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/market-pulse",
+      "dest": "/api/market-pulse.js",
+      "methods": ["GET", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    },
+    {
+      "src": "/api/cloud-db",
+      "dest": "/api/cloud-db.js",
+      "methods": ["GET", "POST", "PUT", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-User-Id"
+      }
+    },
+    {
+      "src": "/api/leaderboard",
+      "dest": "/api/leaderboard.js",
+      "methods": ["GET", "POST", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, X-User-Id"
+      }
+    },
+    {
+      "src": "/ads.txt",
+      "dest": "/ads.txt",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/robots.txt",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml",
+      "headers": {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/tradingview_super_scalper.html",
+      "dest": "/tradingview_super_scalper.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "src": "/tradingview_super_scalper",
+      "dest": "/tradingview_super_scalper.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "src": "/paper-trading(.*)",
+      "dest": "/tradingview_super_scalper.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "src": "/charting_library/(.*)",
+      "dest": "/charting_library/$1"
+    },
+    {
+      "src": "/datafeeds/(.*)",
+      "dest": "/datafeeds/$1"
+    },
+    {
+      "src": "/privacy-policy(.*)",
+      "dest": "/privacy-policy.html"
+    },
+    {
+      "src": "/terms(.*)",
+      "dest": "/terms.html"
+    },
+    {
+      "src": "/disclaimer(.*)",
+      "dest": "/disclaimer.html"
+    },
+    {
+      "src": "/about(.*)",
+      "dest": "/about.html"
+    },
+    {
+      "src": "/contact(.*)",
+      "dest": "/contact.html"
+    },
+    {
+      "src": "/blog(.*)",
+      "dest": "/blog.html"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/manifest.json",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/google0bf3624461f65d7b.html",
+      "dest": "/google0bf3624461f65d7b.html"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico",
+      "headers": {
+        "Content-Type": "image/x-icon",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/profile.ico",
+      "dest": "/profile.ico",
+      "headers": {
+        "Content-Type": "image/x-icon",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/profile.jpg",
+      "dest": "/profile.jpg",
+      "headers": {
+        "Content-Type": "image/jpeg",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/version.json",
+      "dest": "/version.json",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/sw.js",
+      "headers": {
+        "Content-Type": "application/javascript; charset=utf-8",
+        "Service-Worker-Allowed": "/",
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      }
+    },
+    {
+      "src": "/(.*\\.(png|jpg|jpeg|gif|ico|svg|js|css|json|woff2|woff|ttf|txt|xml|html))",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"
+      }
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      }
+    }
+  ]
+}

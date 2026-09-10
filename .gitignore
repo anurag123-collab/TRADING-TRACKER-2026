@@ -1,7 +1,40 @@
+# Deployment & IDE
 .vercel
+.netlify
+.idea/
+.vscode/
+
+# Dependencies
 node_modules/
+
+# Private Credentials & Sensitive Configurations (DO NOT LEAK)
 *credentials*.json
+*config*.json
+dhan_config.json
+user_credentials.json
 user_data/
 traders_log.json
+global_leaderboard_db.json
 .env
 *.log
+
+# Personal Legal Documents & Signed Agreements
+*.pdf
+*.doc
+*.docx
+GST_Consent_Letter*
+
+# Huge Binaries & Builds (GitHub blocks files > 100 MB)
+*.apk
+*.aab
+build/
+android/app/build/
+
+# Temporary Scratch & Test Files
+scratch_*
+rzp_block_*
+crop_test*
+paper_tl*
+paper_tr*
+test_logo*
+
